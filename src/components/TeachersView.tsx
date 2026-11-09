@@ -1205,7 +1205,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                   </div>
                 </th>
                 <th 
-                  className="sticky right-0 z-30 py-3 px-3 sm:px-4 text-right whitespace-nowrap border-b-2 border-l-2 border-ink w-[95px] min-w-[95px]"
+                  className="sticky right-0 z-30 py-3 px-3 sm:px-4 text-right whitespace-nowrap border-b-2 border-ink border-l border-current/20 w-[95px] min-w-[95px]"
                   style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
                 >
                   {tt.actions}
@@ -1284,7 +1284,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
 
                     {/* Actions: Edit & Delete (Sticky Right Column) */}
                     <td 
-                      className="sticky right-0 z-20 py-3 px-3 sm:px-4 text-right border-b border-l-2 border-ink whitespace-nowrap w-[95px] min-w-[95px]"
+                      className="sticky right-0 z-20 py-3 px-3 sm:px-4 text-right border-b border-l border-ink/20 whitespace-nowrap w-[95px] min-w-[95px]"
                       style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
                     >
                       <div className="inline-flex items-center gap-1.5">
