@@ -58,12 +58,18 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
   const tt = t.teacher;
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'All' | 'Active' | 'On Leave' | 'Inactive'>('All');
-  const [genderFilter, setGenderFilter] = useState<'All' | 'Male' | 'Female'>('All');
-  const [sortField, setSortField] = useState<SortField>('id');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [selectedColumn, setSelectedColumn] = useState<SortField | 'all'>('all');
+  const [columnValueOption, setColumnValueOption] = useState<string>('all');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTeacherId, setEditingTeacherId] = useState<string | null>(null);
+
+  const handleSelectColumn = (col: SortField | 'all') => {
+    setSelectedColumn(col);
+    if (col === 'gender') setColumnValueOption('all');
+    else if (col === 'status') setColumnValueOption('all');
+    else if (col === 'birthProvince' || col === 'currentProvince') setColumnValueOption('sort_prov_asc');
+    else setColumnValueOption('asc');
+  };
 
   // Close modal on Escape key & lock background scroll
   useEffect(() => {
@@ -294,10 +300,26 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
       tch.englishFirstName.toLowerCase().includes(query) ||
       `${tch.englishFirstName} ${tch.englishLastName}`.toLowerCase().includes(query);
 
-    const matchesStatus = statusFilter === 'All' || tch.status === statusFilter;
-    const matchesGender = genderFilter === 'All' || tch.gender === genderFilter;
+    let matchesColumn = true;
+    if (selectedColumn === 'gender') {
+      if (columnValueOption === 'Male' || columnValueOption === 'Female' || columnValueOption === 'Other') {
+        matchesColumn = tch.gender === columnValueOption;
+      }
+    } else if (selectedColumn === 'status') {
+      if (columnValueOption === 'Active' || columnValueOption === 'On Leave' || columnValueOption === 'Inactive') {
+        matchesColumn = tch.status === columnValueOption;
+      }
+    } else if (selectedColumn === 'birthProvince' && columnValueOption.startsWith('prov_filter_')) {
+      const targetProv = columnValueOption.replace('prov_filter_', '');
+      matchesColumn = tch.birthProvince === targetProv;
+    } else if (selectedColumn === 'currentProvince' && columnValueOption.startsWith('prov_filter_')) {
+      const targetProv = columnValueOption.replace('prov_filter_', '');
+      matchesColumn = tch.currentProvince === targetProv;
+    } else if (selectedColumn === 'civilServantId' && columnValueOption === 'has_id') {
+      matchesColumn = Boolean(tch.civilServantId && tch.civilServantId.trim() !== '');
+    }
 
-    return matchesSearch && matchesStatus && matchesGender;
+    return matchesSearch && matchesColumn;
   });
 
   const formatAddress = (village?: string, commune?: string, district?: string, province?: string) => {
@@ -336,20 +358,32 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
   };
 
   const handleHeaderSort = (field: SortField) => {
-    if (sortField === field) {
-      setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    if (selectedColumn === field) {
+      if (field === 'gender') {
+        setColumnValueOption(prev => (prev === 'male_first' ? 'female_first' : 'male_first'));
+      } else if (field === 'status') {
+        setColumnValueOption(prev => (prev === 'active_first' ? 'inactive_first' : 'active_first'));
+      } else if (field === 'birthProvince' || field === 'currentProvince') {
+        setColumnValueOption(prev => (prev === 'sort_prov_asc' ? 'sort_prov_desc' : 'sort_prov_asc'));
+      } else {
+        setColumnValueOption(prev => (prev === 'asc' ? 'desc' : 'asc'));
+      }
     } else {
-      setSortField(field);
-      setSortOrder('asc');
+      setSelectedColumn(field);
+      if (field === 'gender') setColumnValueOption('male_first');
+      else if (field === 'status') setColumnValueOption('active_first');
+      else if (field === 'birthProvince' || field === 'currentProvince') setColumnValueOption('sort_prov_asc');
+      else setColumnValueOption('asc');
     }
   };
 
   const renderSortIcon = (field: SortField) => {
-    if (sortField === field) {
-      return sortOrder === 'asc' ? (
-        <ArrowUp size={12} className="inline-block shrink-0 text-amber-300" />
-      ) : (
+    if (selectedColumn === field) {
+      const isDesc = columnValueOption === 'desc' || columnValueOption === 'female_first' || columnValueOption === 'inactive_first' || columnValueOption === 'sort_prov_desc';
+      return isDesc ? (
         <ArrowDown size={12} className="inline-block shrink-0 text-amber-300" />
+      ) : (
+        <ArrowUp size={12} className="inline-block shrink-0 text-amber-300" />
       );
     }
     return (
@@ -360,103 +394,179 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
   // Sort logic across all fields including addresses
   const sortedTeachers = [...filteredTeachers].sort((a, b) => {
     let cmp = 0;
-    switch (sortField) {
-      case 'code': {
-        const codeA = a.codeInfo || a.teacherId || '';
-        const codeB = b.codeInfo || b.teacherId || '';
-        cmp = codeA.localeCompare(codeB, undefined, { numeric: true });
-        break;
+    if (selectedColumn === 'gender') {
+      if (columnValueOption === 'male_first') {
+        cmp = a.gender === 'Male' ? -1 : (b.gender === 'Male' ? 1 : 0);
+      } else if (columnValueOption === 'female_first') {
+        cmp = a.gender === 'Female' ? -1 : (b.gender === 'Female' ? 1 : 0);
       }
-      case 'civilServantId': {
-        cmp = (a.civilServantId || '').localeCompare(b.civilServantId || '', undefined, { numeric: true });
-        break;
+    } else if (selectedColumn === 'status') {
+      const orderMap: Record<string, number> = columnValueOption === 'active_first'
+        ? { Active: 1, 'On Leave': 2, Inactive: 3 }
+        : columnValueOption === 'onleave_first'
+        ? { 'On Leave': 1, Active: 2, Inactive: 3 }
+        : columnValueOption === 'inactive_first'
+        ? { Inactive: 1, 'On Leave': 2, Active: 3 }
+        : { Active: 1, 'On Leave': 2, Inactive: 3 };
+      cmp = (orderMap[a.status] || 99) - (orderMap[b.status] || 99);
+    } else if (selectedColumn === 'birthProvince') {
+      if (columnValueOption === 'sort_prov_desc') {
+        cmp = -(a.birthProvince || '').localeCompare(b.birthProvince || '', 'km');
+      } else if (columnValueOption === 'sort_dist_asc') {
+        cmp = (a.birthDistrict || '').localeCompare(b.birthDistrict || '', 'km');
+      } else if (columnValueOption === 'sort_comm_asc') {
+        cmp = (a.birthCommune || '').localeCompare(b.birthCommune || '', 'km');
+      } else {
+        cmp = (a.birthProvince || '').localeCompare(b.birthProvince || '', 'km');
+        if (cmp === 0) cmp = (a.birthDistrict || '').localeCompare(b.birthDistrict || '', 'km');
       }
-      case 'khmerName': {
-        const nameA = `${a.khmerLastName} ${a.khmerFirstName}`.trim();
-        const nameB = `${b.khmerLastName} ${b.khmerFirstName}`.trim();
-        cmp = nameA.localeCompare(nameB, 'km');
-        break;
+    } else if (selectedColumn === 'currentProvince') {
+      if (columnValueOption === 'sort_prov_desc') {
+        cmp = -(a.currentProvince || '').localeCompare(b.currentProvince || '', 'km');
+      } else if (columnValueOption === 'sort_dist_asc') {
+        cmp = (a.currentDistrict || '').localeCompare(b.currentDistrict || '', 'km');
+      } else if (columnValueOption === 'sort_comm_asc') {
+        cmp = (a.currentCommune || '').localeCompare(b.currentCommune || '', 'km');
+      } else {
+        cmp = (a.currentProvince || '').localeCompare(b.currentProvince || '', 'km');
+        if (cmp === 0) cmp = (a.currentDistrict || '').localeCompare(b.currentDistrict || '', 'km');
       }
-      case 'englishName': {
-        const nameA = `${a.englishLastName} ${a.englishFirstName}`.trim();
-        const nameB = `${b.englishLastName} ${b.englishFirstName}`.trim();
-        cmp = nameA.localeCompare(nameB, 'en');
-        break;
-      }
-      case 'gender': {
-        cmp = (a.gender || '').localeCompare(b.gender || '');
-        break;
-      }
-      case 'dob': {
-        cmp = (a.dob || '').localeCompare(b.dob || '');
-        break;
-      }
+    } else if (selectedColumn === 'khmerName') {
+      const nameA = `${a.khmerLastName} ${a.khmerFirstName}`.trim();
+      const nameB = `${b.khmerLastName} ${b.khmerFirstName}`.trim();
+      cmp = nameA.localeCompare(nameB, 'km');
+      if (columnValueOption === 'desc') cmp = -cmp;
+    } else if (selectedColumn === 'englishName') {
+      const nameA = `${a.englishLastName} ${a.englishFirstName}`.trim();
+      const nameB = `${b.englishLastName} ${b.englishFirstName}`.trim();
+      cmp = nameA.localeCompare(nameB, 'en');
+      if (columnValueOption === 'desc') cmp = -cmp;
+    } else if (selectedColumn === 'dob') {
+      cmp = (a.dob || '').localeCompare(b.dob || '');
+      if (columnValueOption === 'desc') cmp = -cmp;
+    } else if (selectedColumn === 'code') {
+      const codeA = a.codeInfo || a.teacherId || '';
+      const codeB = b.codeInfo || b.teacherId || '';
+      cmp = codeA.localeCompare(codeB, undefined, { numeric: true });
+      if (columnValueOption === 'desc') cmp = -cmp;
+    } else if (selectedColumn === 'civilServantId') {
+      cmp = (a.civilServantId || '').localeCompare(b.civilServantId || '', undefined, { numeric: true });
+      if (columnValueOption === 'desc') cmp = -cmp;
+    } else if (selectedColumn === 'id') {
+      const numA = parseInt(a.id, 10);
+      const numB = parseInt(b.id, 10);
+      cmp = (!isNaN(numA) && !isNaN(numB)) ? (numA - numB) : a.id.localeCompare(b.id);
+      if (columnValueOption === 'desc') cmp = -cmp;
+    } else {
+      const numA = parseInt(a.id, 10);
+      const numB = parseInt(b.id, 10);
+      cmp = (!isNaN(numA) && !isNaN(numB)) ? (numA - numB) : a.id.localeCompare(b.id);
+    }
+    return cmp;
+  });
+
+  const renderColumnValueOptions = () => {
+    switch (selectedColumn) {
+      case 'gender':
+        return (
+          <>
+            <option value="all">{tt.allGender}</option>
+            <option value="Male">{tt.male}</option>
+            <option value="Female">{tt.female}</option>
+            <option value="male_first">{tt.maleFirst}</option>
+            <option value="female_first">{tt.femaleFirst}</option>
+          </>
+        );
+      case 'status':
+        return (
+          <>
+            <option value="all">{tt.allStatus}</option>
+            <option value="Active">{tt.active}</option>
+            <option value="On Leave">{tt.onLeave}</option>
+            <option value="Inactive">{tt.inactive}</option>
+            <option value="active_first">{tt.activeFirst}</option>
+            <option value="onleave_first">{tt.onLeaveFirst}</option>
+            <option value="inactive_first">{tt.inactiveFirst}</option>
+          </>
+        );
       case 'birthProvince': {
-        const provA = a.birthProvince || '';
-        const provB = b.birthProvince || '';
-        cmp = provA.localeCompare(provB, 'km');
-        if (cmp === 0) {
-          cmp = (a.birthDistrict || '').localeCompare(b.birthDistrict || '', 'km');
-        }
-        if (cmp === 0) {
-          cmp = (a.birthCommune || '').localeCompare(b.birthCommune || '', 'km');
-        }
-        if (cmp === 0) {
-          cmp = (a.birthVillage || '').localeCompare(b.birthVillage || '', 'km');
-        }
-        break;
-      }
-      case 'birthDistrict': {
-        const distA = a.birthDistrict || '';
-        const distB = b.birthDistrict || '';
-        cmp = distA.localeCompare(distB, 'km');
-        if (cmp === 0) {
-          cmp = (a.birthCommune || '').localeCompare(b.birthCommune || '', 'km');
-        }
-        break;
+        const provs = Array.from(new Set(teachers.map(t => t.birthProvince).filter(Boolean))) as string[];
+        return (
+          <>
+            <option value="sort_prov_asc">{lang === 'km' ? 'តម្រៀប៖ ខេត្ត/រាជធានី (A-Z)' : 'Sort: Province (A-Z)'}</option>
+            <option value="sort_prov_desc">{lang === 'km' ? 'តម្រៀប៖ ខេត្ត/រាជធានី (Z-A)' : 'Sort: Province (Z-A)'}</option>
+            <option value="sort_dist_asc">{lang === 'km' ? 'តម្រៀប៖ ស្រុក/ខណ្ឌ (A-Z)' : 'Sort: District (A-Z)'}</option>
+            <option value="sort_comm_asc">{lang === 'km' ? 'តម្រៀប៖ ឃុំ/សង្កាត់ (A-Z)' : 'Sort: Commune (A-Z)'}</option>
+            {provs.map(p => (
+              <option key={p} value={`prov_filter_${p}`}>
+                {lang === 'km' ? `បង្ហាញតែ៖ ${p}` : `Show only: ${p}`}
+              </option>
+            ))}
+          </>
+        );
       }
       case 'currentProvince': {
-        const provA = a.currentProvince || '';
-        const provB = b.currentProvince || '';
-        cmp = provA.localeCompare(provB, 'km');
-        if (cmp === 0) {
-          cmp = (a.currentDistrict || '').localeCompare(b.currentDistrict || '', 'km');
-        }
-        if (cmp === 0) {
-          cmp = (a.currentCommune || '').localeCompare(b.currentCommune || '', 'km');
-        }
-        if (cmp === 0) {
-          cmp = (a.currentVillage || '').localeCompare(b.currentVillage || '', 'km');
-        }
-        break;
+        const provs = Array.from(new Set(teachers.map(t => t.currentProvince).filter(Boolean))) as string[];
+        return (
+          <>
+            <option value="sort_prov_asc">{lang === 'km' ? 'តម្រៀប៖ ខេត្ត/រាជធានី (A-Z)' : 'Sort: Province (A-Z)'}</option>
+            <option value="sort_prov_desc">{lang === 'km' ? 'តម្រៀប៖ ខេត្ត/រាជធានី (Z-A)' : 'Sort: Province (Z-A)'}</option>
+            <option value="sort_dist_asc">{lang === 'km' ? 'តម្រៀប៖ ស្រុក/ខណ្ឌ (A-Z)' : 'Sort: District (A-Z)'}</option>
+            <option value="sort_comm_asc">{lang === 'km' ? 'តម្រៀប៖ ឃុំ/សង្កាត់ (A-Z)' : 'Sort: Commune (A-Z)'}</option>
+            {provs.map(p => (
+              <option key={p} value={`prov_filter_${p}`}>
+                {lang === 'km' ? `បង្ហាញតែ៖ ${p}` : `Show only: ${p}`}
+              </option>
+            ))}
+          </>
+        );
       }
-      case 'currentDistrict': {
-        const distA = a.currentDistrict || '';
-        const distB = b.currentDistrict || '';
-        cmp = distA.localeCompare(distB, 'km');
-        if (cmp === 0) {
-          cmp = (a.currentCommune || '').localeCompare(b.currentCommune || '', 'km');
-        }
-        break;
-      }
-      case 'status': {
-        cmp = (a.status || '').localeCompare(b.status || '');
-        break;
-      }
+      case 'khmerName':
+        return (
+          <>
+            <option value="asc">{lang === 'km' ? 'តម្រៀប៖ ក ដល់ អ (A-Z)' : 'Sort: A-Z'}</option>
+            <option value="desc">{lang === 'km' ? 'តម្រៀប៖ អ ដល់ ក (Z-A)' : 'Sort: Z-A'}</option>
+          </>
+        );
+      case 'englishName':
+        return (
+          <>
+            <option value="asc">Sort: A to Z</option>
+            <option value="desc">Sort: Z to A</option>
+          </>
+        );
+      case 'dob':
+        return (
+          <>
+            <option value="asc">{tt.oldestFirst}</option>
+            <option value="desc">{tt.youngestFirst}</option>
+          </>
+        );
+      case 'code':
+        return (
+          <>
+            <option value="asc">{lang === 'km' ? 'កូដពីតូចទៅធំ' : 'Ascending'}</option>
+            <option value="desc">{lang === 'km' ? 'កូដពីធំទៅតូច' : 'Descending'}</option>
+          </>
+        );
+      case 'civilServantId':
+        return (
+          <>
+            <option value="asc">{lang === 'km' ? 'ពីតូចទៅធំ' : 'Ascending'}</option>
+            <option value="desc">{lang === 'km' ? 'ពីធំទៅតូច' : 'Descending'}</option>
+            <option value="has_id">{lang === 'km' ? 'មានអត្តលេខមុន' : 'With ID first'}</option>
+          </>
+        );
       case 'id':
-      default: {
-        const numA = parseInt(a.id, 10);
-        const numB = parseInt(b.id, 10);
-        if (!isNaN(numA) && !isNaN(numB)) {
-          cmp = numA - numB;
-        } else {
-          cmp = a.id.localeCompare(b.id);
-        }
-        break;
-      }
+      default:
+        return (
+          <>
+            <option value="asc">{lang === 'km' ? 'ល.រ ពីតូចទៅធំ' : '1, 2, 3...'}</option>
+            <option value="desc">{lang === 'km' ? 'ល.រ ពីធំទៅតូច' : '..., 3, 2, 1'}</option>
+          </>
+        );
     }
-    return sortOrder === 'asc' ? cmp : -cmp;
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -932,74 +1042,46 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
           />
         </div>
 
-        {/* Filters, Sorting and Counter */}
+        {/* Dynamic Column & Value/Sort Dropdowns + Counter */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-          {/* Status Filter */}
+          {/* Dropdown 1: Column Name Selector */}
           <div className="flex items-center gap-1.5">
             <Filter size={13} className="opacity-60" />
             <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as any)}
+              value={selectedColumn}
+              onChange={(e) => handleSelectColumn(e.target.value as any)}
               className="py-2 px-2.5 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
               style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+              title={tt.selectColumn}
             >
-              <option value="All">{tt.allStatus}</option>
-              <option value="Active">{tt.active}</option>
-              <option value="On Leave">{tt.onLeave}</option>
-              <option value="Inactive">{tt.inactive}</option>
+              <option value="all">-- {tt.selectColumn} --</option>
+              <option value="gender">{tt.gender}</option>
+              <option value="status">{tt.status}</option>
+              <option value="birthProvince">{tt.birthAddress}</option>
+              <option value="currentProvince">{tt.currentAddress}</option>
+              <option value="khmerName">{tt.khmerFullName}</option>
+              <option value="englishName">{tt.englishFullName}</option>
+              <option value="dob">{tt.dob}</option>
+              <option value="code">{tt.codeInfo}</option>
+              <option value="civilServantId">{tt.civilServantId}</option>
+              <option value="id">{tt.id}</option>
             </select>
           </div>
 
-          {/* Gender Filter */}
-          <div className="flex items-center gap-1.5">
-            <User size={13} className="opacity-60" />
-            <select
-              value={genderFilter}
-              onChange={(e) => setGenderFilter(e.target.value as any)}
-              className="py-2 px-2.5 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
-              style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
-            >
-              <option value="All">{tt.allGender}</option>
-              <option value="Male">{tt.male}</option>
-              <option value="Female">{tt.female}</option>
-            </select>
-          </div>
-
-          {/* Sort By Dropdown & Order Toggle */}
-          <div className="flex items-center gap-1.5">
-            <ArrowUpDown size={13} className="opacity-60" />
-            <select
-              value={sortField}
-              onChange={(e) => setSortField(e.target.value as SortField)}
-              className="py-2 px-2.5 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
-              style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
-              title={tt.sortBy}
-            >
-              <option value="id">{tt.defaultSort}</option>
-              <option value="code">{tt.sortCode}</option>
-              <option value="civilServantId">{tt.sortCivilServantId}</option>
-              <option value="khmerName">{tt.sortKhmerName}</option>
-              <option value="englishName">{tt.sortEnglishName}</option>
-              <option value="dob">{tt.sortDob}</option>
-              <option value="birthProvince">{tt.sortBirthProvince}</option>
-              <option value="birthDistrict">{tt.sortBirthDistrict}</option>
-              <option value="currentProvince">{tt.sortCurrentProvince}</option>
-              <option value="currentDistrict">{tt.sortCurrentDistrict}</option>
-              <option value="status">{tt.sortStatus}</option>
-            </select>
-
-            {/* Asc / Desc Toggle Button */}
-            <button
-              type="button"
-              onClick={() => setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'))}
-              className="h-[34px] px-2.5 border-2 border-ink text-xs font-mono font-bold hover:bg-black/10 transition-colors flex items-center gap-1"
-              style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
-              title={sortOrder === 'asc' ? tt.sortAsc : tt.sortDesc}
-            >
-              {sortOrder === 'asc' ? <ArrowUp size={13} /> : <ArrowDown size={13} />}
-              <span className="text-[11px]">{sortOrder === 'asc' ? 'A-Z' : 'Z-A'}</span>
-            </button>
-          </div>
+          {/* Dropdown 2: Dynamic Values / Sort Modes for Selected Column */}
+          {selectedColumn !== 'all' && (
+            <div className="flex items-center gap-1.5 animate-fadeIn">
+              <ArrowUpDown size={13} className="opacity-60" />
+              <select
+                value={columnValueOption}
+                onChange={(e) => setColumnValueOption(e.target.value)}
+                className="py-2 px-2.5 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
+                style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+              >
+                {renderColumnValueOptions()}
+              </select>
+            </div>
+          )}
 
           {/* Total Count Badge */}
           <div 

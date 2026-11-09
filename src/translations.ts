@@ -108,6 +108,14 @@ export interface TranslationDictionary {
     sortStatus: string;
     sortAsc: string;
     sortDesc: string;
+    selectColumn: string;
+    maleFirst: string;
+    femaleFirst: string;
+    activeFirst: string;
+    onLeaveFirst: string;
+    inactiveFirst: string;
+    oldestFirst: string;
+    youngestFirst: string;
   };
 }
 
@@ -221,7 +229,15 @@ export const translations: Record<Language, TranslationDictionary> = {
       sortCurrentDistrict: 'Current District',
       sortStatus: 'Status',
       sortAsc: 'Ascending (A-Z)',
-      sortDesc: 'Descending (Z-A)'
+      sortDesc: 'Descending (Z-A)',
+      selectColumn: 'Select Column',
+      maleFirst: 'Sort: Male first',
+      femaleFirst: 'Sort: Female first',
+      activeFirst: 'Sort: Active first',
+      onLeaveFirst: 'Sort: On Leave first',
+      inactiveFirst: 'Sort: Inactive first',
+      oldestFirst: 'Oldest first',
+      youngestFirst: 'Youngest first'
     }
   },
   km: {
@@ -333,7 +349,15 @@ export const translations: Record<Language, TranslationDictionary> = {
       sortCurrentDistrict: 'ស្រុកបច្ចុប្បន្ន',
       sortStatus: 'ស្ថានភាព',
       sortAsc: 'ឡើងលើ (A-Z)',
-      sortDesc: 'ចុះក្រោម (Z-A)'
+      sortDesc: 'ចុះក្រោម (Z-A)',
+      selectColumn: 'ជ្រើសរើសជួរឈរ',
+      maleFirst: 'តម្រៀប៖ ប្រុសមុន',
+      femaleFirst: 'តម្រៀប៖ ស្រីមុន',
+      activeFirst: 'តម្រៀប៖ សកម្មមុន',
+      onLeaveFirst: 'តម្រៀប៖ ឈប់សម្រាកមុន',
+      inactiveFirst: 'តម្រៀប៖ អសកម្មមុន',
+      oldestFirst: 'ចាស់ទៅក្មេង',
+      youngestFirst: 'ក្មេងទៅចាស់'
     }
   }
 };
