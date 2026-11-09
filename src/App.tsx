@@ -89,7 +89,6 @@ export function App() {
               {currentTab === 'dashboard' && (
                 <BlankPageTemplate
                   title={t.pages.dashboardTitle}
-                  breadcrumb={t.nav.dashboard.toUpperCase()}
                   subtitle={t.pages.dashboardSub}
                   lang={lang}
                 />
@@ -98,7 +97,6 @@ export function App() {
               {currentTab === 'teachers' && (
                 <BlankPageTemplate
                   title={t.pages.teachersTitle}
-                  breadcrumb={t.nav.teachers.toUpperCase()}
                   subtitle={t.pages.teachersSub}
                   lang={lang}
                 />
@@ -107,7 +105,6 @@ export function App() {
               {currentTab === 'students' && (
                 <BlankPageTemplate
                   title={t.pages.studentsTitle}
-                  breadcrumb={t.nav.students.toUpperCase()}
                   subtitle={t.pages.studentsSub}
                   lang={lang}
                 />
@@ -116,7 +113,6 @@ export function App() {
               {currentTab === 'classes' && (
                 <BlankPageTemplate
                   title={t.pages.classesTitle}
-                  breadcrumb={t.nav.classes.toUpperCase()}
                   subtitle={t.pages.classesSub}
                   lang={lang}
                 />

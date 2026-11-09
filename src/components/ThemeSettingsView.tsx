@@ -179,15 +179,10 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b-2 border-ink gap-3">
         <div>
-          <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono opacity-70 uppercase">
-            <span>{t.brand}</span>
-            <span>/</span>
-            <span className="font-bold">{t.nav.settings}</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight mt-1" style={{ fontFamily: theme.fontFamily }}>
+          <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight" style={{ fontFamily: theme.fontFamily }}>
             {t.pages.settingsTitle}
           </h2>
-          <p className="font-mono text-xs opacity-70 tracking-wider">
+          <p className="font-mono text-xs opacity-70 tracking-wider mt-1">
             {t.pages.settingsSub}
           </p>
         </div>

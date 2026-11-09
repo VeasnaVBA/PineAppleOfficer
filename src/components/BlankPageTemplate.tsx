@@ -4,14 +4,13 @@ import { Language, translations } from '../translations';
 
 interface BlankPageTemplateProps {
   title: string;
-  breadcrumb: string;
+  breadcrumb?: string;
   subtitle: string;
   lang: Language;
 }
 
 export const BlankPageTemplate: React.FC<BlankPageTemplateProps> = ({
   title,
-  breadcrumb,
   subtitle,
   lang
 }) => {
@@ -19,17 +18,12 @@ export const BlankPageTemplate: React.FC<BlankPageTemplateProps> = ({
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in text-ink">
-      {/* Top Breadcrumb & Page Masthead */}
+      {/* Page Masthead */}
       <div className="pb-4 border-b-2 border-ink">
-        <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono opacity-70 uppercase">
-          <span>{t.brand}</span>
-          <span>/</span>
-          <span className="font-bold">{breadcrumb}</span>
-        </div>
-        <h2 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-tight mt-1">
+        <h2 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-tight">
           {title}
         </h2>
-        <p className="font-mono text-xs opacity-70 tracking-wider">
+        <p className="font-mono text-xs opacity-70 tracking-wider mt-1">
           {subtitle}
         </p>
       </div>
