@@ -182,9 +182,6 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({
           <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight" style={{ fontFamily: theme.fontFamily }}>
             {t.pages.settingsTitle}
           </h2>
-          <p className="font-mono text-xs opacity-70 tracking-wider mt-1">
-            {t.pages.settingsSub}
-          </p>
         </div>
 
         <button

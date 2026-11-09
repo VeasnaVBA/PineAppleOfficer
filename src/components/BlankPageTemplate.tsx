@@ -5,13 +5,12 @@ import { Language, translations } from '../translations';
 interface BlankPageTemplateProps {
   title: string;
   breadcrumb?: string;
-  subtitle: string;
+  subtitle?: string;
   lang: Language;
 }
 
 export const BlankPageTemplate: React.FC<BlankPageTemplateProps> = ({
   title,
-  subtitle,
   lang
 }) => {
   const t = translations[lang];
@@ -23,9 +22,6 @@ export const BlankPageTemplate: React.FC<BlankPageTemplateProps> = ({
         <h2 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-tight">
           {title}
         </h2>
-        <p className="font-mono text-xs opacity-70 tracking-wider mt-1">
-          {subtitle}
-        </p>
       </div>
 
       {/* Main Empty Canvas Area - Dynamic Theme Colors */}

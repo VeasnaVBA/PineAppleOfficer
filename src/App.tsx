@@ -89,7 +89,6 @@ export function App() {
               {currentTab === 'dashboard' && (
                 <BlankPageTemplate
                   title={t.pages.dashboardTitle}
-                  subtitle={t.pages.dashboardSub}
                   lang={lang}
                 />
               )}
@@ -97,7 +96,6 @@ export function App() {
               {currentTab === 'teachers' && (
                 <BlankPageTemplate
                   title={t.pages.teachersTitle}
-                  subtitle={t.pages.teachersSub}
                   lang={lang}
                 />
               )}
@@ -105,7 +103,6 @@ export function App() {
               {currentTab === 'students' && (
                 <BlankPageTemplate
                   title={t.pages.studentsTitle}
-                  subtitle={t.pages.studentsSub}
                   lang={lang}
                 />
               )}
@@ -113,7 +110,6 @@ export function App() {
               {currentTab === 'classes' && (
                 <BlankPageTemplate
                   title={t.pages.classesTitle}
-                  subtitle={t.pages.classesSub}
                   lang={lang}
                 />
               )}
