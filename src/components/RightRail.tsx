@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Article } from '../types';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 interface RightRailProps {
   heroArticle: Article;
@@ -45,25 +45,19 @@ export const RightRail: React.FC<RightRailProps> = ({
 
   return (
     <aside className="w-full xl:w-80 2xl:w-96 flex-shrink-0 flex flex-col justify-between border-t-2 xl:border-t-0 xl:border-l-2 border-ink bg-[#ded5be]">
-      {/* Top: Featured Cinematic Story */}
-      <div className="border-b-2 border-ink">
-        {/* Cinematic Monochrome Image */}
-        <div 
-          onClick={() => onSelectArticle(heroArticle)}
-          className="relative aspect-[16/10] sm:aspect-[16/11] bg-[#1a1a1a] overflow-hidden cursor-pointer group"
-        >
-          <img
-            src={heroArticle.imageUrl}
-            alt={heroArticle.title}
-            className="w-full h-full object-cover filter grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
-          />
-          <div className="absolute top-2 right-2 px-2 py-0.5 bg-ink text-[#ded5be] text-[9px] font-mono tracking-widest uppercase">
-            Spotlight
-          </div>
+      {/* Top: Featured Curatorial Spotlight (Pure Typographic, No Image) */}
+      <div className="border-b-2 border-ink p-5 lg:p-6 bg-[#ede5cf]">
+        <div className="flex items-center justify-between pb-2 border-b border-ink/20">
+          <span className="px-2 py-0.5 bg-ink text-[#ded5be] text-[9px] font-mono tracking-widest uppercase font-bold">
+            Editorial Spotlight
+          </span>
+          <span className="text-[10px] font-mono text-ink/70">
+            {heroArticle.date}
+          </span>
         </div>
 
         {/* Story Text */}
-        <div className="p-4 sm:p-5 lg:p-6">
+        <div className="pt-3">
           <h3 
             onClick={() => onSelectArticle(heroArticle)}
             className="font-serif text-base sm:text-lg font-bold text-ink leading-snug hover:underline cursor-pointer"
@@ -71,15 +65,15 @@ export const RightRail: React.FC<RightRailProps> = ({
             {heroArticle.title}
           </h3>
           <p className="text-[10px] font-mono tracking-wider text-ink/70 mt-1 uppercase">
-            {heroArticle.date} • {heroArticle.category}
+            {heroArticle.category} • By {heroArticle.author}
           </p>
-          <p className="text-xs font-serif text-ink/85 mt-2 leading-relaxed line-clamp-4">
-            {heroArticle.excerpt}
+          <p className="text-xs font-serif text-ink/85 mt-2.5 leading-relaxed line-clamp-4 italic">
+            "{heroArticle.excerpt}"
           </p>
 
           <button
             onClick={() => onSelectArticle(heroArticle)}
-            className="mt-3 flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-widest text-ink hover:underline font-bold"
+            className="mt-3.5 flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-widest text-ink hover:underline font-bold"
           >
             <span>Read full coverage</span>
             <ArrowRight size={12} />

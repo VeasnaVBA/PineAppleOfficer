@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Article } from '../types';
-import { Search, Plus, Edit3, Trash2, Eye, Star, Filter } from 'lucide-react';
+import { Search, Plus, Edit3, Trash2, Eye, Star, FileText } from 'lucide-react';
 
 interface EditorialCMSViewProps {
   articles: Article[];
@@ -35,11 +35,11 @@ export const EditorialCMSView: React.FC<EditorialCMSViewProps> = ({
   });
 
   return (
-    <div className="p-6 lg:p-8 space-y-6 animate-fade-in">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-ink gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b-2 border-ink gap-4">
         <div>
-          <h2 className="font-serif text-2xl lg:text-3xl font-bold uppercase tracking-tight text-ink">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold uppercase tracking-tight text-ink">
             EDITORIAL CMS ARCHIVE
           </h2>
           <p className="font-mono text-xs text-ink/70 mt-1 uppercase tracking-wider">
@@ -49,7 +49,7 @@ export const EditorialCMSView: React.FC<EditorialCMSViewProps> = ({
 
         <button
           onClick={onOpenNewModal}
-          className="px-4 py-2 bg-ink text-[#ded5be] text-xs font-mono uppercase tracking-widest font-bold hover:bg-ink/85 flex items-center gap-1.5 shadow-sm"
+          className="px-4 py-2 bg-ink text-[#ded5be] text-xs font-mono uppercase tracking-widest font-bold hover:bg-ink/85 flex items-center gap-1.5 shadow-sm self-start sm:self-auto"
         >
           <Plus size={14} />
           <span>New Dispatch</span>
@@ -69,12 +69,12 @@ export const EditorialCMSView: React.FC<EditorialCMSViewProps> = ({
           />
         </div>
 
-        <div className="flex items-center gap-1 overflow-x-auto text-xs font-mono">
+        <div className="flex items-center gap-1 overflow-x-auto text-xs font-mono scrollbar-none">
           {['All', 'Published', 'Featured', 'Draft', 'Archived'].map(st => (
             <button
               key={st}
               onClick={() => setStatusFilter(st)}
-              className={`px-2.5 py-1 border uppercase tracking-wider text-[11px] ${
+              className={`px-2.5 py-1 border uppercase tracking-wider text-[11px] whitespace-nowrap ${
                 statusFilter === st ? 'bg-ink text-[#ded5be] border-ink font-bold' : 'border-ink/40 text-ink'
               }`}
             >
@@ -89,7 +89,7 @@ export const EditorialCMSView: React.FC<EditorialCMSViewProps> = ({
         <table className="w-full text-left font-mono text-xs">
           <thead className="bg-[#111111] text-[#ded5be] border-b border-ink uppercase tracking-wider text-[10px]">
             <tr>
-              <th className="p-3 w-16">Preview</th>
+              <th className="p-3 w-10">Doc</th>
               <th className="p-3">Title & Summary</th>
               <th className="p-3">Category</th>
               <th className="p-3">Curator</th>
@@ -103,12 +103,8 @@ export const EditorialCMSView: React.FC<EditorialCMSViewProps> = ({
             {filtered.map(article => (
               <tr key={article.id} className="hover:bg-black/5 transition-colors">
                 <td className="p-3">
-                  <div className="w-12 h-12 border border-ink overflow-hidden bg-black flex-shrink-0">
-                    <img 
-                      src={article.imageUrl} 
-                      alt="" 
-                      className="w-full h-full object-cover filter grayscale contrast-125"
-                    />
+                  <div className="w-8 h-8 border border-ink flex items-center justify-center bg-[#ede5cf] text-ink">
+                    <FileText size={15} />
                   </div>
                 </td>
                 <td className="p-3 max-w-xs">
@@ -123,17 +119,17 @@ export const EditorialCMSView: React.FC<EditorialCMSViewProps> = ({
                   </p>
                 </td>
                 <td className="p-3">
-                  <span className="text-[10px] border border-ink/40 px-1.5 py-0.5">
+                  <span className="text-[10px] border border-ink/40 px-1.5 py-0.5 whitespace-nowrap">
                     {article.category}
                   </span>
                 </td>
-                <td className="p-3 font-semibold text-ink">{article.author}</td>
-                <td className="p-3 text-ink/70">{article.date}</td>
-                <td className="p-3">
+                <td className="p-3 font-semibold text-ink whitespace-nowrap">{article.author}</td>
+                <td className="p-3 text-ink/70 whitespace-nowrap">{article.date}</td>
+                <td className="p-3 whitespace-nowrap">
                   <span>{article.views.toLocaleString()}</span>
                   <span className="text-ink/60 ml-1">({article.likes} ♥)</span>
                 </td>
-                <td className="p-3">
+                <td className="p-3 whitespace-nowrap">
                   <select
                     value={article.status}
                     onChange={(e) => onStatusChange(article.id, e.target.value as any)}
@@ -145,7 +141,7 @@ export const EditorialCMSView: React.FC<EditorialCMSViewProps> = ({
                     <option value="Archived">Archived</option>
                   </select>
                 </td>
-                <td className="p-3 text-right">
+                <td className="p-3 text-right whitespace-nowrap">
                   <div className="flex items-center justify-end gap-1.5">
                     <button
                       onClick={() => onSelectArticle(article)}
@@ -163,7 +159,7 @@ export const EditorialCMSView: React.FC<EditorialCMSViewProps> = ({
                     </button>
                     <button
                       onClick={() => onToggleFeature(article.id)}
-                      className="p-1 hover:bg-black/10 text-yellow-600"
+                      className="p-1 hover:bg-black/10 text-yellow-700"
                       title="Toggle Feature"
                     >
                       <Star size={13} className={article.status === 'Featured' ? 'fill-yellow-600' : ''} />

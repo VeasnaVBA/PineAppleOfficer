@@ -42,14 +42,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const getPageTitle = (tab: string) => {
     switch (tab) {
-      case 'overview': return 'Overview';
-      case 'articles': return 'Featured Articles';
+      case 'empty': return 'Empty Page';
+      case 'overview': return 'Dashboard Overview';
+      case 'articles': return 'Articles';
       case 'cms': return 'Editorial CMS';
       case 'analytics': return 'Audience & Analytics';
       case 'subscribers': return 'Patrons & CRM';
-      case 'gallery': return 'Media Vault';
       case 'settings': return 'System Settings';
-      default: return 'Overview';
+      default: return 'Empty Page';
     }
   };
 

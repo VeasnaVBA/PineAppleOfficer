@@ -1,6 +1,6 @@
 import React from 'react';
 import { Article } from '../types';
-import { X, Eye, Heart, Calendar, User, Share2, Edit3, ExternalLink } from 'lucide-react';
+import { X, Eye, Heart, Calendar, User, Share2, Edit3 } from 'lucide-react';
 
 interface ArticleInspectModalProps {
   article: Article | null;
@@ -48,15 +48,6 @@ export const ArticleInspectModal: React.FC<ArticleInspectModalProps> = ({
             <p className="text-sm font-mono text-ink/80 mt-1">
               Curated by: <span className="font-bold underline">{article.author}</span>
             </p>
-          </div>
-
-          {/* Large image */}
-          <div className="relative aspect-[16/9] border border-ink overflow-hidden bg-black">
-            <img
-              src={article.imageUrl}
-              alt={article.title}
-              className="w-full h-full object-cover filter grayscale contrast-125"
-            />
           </div>
 
           {/* Telemetry row */}

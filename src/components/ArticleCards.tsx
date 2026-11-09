@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Article } from '../types';
-import { Eye, Heart, Edit3, Trash2, Star } from 'lucide-react';
+import { Eye, Heart, Edit3, Trash2, Star, BookOpen } from 'lucide-react';
 
 interface ArticleCardsProps {
   articles: Article[];
@@ -34,7 +34,7 @@ export const ArticleCards: React.FC<ArticleCardsProps> = ({
             LATEST ARTICLES
           </h2>
           <p className="font-mono text-[11px] sm:text-xs text-ink/75 tracking-wider mt-0.5">
-            12 956 article archive • 3 currently highlighted in gallery
+            12 956 article archive • 3 currently highlighted
           </p>
         </div>
 
@@ -56,15 +56,15 @@ export const ArticleCards: React.FC<ArticleCardsProps> = ({
         </div>
       </div>
 
-      {/* 3 Editorial Cards Grid */}
+      {/* 3 Pure Typographic Cards (Zero Images) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-8">
         {filteredArticles.map((article) => (
           <div
             key={article.id}
-            className="group relative flex flex-col border-2 border-ink bg-[#111111] overflow-hidden shadow-sm hover:shadow-brutal transition-all duration-200"
+            className="group relative flex flex-col border-2 border-ink bg-[#ded5be] overflow-hidden shadow-sm hover:shadow-brutal transition-all duration-200"
           >
-            {/* Dark Top Header matching the reference image */}
-            <div className="p-4 bg-[#111111] text-[#ded5be] border-b border-[#2a2a2a] flex flex-col justify-between min-h-[110px] sm:min-h-[125px]">
+            {/* Dark Top Header */}
+            <div className="p-4 bg-[#111111] text-[#ded5be] border-b border-ink flex flex-col justify-between min-h-[110px]">
               <div>
                 <h3 
                   onClick={() => onSelectArticle(article)}
@@ -72,7 +72,7 @@ export const ArticleCards: React.FC<ArticleCardsProps> = ({
                 >
                   {article.title}
                 </h3>
-                <p className="text-[10px] font-mono tracking-wider text-[#b8ad94] mt-1 uppercase">
+                <p className="text-[10px] font-mono tracking-wider text-[#b8ad94] mt-1.5 uppercase">
                   {article.subtitle || article.category}
                 </p>
               </div>
@@ -86,71 +86,67 @@ export const ArticleCards: React.FC<ArticleCardsProps> = ({
               </div>
             </div>
 
-            {/* Monochrome High-Contrast Image Container */}
+            {/* Typographic Content Body (No image) */}
             <div 
-              className="relative aspect-[3/4] bg-[#222222] overflow-hidden cursor-pointer"
+              className="p-5 flex-1 flex flex-col justify-between bg-[#ede5cf] cursor-pointer"
               onClick={() => onSelectArticle(article)}
             >
-              <img
-                src={article.imageUrl}
-                alt={article.title}
-                className="w-full h-full object-cover filter grayscale contrast-125 group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="px-2 py-0.5 border border-ink bg-[#ded5be] text-[9px] font-mono uppercase tracking-widest font-bold">
+                    {article.status}
+                  </span>
+                  <span className="text-[10px] font-mono text-ink/60">
+                    ID: {article.id}
+                  </span>
+                </div>
 
-              {/* Status Badge */}
-              <div className="absolute top-2 left-2 px-2 py-0.5 bg-ink/90 border border-[#ded5be]/40 text-[#ded5be] text-[9px] font-mono uppercase tracking-widest">
-                {article.status}
-              </div>
-
-              {/* Actions Overlay */}
-              <div className="absolute inset-0 bg-ink/80 opacity-0 group-hover:opacity-100 transition-opacity p-4 flex flex-col justify-end text-[#ded5be]">
-                <p className="text-xs font-serif italic mb-3 line-clamp-3 text-[#ded5be]/90">
+                <p className="font-serif text-xs text-ink/85 leading-relaxed line-clamp-4 italic">
                   "{article.excerpt}"
                 </p>
+              </div>
 
-                <div className="flex items-center justify-between gap-2 border-t border-[#444] pt-3 text-[11px] font-mono">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onEditArticle(article);
-                    }}
-                    className="flex items-center gap-1 px-2.5 py-1.5 bg-[#ded5be] text-ink hover:bg-white font-bold transition-colors uppercase text-[10px]"
-                  >
-                    <Edit3 size={12} />
-                    Edit
-                  </button>
+              <div className="pt-4 mt-3 border-t border-ink/20 flex items-center justify-between text-xs font-mono">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEditArticle(article);
+                  }}
+                  className="flex items-center gap-1 text-[10px] uppercase font-bold text-ink hover:underline"
+                >
+                  <Edit3 size={11} />
+                  Edit
+                </button>
 
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onToggleFeature(article.id);
-                    }}
-                    className="flex items-center gap-1 px-2.5 py-1.5 border border-[#ded5be]/40 text-[#ded5be] hover:bg-white/10 text-[10px] font-mono uppercase"
-                  >
-                    <Star size={12} className={article.status === 'Featured' ? 'fill-yellow-400 text-yellow-400' : ''} />
-                    Feature
-                  </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleFeature(article.id);
+                  }}
+                  className="flex items-center gap-1 text-[10px] uppercase text-ink hover:underline"
+                >
+                  <Star size={11} className={article.status === 'Featured' ? 'fill-yellow-600 text-yellow-600' : ''} />
+                  Feature
+                </button>
 
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeleteArticle(article.id);
-                    }}
-                    className="p-1.5 border border-red-500/50 text-red-300 hover:bg-red-500/20"
-                    title="Delete Article"
-                  >
-                    <Trash2 size={12} />
-                  </button>
-                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteArticle(article.id);
+                  }}
+                  className="text-red-700 hover:text-red-900"
+                  title="Delete"
+                >
+                  <Trash2 size={12} />
+                </button>
               </div>
             </div>
 
             {/* Bottom Card Bar */}
-            <div className="px-3 py-2 bg-[#1a1a1a] text-[#8e8571] flex items-center justify-between text-[10px] font-mono border-t border-[#262626]">
+            <div className="px-3 py-2 bg-[#ded5be] text-ink/75 flex items-center justify-between text-[10px] font-mono border-t border-ink">
               <span className="truncate">CURATOR: {article.author.toUpperCase()}</span>
-              <span className="flex items-center gap-1 text-red-300/80 flex-shrink-0">
-                <Heart size={10} className="fill-red-300/60" />
+              <span className="flex items-center gap-1 text-red-700 flex-shrink-0 font-bold">
+                <Heart size={10} className="fill-red-700" />
                 {article.likes}
               </span>
             </div>

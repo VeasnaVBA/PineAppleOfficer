@@ -1,16 +1,14 @@
 import React from 'react';
 import { 
   X, 
+  LayoutGrid, 
   Compass, 
   BookOpen, 
   BarChart3, 
   Users, 
-  Image as ImageIcon, 
   Settings, 
   PenSquare, 
-  Github, 
-  Globe,
-  Radio
+  Github
 } from 'lucide-react';
 
 interface MobileDrawerProps {
@@ -35,12 +33,11 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
   if (!isOpen) return null;
 
   const navItems = [
-    { id: 'overview', label: 'Home / Overview', badge: 'Live', icon: Compass },
-    { id: 'articles', label: 'Curated Articles', badge: `${articleCount}`, icon: BookOpen },
+    { id: 'empty', label: 'Empty Page', badge: 'Blank', icon: LayoutGrid },
+    { id: 'overview', label: 'Dashboard Overview', badge: 'Live', icon: Compass },
     { id: 'cms', label: 'Editorial CMS', badge: 'Admin', icon: BookOpen },
     { id: 'analytics', label: 'Audience Analytics', badge: '+14%', icon: BarChart3 },
     { id: 'subscribers', label: 'Patrons & CRM', badge: `${subscriberCount}`, icon: Users },
-    { id: 'gallery', label: 'Media Vault', badge: 'Photos', icon: ImageIcon },
     { id: 'settings', label: 'System Settings', badge: 'Cloud', icon: Settings },
   ];
 
@@ -88,7 +85,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
               className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-ink text-[#ded5be] hover:bg-ink/85 text-xs font-mono uppercase tracking-widest border border-ink shadow-sm font-bold"
             >
               <PenSquare size={14} />
-              <span>New Dispatch</span>
+              <span>New Block / Dispatch</span>
             </button>
           </div>
 

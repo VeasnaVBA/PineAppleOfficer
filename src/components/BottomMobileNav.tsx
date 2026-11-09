@@ -1,5 +1,5 @@
 import React from 'react';
-import { Compass, BookOpen, BarChart3, Users, Menu } from 'lucide-react';
+import { LayoutGrid, Compass, BookOpen, BarChart3, Menu } from 'lucide-react';
 
 interface BottomMobileNavProps {
   currentTab: string;
@@ -13,10 +13,10 @@ export const BottomMobileNav: React.FC<BottomMobileNavProps> = ({
   onToggleMobileDrawer
 }) => {
   const items = [
-    { id: 'overview', label: 'Home', icon: Compass },
-    { id: 'cms', label: 'Articles', icon: BookOpen },
+    { id: 'empty', label: 'Empty Page', icon: LayoutGrid },
+    { id: 'overview', label: 'Dashboard', icon: Compass },
+    { id: 'cms', label: 'CMS', icon: BookOpen },
     { id: 'analytics', label: 'Metrics', icon: BarChart3 },
-    { id: 'subscribers', label: 'Patrons', icon: Users },
   ];
 
   return (

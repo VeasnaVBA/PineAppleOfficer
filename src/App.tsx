@@ -9,6 +9,7 @@ import { TopTicker } from './components/TopTicker';
 import { ArticleCards } from './components/ArticleCards';
 import { BottomEditorial } from './components/BottomEditorial';
 import { RightRail } from './components/RightRail';
+import { EmptyPageView } from './components/EmptyPageView';
 import { NewArticleModal } from './components/NewArticleModal';
 import { ArticleInspectModal } from './components/ArticleInspectModal';
 import { AnalyticsView } from './components/AnalyticsView';
@@ -20,7 +21,7 @@ import { Toast } from './components/Toast';
 export function App() {
   const [articles, setArticles] = useState<Article[]>(initialArticles);
   const [subscribers, setSubscribers] = useState<Subscriber[]>(initialSubscribers);
-  const [currentTab, setCurrentTab] = useState<string>('overview');
+  const [currentTab, setCurrentTab] = useState<string>('empty');
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   
   // Modals
@@ -120,7 +121,12 @@ export function App() {
 
             {/* View router based on active tab */}
             <div className="flex-1">
-              {/* Home Overview View: The classic full magazine spread */}
+              {/* Clean Empty Page Workspace (Default) */}
+              {currentTab === 'empty' && (
+                <EmptyPageView onShowToast={showToast} />
+              )}
+
+              {/* Dashboard Overview (Pure Typographic, No Images) */}
               {currentTab === 'overview' && (
                 <div className="flex flex-col xl:flex-row">
                   <div className="flex-1 min-w-0 flex flex-col justify-between">
@@ -145,7 +151,7 @@ export function App() {
                 </div>
               )}
 
-              {/* Dedicated Curated Articles Page */}
+              {/* Dedicated Articles Page */}
               {currentTab === 'articles' && (
                 <div className="flex flex-col">
                   <ArticleCards
@@ -158,12 +164,6 @@ export function App() {
                     onDeleteArticle={handleDeleteArticle}
                     onToggleFeature={handleToggleFeature}
                   />
-                  <div className="p-4 sm:p-6 lg:p-8 border-b-2 border-ink">
-                    <h3 className="font-serif text-lg font-bold text-ink mb-2">Curatorial Focus</h3>
-                    <p className="font-serif text-sm text-ink/80 leading-relaxed max-w-3xl">
-                      All editions are reviewed weekly by the curatorial board. Monolithic architecture, surrealist human studies, and stark philosophical essays are prioritized for front-line circulation.
-                    </p>
-                  </div>
                   <BottomEditorial onShowToast={showToast} />
                 </div>
               )}
@@ -201,55 +201,6 @@ export function App() {
                   onDeleteSubscriber={handleDeleteSubscriber}
                   onShowToast={showToast}
                 />
-              )}
-
-              {/* Media Vault Gallery Page */}
-              {currentTab === 'gallery' && (
-                <div className="p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in">
-                  <div className="border-b-2 border-ink pb-3 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-                    <div>
-                      <h2 className="font-serif text-xl sm:text-2xl font-bold uppercase text-ink">
-                        CURATORIAL MEDIA VAULT
-                      </h2>
-                      <p className="font-mono text-xs text-ink/70">
-                        High-contrast monochrome photography and archival plates
-                      </p>
-                    </div>
-                    <span className="font-mono text-xs px-2.5 py-1 border border-ink bg-[#ede5cf] self-start sm:self-auto font-bold">
-                      {articles.length + 5} Archival Plates
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {[
-                      { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600', title: 'Isolation Study #1', author: 'Ben Zank' },
-                      { url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=600', title: 'The Silhouette Posture', author: 'Ignant Studio' },
-                      { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600', title: 'Temporal Continuum', author: 'Julian M.' },
-                      { url: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=600', title: 'Brutalist Form', author: 'Elena Rostova' },
-                      { url: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&q=80&w=800', title: 'Tacheles Cathedral Rays', author: 'Karin Von Berg' },
-                      { url: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=600', title: 'Auditorium Monochrome', author: 'Archival Staff' },
-                      { url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=600', title: 'Subtle Valley Shadows', author: 'Jack Johnstone' },
-                      { url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=600', title: 'Geometric Angle', author: 'Drew Vickers' }
-                    ].map((item, idx) => (
-                      <div 
-                        key={idx} 
-                        className="border-2 border-ink aspect-square overflow-hidden bg-black group relative cursor-pointer shadow-sm hover:shadow-brutal transition-all"
-                        onClick={() => showToast('PLATE INSPECTED', `${item.title} by ${item.author}`)}
-                      >
-                        <img 
-                          src={item.url} 
-                          alt={item.title} 
-                          className="w-full h-full object-cover filter grayscale contrast-125 group-hover:scale-110 transition-transform duration-300" 
-                        />
-                        <div className="absolute inset-0 bg-ink/80 opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-end text-[#ded5be]">
-                          <span className="text-[10px] font-mono uppercase tracking-widest text-[#b8ad94]">PLATE #{idx + 101}</span>
-                          <span className="text-sm font-serif font-bold text-[#ded5be]">{item.title}</span>
-                          <span className="text-xs font-mono text-[#ded5be]/80 mt-0.5">{item.author}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               )}
 
               {/* System Configuration & Cloud Settings Page */}
@@ -297,7 +248,8 @@ export function App() {
         article={inspectingArticle}
         onClose={() => setInspectingArticle(null)}
         onEdit={(article) => {
-          setInspectingArticle(article);
+          setInspectingArticle(null);
+          setEditingArticle(article);
           setIsNewModalOpen(true);
         }}
         onShowToast={showToast}

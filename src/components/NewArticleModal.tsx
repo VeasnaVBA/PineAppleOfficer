@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Article } from '../types';
-import { X, Sparkles, Image, Check } from 'lucide-react';
+import { X, Check } from 'lucide-react';
 
 interface NewArticleModalProps {
   isOpen: boolean;
@@ -20,7 +20,7 @@ export const NewArticleModal: React.FC<NewArticleModalProps> = ({
     subtitle: '',
     category: 'Photography, Concept',
     author: 'Curator Desk',
-    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600',
+    imageUrl: '',
     excerpt: '',
     content: '',
     status: 'Published'
@@ -35,7 +35,7 @@ export const NewArticleModal: React.FC<NewArticleModalProps> = ({
         subtitle: 'Art, Concept',
         category: 'Art, Conceptual',
         author: 'Curator Desk',
-        imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=600',
+        imageUrl: '',
         excerpt: '',
         content: '',
         status: 'Published'
@@ -55,12 +55,12 @@ export const NewArticleModal: React.FC<NewArticleModalProps> = ({
       subtitle: formData.subtitle || 'Editorial Collection',
       category: formData.category || 'Curated',
       date: initialData?.date || '09.11.2026',
-      imageUrl: formData.imageUrl || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600',
+      imageUrl: '',
       author: formData.author || 'Archival Staff',
       views: initialData?.views || 120,
       likes: initialData?.likes || 14,
       status: (formData.status as any) || 'Published',
-      excerpt: formData.excerpt || 'A study on light, shadow, and architectural isolation.',
+      excerpt: formData.excerpt || 'A study on structure, typography, and architectural isolation.',
       content: formData.content || formData.excerpt
     };
 
@@ -165,26 +165,6 @@ export const NewArticleModal: React.FC<NewArticleModalProps> = ({
                 <option value="Draft">Draft (Internal Review)</option>
                 <option value="Archived">Archived</option>
               </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-[11px] font-mono uppercase tracking-widest text-ink/80 mb-1">
-              Monochrome Image URL
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="url"
-                placeholder="https://..."
-                value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                className="flex-1 px-3 py-2 bg-transparent border border-ink text-ink text-xs font-mono focus:bg-white/40 outline-none"
-              />
-              {formData.imageUrl && (
-                <div className="w-10 h-10 border border-ink overflow-hidden flex-shrink-0 bg-black">
-                  <img src={formData.imageUrl} alt="preview" className="w-full h-full object-cover filter grayscale contrast-125" />
-                </div>
-              )}
             </div>
           </div>
 

@@ -1,16 +1,13 @@
 import React from 'react';
 import { 
+  LayoutGrid, 
   Compass, 
   BookOpen, 
-  Image as ImageIcon, 
   BarChart3, 
   Users, 
   Settings, 
   PenSquare,
-  Sparkles,
-  ExternalLink,
-  Github,
-  Globe
+  Github
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -27,13 +24,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
   articleCount
 }) => {
   const navItems = [
-    { id: 'overview', label: 'Home', badge: 'Live' },
-    { id: 'articles', label: 'Articles', badge: `${articleCount}` },
-    { id: 'cms', label: 'Editorial CMS', badge: 'Admin' },
-    { id: 'analytics', label: 'Analytics', badge: '+14%' },
-    { id: 'subscribers', label: 'Subscribers', badge: 'CRM' },
-    { id: 'gallery', label: 'Gallery', badge: 'Media' },
-    { id: 'settings', label: 'Settings', badge: 'Cloud' }
+    { id: 'empty', label: 'Empty Page', badge: 'Blank', icon: LayoutGrid },
+    { id: 'overview', label: 'Dashboard', badge: 'Live', icon: Compass },
+    { id: 'cms', label: 'Editorial CMS', badge: 'Admin', icon: BookOpen },
+    { id: 'analytics', label: 'Analytics', badge: '+14%', icon: BarChart3 },
+    { id: 'subscribers', label: 'Subscribers', badge: 'CRM', icon: Users },
+    { id: 'settings', label: 'Settings', badge: 'Cloud', icon: Settings }
   ];
 
   return (
@@ -61,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-ink text-[#ded5be] hover:bg-ink/85 transition-all text-xs font-mono uppercase tracking-widest border border-ink shadow-sm font-bold"
           >
             <PenSquare size={14} />
-            <span>New Dispatch</span>
+            <span>New Block / Dispatch</span>
           </button>
         </div>
 
