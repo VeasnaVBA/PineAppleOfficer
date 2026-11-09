@@ -43,12 +43,12 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Language Switcher Button (EN / ខ្មែរ) */}
           <div 
-            className="flex items-center border-2 border-ink text-[10px] sm:text-xs font-mono transition-colors"
+            className="h-8 flex items-stretch border border-ink text-[11px] sm:text-xs font-mono transition-colors"
             style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
           >
             <button
               onClick={() => onToggleLanguage('en')}
-              className={`px-2 py-1 font-bold transition-colors ${
+              className={`h-full px-2 sm:px-2.5 flex items-center justify-center font-bold transition-colors ${
                 lang === 'en' 
                   ? 'bg-ink' 
                   : 'hover:bg-black/10'
@@ -60,7 +60,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
             <button
               onClick={() => onToggleLanguage('km')}
-              className={`px-2 py-1 font-bold transition-colors border-l border-ink ${
+              className={`h-full px-2 sm:px-2.5 flex items-center justify-center font-bold transition-colors border-l border-ink ${
                 lang === 'km' 
                   ? 'bg-ink' 
                   : 'hover:bg-black/10'
@@ -72,26 +72,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </div>
 
-          {/* Live Edge Status Pill */}
+          {/* GitHub Repository Link Button */}
           <a
             href="https://github.com/VeasnaVBA/PineAppleOfficer"
             target="_blank"
             rel="noreferrer"
-            className="hidden md:flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono border border-ink hover:opacity-80 transition-colors"
+            className="h-8 flex items-center justify-center gap-1.5 px-2 sm:px-2.5 border border-ink text-xs font-mono hover:opacity-80 transition-colors"
             style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
             title="GitHub Repository"
           >
-            <Github size={12} />
-            <span className="hidden lg:inline">VeasnaVBA/PineAppleOfficer</span>
+            <Github size={14} />
+            <span className="hidden lg:inline text-[11px]">VeasnaVBA/PineAppleOfficer</span>
           </a>
-
-          <div 
-            className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1 text-[10px] font-mono border border-ink transition-colors"
-            style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-            <span className="font-bold">{t.live}</span>
-          </div>
 
           {/* Notifications Dropdown */}
           <div className="relative">
@@ -100,7 +92,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setShowNotifications(!showNotifications);
                 setShowUserMenu(false);
               }}
-              className="relative p-1.5 border border-ink hover:bg-black/10 transition-colors"
+              className="h-8 w-8 flex items-center justify-center relative border border-ink hover:bg-black/10 transition-colors"
               style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
               title="Notifications"
             >
@@ -139,8 +131,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setShowUserMenu(!showUserMenu);
                 setShowNotifications(false);
               }}
-              className="flex items-center gap-1 p-1 sm:p-1.5 border border-ink hover:bg-black/10 transition-colors"
+              className="h-8 flex items-center justify-center gap-1 px-1.5 sm:px-2 border border-ink hover:bg-black/10 transition-colors"
               style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+              title="User Profile"
             >
               <div 
                 className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-serif font-bold"
@@ -148,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 P
               </div>
-              <ChevronDown size={12} className="hidden sm:block opacity-70" />
+              <ChevronDown size={12} className="opacity-70" />
             </button>
 
             {showUserMenu && (
