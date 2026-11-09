@@ -1,269 +1,575 @@
 import React, { useState } from 'react';
+import { 
+  UserPlus, 
+  Search, 
+  Trash2, 
+  Edit3, 
+  X, 
+  Check, 
+  Filter, 
+  GraduationCap,
+  Calendar,
+  User,
+  Hash
+} from 'lucide-react';
 import { Teacher } from '../types';
-import { UserPlus, Search, Mail, Phone, BookOpen, Trash2, Edit3, CheckCircle2, GraduationCap } from 'lucide-react';
+import { Language, translations } from '../translations';
 
 interface TeachersViewProps {
   teachers: Teacher[];
   onAddTeacher: (teacher: Teacher) => void;
+  onUpdateTeacher: (teacher: Teacher) => void;
   onDeleteTeacher: (id: string) => void;
   onShowToast: (title: string, message: string) => void;
+  lang: Language;
 }
 
 export const TeachersView: React.FC<TeachersViewProps> = ({
   teachers,
   onAddTeacher,
+  onUpdateTeacher,
   onDeleteTeacher,
-  onShowToast
+  onShowToast,
+  lang
 }) => {
+  const t = translations[lang];
+  const tt = t.teacher;
+
   const [searchTerm, setSearchTerm] = useState('');
-  const [deptFilter, setDeptFilter] = useState('All');
-  const [isAdding, setIsAdding] = useState(false);
-  const [newTeacher, setNewTeacher] = useState({
-    name: '',
-    department: 'Literature & Humanities',
-    subject: '',
-    email: '',
-    phone: '',
-    officeRoom: '',
-    classes: ''
+  const [statusFilter, setStatusFilter] = useState<'All' | 'Active' | 'On Leave' | 'Inactive'>('All');
+  const [genderFilter, setGenderFilter] = useState<'All' | 'Male' | 'Female'>('All');
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingTeacherId, setEditingTeacherId] = useState<string | null>(null);
+
+  // Form State
+  const [formData, setFormData] = useState<{
+    id: string;
+    teacherId: string;
+    khmerLastName: string;
+    khmerFirstName: string;
+    englishLastName: string;
+    englishFirstName: string;
+    gender: 'Male' | 'Female' | 'Other';
+    dob: string;
+    status: 'Active' | 'On Leave' | 'Inactive';
+  }>({
+    id: '',
+    teacherId: '',
+    khmerLastName: '',
+    khmerFirstName: '',
+    englishLastName: '',
+    englishFirstName: '',
+    gender: 'Male',
+    dob: '1990-01-01',
+    status: 'Active'
   });
 
-  const departments = ['All', 'Literature & Humanities', 'Mathematics & Computing', 'Natural Sciences', 'Fine Arts & Architecture', 'Social Sciences'];
+  const getNextTeacherId = () => {
+    const count = teachers.length + 1;
+    return `TCH-${String(count).padStart(3, '0')}`;
+  };
 
-  const filtered = teachers.filter(t => {
-    const matchSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        t.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        t.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchDept = deptFilter === 'All' || t.department === deptFilter;
-    return matchSearch && matchDept;
-  });
+  const handleOpenAdd = () => {
+    setEditingTeacherId(null);
+    setFormData({
+      id: String(Date.now()),
+      teacherId: getNextTeacherId(),
+      khmerLastName: '',
+      khmerFirstName: '',
+      englishLastName: '',
+      englishFirstName: '',
+      gender: 'Male',
+      dob: '1990-01-01',
+      status: 'Active'
+    });
+    setIsFormOpen(true);
+  };
 
-  const handleCreate = (e: React.FormEvent) => {
+  const handleOpenEdit = (teacher: Teacher) => {
+    setEditingTeacherId(teacher.id);
+    setFormData({
+      id: teacher.id,
+      teacherId: teacher.teacherId,
+      khmerLastName: teacher.khmerLastName,
+      khmerFirstName: teacher.khmerFirstName,
+      englishLastName: teacher.englishLastName,
+      englishFirstName: teacher.englishFirstName,
+      gender: (teacher.gender as 'Male' | 'Female' | 'Other') || 'Male',
+      dob: teacher.dob || '1990-01-01',
+      status: teacher.status || 'Active'
+    });
+    setIsFormOpen(true);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTeacher.name || !newTeacher.email) return;
+    if (!formData.teacherId.trim() || !formData.khmerLastName.trim() || !formData.englishLastName.trim()) {
+      return;
+    }
 
-    const teacherObj: Teacher = {
-      id: `tch-${Date.now()}`,
-      name: newTeacher.name,
-      department: newTeacher.department,
-      subject: newTeacher.subject || 'General Studies',
-      email: newTeacher.email,
-      phone: newTeacher.phone || '+1 (555) 000-0000',
-      classes: newTeacher.classes ? newTeacher.classes.split(',').map(c => c.trim()) : ['GEN-101'],
-      status: 'Active',
-      joinedDate: '09.11.2026',
-      officeRoom: newTeacher.officeRoom || 'Main Faculty Hall'
-    };
+    if (editingTeacherId) {
+      onUpdateTeacher({
+        ...formData,
+        id: editingTeacherId,
+        name: `${formData.englishFirstName} ${formData.englishLastName}`
+      });
+      onShowToast(tt.teacherUpdatedToast, `${formData.khmerLastName} ${formData.khmerFirstName} (${formData.teacherId})`);
+    } else {
+      const newRecord: Teacher = {
+        ...formData,
+        id: String(Date.now()),
+        name: `${formData.englishFirstName} ${formData.englishLastName}`
+      };
+      onAddTeacher(newRecord);
+      onShowToast(tt.teacherAddedToast, `${newRecord.khmerLastName} ${newRecord.khmerFirstName} (${newRecord.teacherId})`);
+    }
 
-    onAddTeacher(teacherObj);
-    setIsAdding(false);
-    setNewTeacher({ name: '', department: 'Literature & Humanities', subject: '', email: '', phone: '', officeRoom: '', classes: '' });
-    onShowToast('FACULTY REGISTERED', `${teacherObj.name} added to teacher directory.`);
+    setIsFormOpen(false);
+    setEditingTeacherId(null);
+  };
+
+  const handleDelete = (id: string, name: string) => {
+    if (window.confirm(`${tt.confirmDelete} (${name})`)) {
+      onDeleteTeacher(id);
+      onShowToast(tt.teacherDeletedToast, name);
+    }
+  };
+
+  // Filter logic
+  const filteredTeachers = teachers.filter(tch => {
+    const query = searchTerm.toLowerCase().trim();
+    const matchesSearch = 
+      !query ||
+      tch.teacherId.toLowerCase().includes(query) ||
+      tch.khmerLastName.toLowerCase().includes(query) ||
+      tch.khmerFirstName.toLowerCase().includes(query) ||
+      `${tch.khmerLastName} ${tch.khmerFirstName}`.toLowerCase().includes(query) ||
+      tch.englishLastName.toLowerCase().includes(query) ||
+      tch.englishFirstName.toLowerCase().includes(query) ||
+      `${tch.englishFirstName} ${tch.englishLastName}`.toLowerCase().includes(query);
+
+    const matchesStatus = statusFilter === 'All' || tch.status === statusFilter;
+    const matchesGender = genderFilter === 'All' || tch.gender === genderFilter;
+
+    return matchesSearch && matchesStatus && matchesGender;
+  });
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'Active':
+        return (
+          <span 
+            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 border border-ink text-[11px] font-mono font-bold"
+            style={{ backgroundColor: 'var(--app-bg)' }}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+            {tt.active}
+          </span>
+        );
+      case 'On Leave':
+        return (
+          <span 
+            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 border border-ink text-[11px] font-mono font-bold"
+            style={{ backgroundColor: 'var(--app-bg)' }}
+          >
+            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+            {tt.onLeave}
+          </span>
+        );
+      case 'Inactive':
+      default:
+        return (
+          <span 
+            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 border border-ink text-[11px] font-mono font-bold opacity-75"
+            style={{ backgroundColor: 'var(--app-bg)' }}
+          >
+            <span className="w-2 h-2 rounded-full bg-gray-500"></span>
+            {tt.inactive}
+          </span>
+        );
+    }
+  };
+
+  const getGenderLabel = (gender: string) => {
+    if (gender === 'Male') return tt.male;
+    if (gender === 'Female') return tt.female;
+    return tt.other;
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b-2 border-ink gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-[11px] font-mono text-ink/70 uppercase">
-            <span>ACADEMICS</span>
-            <span>/</span>
-            <span className="font-bold text-ink underline">TEACHER INFO</span>
-          </div>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-tight text-ink mt-1">
-            FACULTY & INSTRUCTOR ROSTER
-          </h2>
-          <p className="font-mono text-xs text-ink/70 tracking-wider">
-            {teachers.length} Appointed instructors across academic departments
-          </p>
-        </div>
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in text-ink">
+      {/* Header - No Subtitle */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b-2 border-ink gap-3">
+        <h2 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-tight">
+          {t.pages.teachersTitle}
+        </h2>
 
         <button
-          onClick={() => setIsAdding(!isAdding)}
-          className="flex items-center gap-1.5 px-4 py-2 bg-ink text-[#ded5be] text-xs font-mono uppercase tracking-widest font-bold hover:bg-ink/85 border border-ink shadow-sm self-start sm:self-auto"
+          onClick={handleOpenAdd}
+          className="h-9 px-3.5 flex items-center justify-center gap-2 border-2 border-ink font-mono text-xs uppercase tracking-wider font-bold shadow-brutal hover:opacity-90 transition-all self-start sm:self-auto"
+          style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
         >
-          <UserPlus size={14} />
-          <span>Add Instructor</span>
+          <UserPlus size={15} />
+          <span>{tt.addTeacher}</span>
         </button>
       </div>
 
-      {/* Add Teacher Form Drawer */}
-      {isAdding && (
-        <form onSubmit={handleCreate} className="p-5 border-2 border-ink bg-[#ede5cf] shadow-brutal space-y-4">
-          <h4 className="font-serif font-bold text-base text-ink">Register New Faculty Member</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <input
-              type="text"
-              required
-              placeholder="Instructor Full Name *"
-              value={newTeacher.name}
-              onChange={(e) => setNewTeacher({ ...newTeacher, name: e.target.value })}
-              className="px-3 py-1.5 bg-transparent border border-ink text-xs font-mono outline-none"
-            />
-            <input
-              type="email"
-              required
-              placeholder="Official Institutional Email *"
-              value={newTeacher.email}
-              onChange={(e) => setNewTeacher({ ...newTeacher, email: e.target.value })}
-              className="px-3 py-1.5 bg-transparent border border-ink text-xs font-mono outline-none"
-            />
-            <input
-              type="text"
-              placeholder="Primary Subject (e.g. Calculus)"
-              value={newTeacher.subject}
-              onChange={(e) => setNewTeacher({ ...newTeacher, subject: e.target.value })}
-              className="px-3 py-1.5 bg-transparent border border-ink text-xs font-mono outline-none"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <select
-              value={newTeacher.department}
-              onChange={(e) => setNewTeacher({ ...newTeacher, department: e.target.value })}
-              className="px-3 py-1.5 bg-[#ded5be] border border-ink text-xs font-mono outline-none"
-            >
-              <option value="Literature & Humanities">Literature & Humanities</option>
-              <option value="Mathematics & Computing">Mathematics & Computing</option>
-              <option value="Natural Sciences">Natural Sciences</option>
-              <option value="Fine Arts & Architecture">Fine Arts & Architecture</option>
-              <option value="Social Sciences">Social Sciences</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Office Location (e.g. Hall B, Rm 204)"
-              value={newTeacher.officeRoom}
-              onChange={(e) => setNewTeacher({ ...newTeacher, officeRoom: e.target.value })}
-              className="px-3 py-1.5 bg-transparent border border-ink text-xs font-mono outline-none"
-            />
-            <input
-              type="text"
-              placeholder="Assigned Class Codes (comma separated, e.g. ENG-101, LIT-201)"
-              value={newTeacher.classes}
-              onChange={(e) => setNewTeacher({ ...newTeacher, classes: e.target.value })}
-              className="px-3 py-1.5 bg-transparent border border-ink text-xs font-mono outline-none"
-            />
-          </div>
-
-          <div className="flex justify-end gap-2 pt-2 border-t border-ink/20">
+      {/* Add / Edit Teacher Modal Form */}
+      {isFormOpen && (
+        <div className="border-2 border-ink shadow-brutal p-5 sm:p-6 space-y-5 animate-fade-in transition-colors"
+          style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+        >
+          <div className="flex items-center justify-between pb-3 border-b border-ink">
+            <div className="flex items-center gap-2">
+              <GraduationCap size={18} />
+              <h3 className="font-serif text-lg font-bold uppercase">
+                {editingTeacherId ? tt.editTeacher : tt.addTeacher}
+              </h3>
+            </div>
             <button
-              type="button"
-              onClick={() => setIsAdding(false)}
-              className="px-3 py-1 border border-ink text-xs font-mono uppercase"
+              onClick={() => setIsFormOpen(false)}
+              className="p-1 border border-ink hover:bg-black/10 transition-colors"
+              title={tt.cancel}
             >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-5 py-1 bg-ink text-[#ded5be] text-xs font-mono uppercase font-bold"
-            >
-              Register Faculty
+              <X size={16} />
             </button>
           </div>
-        </form>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Teacher ID */}
+              <div>
+                <label className="block text-xs font-mono font-bold uppercase mb-1">
+                  {tt.teacherId} *
+                </label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none opacity-50">
+                    <Hash size={14} />
+                  </span>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. TCH-001"
+                    value={formData.teacherId}
+                    onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
+                    className="w-full pl-8 pr-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
+                    style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                  />
+                </div>
+              </div>
+
+              {/* Khmer Last Name */}
+              <div>
+                <label className="block text-xs font-mono font-bold uppercase mb-1">
+                  {tt.khmerLastName} *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="ឧ. ស៊ុន"
+                  value={formData.khmerLastName}
+                  onChange={(e) => setFormData({ ...formData, khmerLastName: e.target.value })}
+                  className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                />
+              </div>
+
+              {/* Khmer First Name */}
+              <div>
+                <label className="block text-xs font-mono font-bold uppercase mb-1">
+                  {tt.khmerFirstName} *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="ឧ. វណ្ណា"
+                  value={formData.khmerFirstName}
+                  onChange={(e) => setFormData({ ...formData, khmerFirstName: e.target.value })}
+                  className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                />
+              </div>
+
+              {/* English Last Name */}
+              <div>
+                <label className="block text-xs font-mono font-bold uppercase mb-1">
+                  {tt.englishLastName} *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Sun"
+                  value={formData.englishLastName}
+                  onChange={(e) => setFormData({ ...formData, englishLastName: e.target.value })}
+                  className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
+                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                />
+              </div>
+
+              {/* English First Name */}
+              <div>
+                <label className="block text-xs font-mono font-bold uppercase mb-1">
+                  {tt.englishFirstName} *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Vanna"
+                  value={formData.englishFirstName}
+                  onChange={(e) => setFormData({ ...formData, englishFirstName: e.target.value })}
+                  className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
+                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                />
+              </div>
+
+              {/* Gender */}
+              <div>
+                <label className="block text-xs font-mono font-bold uppercase mb-1">
+                  {tt.gender} *
+                </label>
+                <select
+                  value={formData.gender}
+                  onChange={(e) => setFormData({ ...formData, gender: e.target.value as any })}
+                  className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
+                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                >
+                  <option value="Male">{tt.male}</option>
+                  <option value="Female">{tt.female}</option>
+                  <option value="Other">{tt.other}</option>
+                </select>
+              </div>
+
+              {/* Date of Birth */}
+              <div>
+                <label className="block text-xs font-mono font-bold uppercase mb-1">
+                  {tt.dob} *
+                </label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    required
+                    value={formData.dob}
+                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                    className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
+                    style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                  />
+                </div>
+              </div>
+
+              {/* Status */}
+              <div>
+                <label className="block text-xs font-mono font-bold uppercase mb-1">
+                  {tt.status} *
+                </label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                  className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
+                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                >
+                  <option value="Active">{tt.active}</option>
+                  <option value="On Leave">{tt.onLeave}</option>
+                  <option value="Inactive">{tt.inactive}</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-ink">
+              <button
+                type="button"
+                onClick={() => setIsFormOpen(false)}
+                className="h-9 px-4 border-2 border-ink text-xs font-mono uppercase tracking-wider font-bold hover:bg-black/10 transition-colors"
+                style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+              >
+                {tt.cancel}
+              </button>
+              <button
+                type="submit"
+                className="h-9 px-5 border-2 border-ink text-xs font-mono uppercase tracking-wider font-bold shadow-brutal hover:opacity-90 transition-all flex items-center gap-1.5"
+                style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
+              >
+                <Check size={14} />
+                <span>{tt.save}</span>
+              </button>
+            </div>
+          </form>
+        </div>
       )}
 
-      {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-        <div className="relative flex-1 max-w-md">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/60" />
+      {/* Control Bar: Search and Filters */}
+      <div 
+        className="p-3 sm:p-4 border-2 border-ink shadow-brutal flex flex-col md:flex-row md:items-center justify-between gap-3 transition-colors"
+        style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+      >
+        {/* Search Input */}
+        <div className="relative flex-1">
+          <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none opacity-60">
+            <Search size={15} />
+          </span>
           <input
             type="text"
-            placeholder="Search faculty by name, subject, or email..."
+            placeholder={tt.searchPlaceholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 bg-transparent border border-ink text-xs font-mono outline-none"
+            className="w-full pl-9 pr-3 py-1.5 border border-ink text-xs font-mono focus:outline-none transition-colors"
+            style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
           />
         </div>
 
-        <div className="flex items-center gap-1 overflow-x-auto text-xs font-mono scrollbar-none">
-          {departments.map(dept => (
-            <button
-              key={dept}
-              onClick={() => setDeptFilter(dept)}
-              className={`px-2.5 py-1 border uppercase tracking-wider text-[10px] whitespace-nowrap ${
-                deptFilter === dept ? 'bg-ink text-[#ded5be] border-ink font-bold' : 'border-ink/40 text-ink'
-              }`}
+        {/* Filters and Counter */}
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {/* Status Filter */}
+          <div className="flex items-center gap-1.5">
+            <Filter size={13} className="opacity-60" />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as any)}
+              className="py-1 px-2 border border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
+              style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
             >
-              {dept === 'All' ? 'All Depts' : dept.split(' ')[0]}
-            </button>
-          ))}
+              <option value="All">{tt.allStatus}</option>
+              <option value="Active">{tt.active}</option>
+              <option value="On Leave">{tt.onLeave}</option>
+              <option value="Inactive">{tt.inactive}</option>
+            </select>
+          </div>
+
+          {/* Gender Filter */}
+          <div className="flex items-center gap-1.5">
+            <User size={13} className="opacity-60" />
+            <select
+              value={genderFilter}
+              onChange={(e) => setGenderFilter(e.target.value as any)}
+              className="py-1 px-2 border border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
+              style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+            >
+              <option value="All">{tt.allGender}</option>
+              <option value="Male">{tt.male}</option>
+              <option value="Female">{tt.female}</option>
+            </select>
+          </div>
+
+          {/* Total Count Badge */}
+          <div 
+            className="px-2.5 py-1 border border-ink text-xs font-mono font-bold"
+            style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+          >
+            <span>{filteredTeachers.length} / {teachers.length}</span>
+          </div>
         </div>
       </div>
 
-      {/* Teachers Table (Pure Typographic & Tabular, Zero Stock Faces) */}
-      <div className="border-2 border-ink bg-[#ded5be] overflow-x-auto shadow-brutal">
-        <table className="w-full text-left font-mono text-xs">
-          <thead className="bg-[#111111] text-[#ded5be] border-b border-ink uppercase tracking-wider text-[10px]">
-            <tr>
-              <th className="p-3">Faculty Name</th>
-              <th className="p-3">Department & Subject</th>
-              <th className="p-3">Contact (Email / Phone)</th>
-              <th className="p-3">Assigned Classes</th>
-              <th className="p-3">Office</th>
-              <th className="p-3">Status</th>
-              <th className="p-3 text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-ink">
-            {filtered.map(teacher => (
-              <tr key={teacher.id} className="hover:bg-black/5 transition-colors">
-                <td className="p-3">
-                  <p className="font-serif font-bold text-sm text-ink">{teacher.name}</p>
-                  <p className="text-[10px] text-ink/60">Joined: {teacher.joinedDate}</p>
-                </td>
-                <td className="p-3">
-                  <p className="font-bold text-ink">{teacher.subject}</p>
-                  <p className="text-[10px] text-ink/70">{teacher.department}</p>
-                </td>
-                <td className="p-3">
-                  <p className="text-ink/90 flex items-center gap-1">
-                    <Mail size={11} className="text-ink/60" />
-                    <span>{teacher.email}</span>
-                  </p>
-                  <p className="text-[10px] text-ink/70 flex items-center gap-1 mt-0.5">
-                    <Phone size={10} className="text-ink/60" />
-                    <span>{teacher.phone}</span>
-                  </p>
-                </td>
-                <td className="p-3">
-                  <div className="flex flex-wrap gap-1">
-                    {teacher.classes.map((cls, idx) => (
-                      <span key={idx} className="px-1.5 py-0.5 border border-ink/40 bg-[#ede5cf] text-[9px] font-bold">
-                        {cls}
-                      </span>
-                    ))}
-                  </div>
-                </td>
-                <td className="p-3 font-semibold text-ink/80">{teacher.officeRoom}</td>
-                <td className="p-3">
-                  <span className={`px-2 py-0.5 border text-[10px] font-bold ${
-                    teacher.status === 'Tenured' 
-                      ? 'border-emerald-800 bg-emerald-100/60 text-emerald-900' 
-                      : teacher.status === 'Active'
-                      ? 'border-ink bg-[#ede5cf] text-ink'
-                      : 'border-amber-800 bg-amber-100 text-amber-900'
-                  }`}>
-                    {teacher.status}
-                  </span>
-                </td>
-                <td className="p-3 text-right">
-                  <button
-                    onClick={() => {
-                      onDeleteTeacher(teacher.id);
-                      onShowToast('FACULTY REMOVED', `${teacher.name} removed from registry.`);
-                    }}
-                    className="p-1 hover:text-red-700"
-                    title="Remove"
-                  >
-                    <Trash2 size={13} />
-                  </button>
-                </td>
+      {/* Teachers Data Table */}
+      <div 
+        className="border-2 border-ink shadow-brutal overflow-hidden transition-colors"
+        style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+      >
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr 
+                className="border-b-2 border-ink text-xs font-mono font-bold uppercase tracking-wider"
+                style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
+              >
+                <th className="py-3 px-3 sm:px-4 text-center w-12">{tt.id}</th>
+                <th className="py-3 px-3 sm:px-4">{tt.teacherId}</th>
+                <th className="py-3 px-3 sm:px-4">{tt.khmerFullName}</th>
+                <th className="py-3 px-3 sm:px-4">{tt.englishFullName}</th>
+                <th className="py-3 px-3 sm:px-4 text-center">{tt.gender}</th>
+                <th className="py-3 px-3 sm:px-4">{tt.dob}</th>
+                <th className="py-3 px-3 sm:px-4 text-center">{tt.status}</th>
+                <th className="py-3 px-3 sm:px-4 text-right">{tt.actions}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-ink/20 text-xs font-mono">
+              {filteredTeachers.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="py-12 text-center opacity-70">
+                    <p className="font-serif text-sm font-bold">{tt.noTeachersFound}</p>
+                  </td>
+                </tr>
+              ) : (
+                filteredTeachers.map((teacher, index) => (
+                  <tr 
+                    key={teacher.id} 
+                    className="hover:bg-black/5 transition-colors"
+                  >
+                    {/* ID / Row Number */}
+                    <td className="py-3 px-3 sm:px-4 text-center opacity-60">
+                      {index + 1}
+                    </td>
+
+                    {/* Teacher ID */}
+                    <td className="py-3 px-3 sm:px-4 font-bold">
+                      <span 
+                        className="px-2 py-0.5 border border-ink inline-block"
+                        style={{ backgroundColor: 'var(--app-bg)' }}
+                      >
+                        {teacher.teacherId}
+                      </span>
+                    </td>
+
+                    {/* Khmer Name (Last + First) */}
+                    <td className="py-3 px-3 sm:px-4 font-serif text-sm font-bold">
+                      {teacher.khmerLastName} {teacher.khmerFirstName}
+                    </td>
+
+                    {/* English Name (Last + First) */}
+                    <td className="py-3 px-3 sm:px-4">
+                      <span className="font-bold">{teacher.englishLastName}</span> {teacher.englishFirstName}
+                    </td>
+
+                    {/* Gender */}
+                    <td className="py-3 px-3 sm:px-4 text-center">
+                      <span 
+                        className="px-2 py-0.5 border border-ink text-[11px]"
+                        style={{ backgroundColor: 'var(--app-bg)' }}
+                      >
+                        {getGenderLabel(teacher.gender)}
+                      </span>
+                    </td>
+
+                    {/* Date of Birth */}
+                    <td className="py-3 px-3 sm:px-4 opacity-85">
+                      <span className="flex items-center gap-1.5">
+                        <Calendar size={12} className="opacity-50" />
+                        {teacher.dob}
+                      </span>
+                    </td>
+
+                    {/* Status */}
+                    <td className="py-3 px-3 sm:px-4 text-center">
+                      {getStatusBadge(teacher.status)}
+                    </td>
+
+                    {/* Actions: Edit & Delete */}
+                    <td className="py-3 px-3 sm:px-4 text-right">
+                      <div className="inline-flex items-center gap-1.5">
+                        <button
+                          onClick={() => handleOpenEdit(teacher)}
+                          className="p-1.5 border border-ink hover:bg-black/10 transition-colors"
+                          style={{ backgroundColor: 'var(--app-bg)' }}
+                          title={tt.edit}
+                        >
+                          <Edit3 size={13} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(teacher.id, `${teacher.khmerLastName} ${teacher.khmerFirstName}`)}
+                          className="p-1.5 border border-ink hover:bg-red-500/20 text-red-700 transition-colors"
+                          style={{ backgroundColor: 'var(--app-bg)' }}
+                          title={tt.delete}
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
 import { BlankPageTemplate } from './components/BlankPageTemplate';
+import { TeachersView } from './components/TeachersView';
 import { ThemeSettingsView } from './components/ThemeSettingsView';
 import { Toast } from './components/Toast';
+import { Teacher } from './types';
+import { initialTeachers } from './data/initialData';
 import { Language, translations } from './translations';
 
 export function App() {
@@ -12,6 +15,36 @@ export function App() {
     const saved = localStorage.getItem('pineapple_lang');
     return (saved === 'km' || saved === 'en') ? saved : 'en';
   });
+
+  const [teachers, setTeachers] = useState<Teacher[]>(() => {
+    const saved = localStorage.getItem('pineapple_teachers');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return initialTeachers;
+  });
+
+  const handleAddTeacher = (teacher: Teacher) => {
+    const updated = [teacher, ...teachers];
+    setTeachers(updated);
+    localStorage.setItem('pineapple_teachers', JSON.stringify(updated));
+  };
+
+  const handleUpdateTeacher = (updatedTeacher: Teacher) => {
+    const updated = teachers.map(t => t.id === updatedTeacher.id ? updatedTeacher : t);
+    setTeachers(updated);
+    localStorage.setItem('pineapple_teachers', JSON.stringify(updated));
+  };
+
+  const handleDeleteTeacher = (id: string) => {
+    const updated = teachers.filter(t => t.id !== id);
+    setTeachers(updated);
+    localStorage.setItem('pineapple_teachers', JSON.stringify(updated));
+  };
 
   const t = translations[lang];
 
@@ -94,8 +127,12 @@ export function App() {
               )}
 
               {currentTab === 'teachers' && (
-                <BlankPageTemplate
-                  title={t.pages.teachersTitle}
+                <TeachersView
+                  teachers={teachers}
+                  onAddTeacher={handleAddTeacher}
+                  onUpdateTeacher={handleUpdateTeacher}
+                  onDeleteTeacher={handleDeleteTeacher}
+                  onShowToast={showToast}
                   lang={lang}
                 />
               )}

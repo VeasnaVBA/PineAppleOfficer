@@ -1,14 +1,22 @@
 export interface Teacher {
   id: string;
-  name: string;
-  department: string;
-  subject: string;
-  email: string;
-  phone: string;
-  classes: string[];
-  status: 'Active' | 'On Leave' | 'Tenured';
-  joinedDate: string;
-  officeRoom: string;
+  teacherId: string;
+  khmerLastName: string;
+  khmerFirstName: string;
+  englishLastName: string;
+  englishFirstName: string;
+  gender: 'Male' | 'Female' | 'Other' | string;
+  dob: string;
+  status: 'Active' | 'On Leave' | 'Inactive';
+  // Optional convenience fields for backwards compatibility
+  name?: string;
+  department?: string;
+  subject?: string;
+  email?: string;
+  phone?: string;
+  classes?: string[];
+  joinedDate?: string;
+  officeRoom?: string;
 }
 
 export interface Student {

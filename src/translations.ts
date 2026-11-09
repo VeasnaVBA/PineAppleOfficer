@@ -47,6 +47,44 @@ export interface TranslationDictionary {
     language: string;
     languageDesc: string;
   };
+  teacher: {
+    addTeacher: string;
+    editTeacher: string;
+    teacherList: string;
+    totalTeachers: string;
+    searchPlaceholder: string;
+    filterStatus: string;
+    allStatus: string;
+    filterGender: string;
+    allGender: string;
+    id: string;
+    teacherId: string;
+    khmerLastName: string;
+    khmerFirstName: string;
+    englishLastName: string;
+    englishFirstName: string;
+    khmerFullName: string;
+    englishFullName: string;
+    gender: string;
+    male: string;
+    female: string;
+    other: string;
+    dob: string;
+    status: string;
+    active: string;
+    onLeave: string;
+    inactive: string;
+    actions: string;
+    save: string;
+    cancel: string;
+    delete: string;
+    edit: string;
+    confirmDelete: string;
+    noTeachersFound: string;
+    teacherAddedToast: string;
+    teacherUpdatedToast: string;
+    teacherDeletedToast: string;
+  };
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -98,6 +136,44 @@ export const translations: Record<Language, TranslationDictionary> = {
       previewDesc: 'Pineapple Officer administrative portal dynamically applies this font across every navigation item, header, button, and canvas area.',
       language: 'Language Settings',
       languageDesc: 'Switch the application language between English and Khmer (ភាសាខ្មែរ):'
+    },
+    teacher: {
+      addTeacher: 'Add Teacher',
+      editTeacher: 'Edit Teacher',
+      teacherList: 'Teacher Directory',
+      totalTeachers: 'Total Faculty',
+      searchPlaceholder: 'Search by ID, Khmer or English name...',
+      filterStatus: 'Status',
+      allStatus: 'All Statuses',
+      filterGender: 'Gender',
+      allGender: 'All Genders',
+      id: 'ID',
+      teacherId: 'Teacher ID',
+      khmerLastName: 'Khmer Last Name',
+      khmerFirstName: 'Khmer First Name',
+      englishLastName: 'English Last Name',
+      englishFirstName: 'English First Name',
+      khmerFullName: 'Khmer Name',
+      englishFullName: 'English Name',
+      gender: 'Gender',
+      male: 'Male',
+      female: 'Female',
+      other: 'Other',
+      dob: 'Date of Birth',
+      status: 'Status',
+      active: 'Active',
+      onLeave: 'On Leave',
+      inactive: 'Inactive',
+      actions: 'Actions',
+      save: 'Save Teacher',
+      cancel: 'Cancel',
+      delete: 'Delete',
+      edit: 'Edit',
+      confirmDelete: 'Are you sure you want to delete this teacher record?',
+      noTeachersFound: 'No teachers found matching your search.',
+      teacherAddedToast: 'Teacher registered successfully',
+      teacherUpdatedToast: 'Teacher record updated',
+      teacherDeletedToast: 'Teacher removed from directory'
     }
   },
   km: {
@@ -148,6 +224,44 @@ export const translations: Record<Language, TranslationDictionary> = {
       previewDesc: 'ច្រកគ្រប់គ្រង Pineapple Officer អនុវត្តពុម្ពអក្សរនេះដោយស្វ័យប្រវត្តិចំពោះគ្រប់ធាតុរុករក ចំណងជើង និងកន្លែងធ្វើការ។',
       language: 'ការកំណត់ភាសា',
       languageDesc: 'ផ្លាស់ប្តូរភាសាកម្មវិធីរវាងភាសាអង់គ្លេស និងភាសាខ្មែរ៖'
+    },
+    teacher: {
+      addTeacher: 'បន្ថែមគ្រូបង្រៀន',
+      editTeacher: 'កែសម្រួលព័ត៌មានគ្រូ',
+      teacherList: 'បញ្ជីឈ្មោះគ្រូបង្រៀន',
+      totalTeachers: 'ចំនួនគ្រូសរុប',
+      searchPlaceholder: 'ស្វែងរកតាមអត្តលេខ ឈ្មោះខ្មែរ ឬឈ្មោះអង់គ្លេស...',
+      filterStatus: 'ស្ថានភាព',
+      allStatus: 'ស្ថានភាពទាំងអស់',
+      filterGender: 'ភេទ',
+      allGender: 'ភេទទាំងអស់',
+      id: 'ល.រ',
+      teacherId: 'អត្តលេខគ្រូ',
+      khmerLastName: 'នាមត្រកូល (ខ្មែរ)',
+      khmerFirstName: 'នាមខ្លួន (ខ្មែរ)',
+      englishLastName: 'នាមត្រកូល (អង់គ្លេស)',
+      englishFirstName: 'នាមខ្លួន (អង់គ្លេស)',
+      khmerFullName: 'ឈ្មោះខ្មែរ',
+      englishFullName: 'ឈ្មោះអង់គ្លេស',
+      gender: 'ភេទ',
+      male: 'ប្រុស',
+      female: 'ស្រី',
+      other: 'ផ្សេងៗ',
+      dob: 'ថ្ងៃខែឆ្នាំកំណើត',
+      status: 'ស្ថានភាព',
+      active: 'សកម្ម',
+      onLeave: 'ឈប់សម្រាក',
+      inactive: 'អសកម្ម',
+      actions: 'សកម្មភាព',
+      save: 'រក្សាទុកទិន្នន័យ',
+      cancel: 'បោះបង់',
+      delete: 'លុប',
+      edit: 'កែប្រែ',
+      confirmDelete: 'តើអ្នកពិតជាចង់លុបទិន្នន័យគ្រូបង្រៀននេះមែនទេ?',
+      noTeachersFound: 'រកមិនឃើញទិន្នន័យគ្រូបង្រៀនដែលត្រូវនឹងការស្វែងរកឡើយ។',
+      teacherAddedToast: 'បានបញ្ចូលគ្រូបង្រៀនថ្មីដោយជោគជ័យ',
+      teacherUpdatedToast: 'បានកែប្រែព័ត៌មានគ្រូបង្រៀនដោយជោគជ័យ',
+      teacherDeletedToast: 'បានលុបគ្រូបង្រៀនចេញពីបញ្ជី'
     }
   }
 };
