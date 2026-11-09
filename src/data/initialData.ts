@@ -3,7 +3,9 @@ import { AcademicMetric, Teacher } from '../types';
 export const initialTeachers: Teacher[] = [
   {
     id: '1',
+    codeInfo: 'TCH-001',
     teacherId: 'TCH-001',
+    civilServantId: '10928374',
     khmerLastName: 'ស៊ុន',
     khmerFirstName: 'វណ្ណា',
     englishLastName: 'Sun',
@@ -14,7 +16,9 @@ export const initialTeachers: Teacher[] = [
   },
   {
     id: '2',
+    codeInfo: 'TCH-002',
     teacherId: 'TCH-002',
+    civilServantId: '20819283',
     khmerLastName: 'ចាន់',
     khmerFirstName: 'ធីតា',
     englishLastName: 'Chan',
@@ -25,7 +29,9 @@ export const initialTeachers: Teacher[] = [
   },
   {
     id: '3',
+    codeInfo: 'TCH-003',
     teacherId: 'TCH-003',
+    civilServantId: '',
     khmerLastName: 'គឹម',
     khmerFirstName: 'សុខា',
     englishLastName: 'Kim',
@@ -36,7 +42,9 @@ export const initialTeachers: Teacher[] = [
   },
   {
     id: '4',
+    codeInfo: 'TCH-004',
     teacherId: 'TCH-004',
+    civilServantId: '40192834',
     khmerLastName: 'លី',
     khmerFirstName: 'សុភាព',
     englishLastName: 'Ly',
@@ -47,7 +55,9 @@ export const initialTeachers: Teacher[] = [
   },
   {
     id: '5',
+    codeInfo: 'TCH-005',
     teacherId: 'TCH-005',
+    civilServantId: '',
     khmerLastName: 'ហេង',
     khmerFirstName: 'វិចិត្រ',
     englishLastName: 'Heng',
@@ -58,7 +68,9 @@ export const initialTeachers: Teacher[] = [
   },
   {
     id: '6',
+    codeInfo: 'TCH-006',
     teacherId: 'TCH-006',
+    civilServantId: '60192847',
     khmerLastName: 'សេង',
     khmerFirstName: 'ពិសី',
     englishLastName: 'Seng',

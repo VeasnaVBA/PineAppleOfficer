@@ -1,6 +1,8 @@
 export interface Teacher {
   id: string;
-  teacherId: string;
+  codeInfo: string; // Teacher code info (e.g. TCH-001) - required
+  civilServantId?: string; // អត្តលេខមន្រ្តីរាជការ (Civil Servant ID) - optional / not required
+  teacherId?: string; // Backwards compatibility fallback
   khmerLastName: string;
   khmerFirstName: string;
   englishLastName: string;

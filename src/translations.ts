@@ -58,7 +58,10 @@ export interface TranslationDictionary {
     filterGender: string;
     allGender: string;
     id: string;
+    codeInfo: string;
+    civilServantId: string;
     teacherId: string;
+    optional: string;
     khmerLastName: string;
     khmerFirstName: string;
     englishLastName: string;
@@ -142,13 +145,16 @@ export const translations: Record<Language, TranslationDictionary> = {
       editTeacher: 'Edit Teacher',
       teacherList: 'Teacher Directory',
       totalTeachers: 'Total Faculty',
-      searchPlaceholder: 'Search by ID, Khmer or English name...',
+      searchPlaceholder: 'Search by Teacher Code, Civil Servant ID, or Name...',
       filterStatus: 'Status',
       allStatus: 'All Statuses',
       filterGender: 'Gender',
       allGender: 'All Genders',
       id: 'ID',
-      teacherId: 'Teacher ID',
+      codeInfo: 'Teacher Code',
+      civilServantId: 'Civil Servant ID',
+      teacherId: 'Civil Servant ID',
+      optional: '(Optional)',
       khmerLastName: 'Khmer Last Name',
       khmerFirstName: 'Khmer First Name',
       englishLastName: 'English Last Name',
@@ -230,13 +236,16 @@ export const translations: Record<Language, TranslationDictionary> = {
       editTeacher: 'កែសម្រួលព័ត៌មានគ្រូ',
       teacherList: 'បញ្ជីឈ្មោះគ្រូបង្រៀន',
       totalTeachers: 'ចំនួនគ្រូសរុប',
-      searchPlaceholder: 'ស្វែងរកតាមអត្តលេខ ឈ្មោះខ្មែរ ឬឈ្មោះអង់គ្លេស...',
+      searchPlaceholder: 'ស្វែងរកតាមកូដគ្រូ អត្តលេខមន្ត្រីរាជការ ឬឈ្មោះ...',
       filterStatus: 'ស្ថានភាព',
       allStatus: 'ស្ថានភាពទាំងអស់',
       filterGender: 'ភេទ',
       allGender: 'ភេទទាំងអស់',
       id: 'ល.រ',
-      teacherId: 'អត្តលេខគ្រូ',
+      codeInfo: 'កូដគ្រូ',
+      civilServantId: 'អត្តលេខមន្រ្តីរាជការ',
+      teacherId: 'អត្តលេខមន្រ្តីរាជការ',
+      optional: '(មិនទាមទារ)',
       khmerLastName: 'នាមត្រកូល (ខ្មែរ)',
       khmerFirstName: 'នាមខ្លួន (ខ្មែរ)',
       englishLastName: 'នាមត្រកូល (អង់គ្លេស)',

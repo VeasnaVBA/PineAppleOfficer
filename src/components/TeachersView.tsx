@@ -61,7 +61,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
   // Form State
   const [formData, setFormData] = useState<{
     id: string;
-    teacherId: string;
+    codeInfo: string;
+    civilServantId: string;
     khmerLastName: string;
     khmerFirstName: string;
     englishLastName: string;
@@ -71,7 +72,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
     status: 'Active' | 'On Leave' | 'Inactive';
   }>({
     id: '',
-    teacherId: '',
+    codeInfo: '',
+    civilServantId: '',
     khmerLastName: '',
     khmerFirstName: '',
     englishLastName: '',
@@ -81,7 +83,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
     status: 'Active'
   });
 
-  const getNextTeacherId = () => {
+  const getNextTeacherCode = () => {
     const count = teachers.length + 1;
     return `TCH-${String(count).padStart(3, '0')}`;
   };
@@ -90,7 +92,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
     setEditingTeacherId(null);
     setFormData({
       id: String(Date.now()),
-      teacherId: getNextTeacherId(),
+      codeInfo: getNextTeacherCode(),
+      civilServantId: '',
       khmerLastName: '',
       khmerFirstName: '',
       englishLastName: '',
@@ -106,7 +109,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
     setEditingTeacherId(teacher.id);
     setFormData({
       id: teacher.id,
-      teacherId: teacher.teacherId,
+      codeInfo: teacher.codeInfo || teacher.teacherId || getNextTeacherCode(),
+      civilServantId: teacher.civilServantId || '',
       khmerLastName: teacher.khmerLastName,
       khmerFirstName: teacher.khmerFirstName,
       englishLastName: teacher.englishLastName,
@@ -120,7 +124,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.teacherId.trim() || !formData.khmerLastName.trim() || !formData.englishLastName.trim()) {
+    if (!formData.codeInfo.trim() || !formData.khmerLastName.trim() || !formData.englishLastName.trim()) {
       return;
     }
 
@@ -128,17 +132,19 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
       onUpdateTeacher({
         ...formData,
         id: editingTeacherId,
+        teacherId: formData.codeInfo,
         name: `${formData.englishFirstName} ${formData.englishLastName}`
       });
-      onShowToast(tt.teacherUpdatedToast, `${formData.khmerLastName} ${formData.khmerFirstName} (${formData.teacherId})`);
+      onShowToast(tt.teacherUpdatedToast, `${formData.khmerLastName} ${formData.khmerFirstName} (${formData.codeInfo})`);
     } else {
       const newRecord: Teacher = {
         ...formData,
         id: String(Date.now()),
+        teacherId: formData.codeInfo,
         name: `${formData.englishFirstName} ${formData.englishLastName}`
       };
       onAddTeacher(newRecord);
-      onShowToast(tt.teacherAddedToast, `${newRecord.khmerLastName} ${newRecord.khmerFirstName} (${newRecord.teacherId})`);
+      onShowToast(tt.teacherAddedToast, `${newRecord.khmerLastName} ${newRecord.khmerFirstName} (${newRecord.codeInfo})`);
     }
 
     setIsFormOpen(false);
@@ -155,9 +161,12 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
   // Filter logic
   const filteredTeachers = teachers.filter(tch => {
     const query = searchTerm.toLowerCase().trim();
+    const code = (tch.codeInfo || tch.teacherId || '').toLowerCase();
+    const civilId = (tch.civilServantId || '').toLowerCase();
     const matchesSearch = 
       !query ||
-      tch.teacherId.toLowerCase().includes(query) ||
+      code.includes(query) ||
+      civilId.includes(query) ||
       tch.khmerLastName.toLowerCase().includes(query) ||
       tch.khmerFirstName.toLowerCase().includes(query) ||
       `${tch.khmerLastName} ${tch.khmerFirstName}`.toLowerCase().includes(query) ||
@@ -267,10 +276,10 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
             <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
               <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Teacher ID */}
+                  {/* Teacher Code (codeInfo) - Required */}
                   <div>
                     <label className="block text-xs font-mono font-bold uppercase mb-1">
-                      {tt.teacherId} *
+                      {tt.codeInfo} *
                     </label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none opacity-50">
@@ -280,12 +289,32 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                         type="text"
                         required
                         placeholder="e.g. TCH-001"
-                        value={formData.teacherId}
-                        onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
+                        value={formData.codeInfo}
+                        onChange={(e) => setFormData({ ...formData, codeInfo: e.target.value })}
                         className="w-full pl-8 pr-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
                         style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
                       />
                     </div>
+                  </div>
+
+                  {/* Civil Servant ID (civilServantId) - Optional / Not Required */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-mono font-bold uppercase">
+                        {tt.civilServantId}
+                      </label>
+                      <span className="text-[10px] font-mono opacity-60">
+                        {tt.optional}
+                      </span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder={lang === 'km' ? "ឧ. 01020304" : "e.g. 10293847"}
+                      value={formData.civilServantId}
+                      onChange={(e) => setFormData({ ...formData, civilServantId: e.target.value })}
+                      className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
+                      style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                    />
                   </div>
 
                   {/* Gender */}
@@ -503,7 +532,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
               >
                 <th className="py-3 px-3 sm:px-4 text-center w-12">{tt.id}</th>
-                <th className="py-3 px-3 sm:px-4">{tt.teacherId}</th>
+                <th className="py-3 px-3 sm:px-4">{tt.codeInfo}</th>
+                <th className="py-3 px-3 sm:px-4">{tt.civilServantId}</th>
                 <th className="py-3 px-3 sm:px-4">{tt.khmerFullName}</th>
                 <th className="py-3 px-3 sm:px-4">{tt.englishFullName}</th>
                 <th className="py-3 px-3 sm:px-4 text-center">{tt.gender}</th>
@@ -515,7 +545,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
             <tbody className="divide-y divide-ink/20 text-xs font-mono">
               {filteredTeachers.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center opacity-70">
+                  <td colSpan={9} className="py-12 text-center opacity-70">
                     <p className="font-serif text-sm font-bold">{tt.noTeachersFound}</p>
                   </td>
                 </tr>
@@ -530,9 +560,18 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                       {index + 1}
                     </td>
 
-                    {/* Teacher ID */}
+                    {/* Teacher Code (codeInfo) */}
                     <td className="py-3 px-3 sm:px-4 font-bold font-mono">
-                      {teacher.teacherId}
+                      {teacher.codeInfo || teacher.teacherId}
+                    </td>
+
+                    {/* Civil Servant ID (civilServantId - Optional) */}
+                    <td className="py-3 px-3 sm:px-4 font-mono">
+                      {teacher.civilServantId ? (
+                        teacher.civilServantId
+                      ) : (
+                        <span className="opacity-40">-</span>
+                      )}
                     </td>
 
                     {/* Khmer Name (Last + First) */}
