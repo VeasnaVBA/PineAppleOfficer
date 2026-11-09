@@ -326,21 +326,9 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Teacher Code (codeInfo) - Required */}
                   <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label className="block text-xs font-mono font-bold uppercase">
-                        {tt.codeInfo} *
-                      </label>
-                      <button
-                        type="button"
-                        onClick={handleGenerateCode}
-                        className="flex items-center gap-1 text-[10px] font-mono font-bold px-1.5 py-0.5 border border-ink hover:bg-black/10 transition-colors"
-                        style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
-                        title={lang === 'km' ? "បង្កើតកូដស្វ័យប្រវត្តិមិនស្ទួន" : "Generate Unique Code"}
-                      >
-                        <RefreshCw size={10} />
-                        <span>{lang === 'km' ? 'បង្កើតកូដ' : 'Generate'}</span>
-                      </button>
-                    </div>
+                    <label className="block text-xs font-mono font-bold uppercase mb-1">
+                      {tt.codeInfo} *
+                    </label>
                     <div className="flex items-center gap-1.5">
                       <div className="relative flex-1">
                         <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none opacity-50">
@@ -363,7 +351,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                         onClick={handleGenerateCode}
                         className="h-[38px] px-2.5 border-2 border-ink hover:bg-black/10 transition-colors flex items-center justify-center text-xs font-mono font-bold flex-shrink-0"
                         style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
-                        title={lang === 'km' ? "បង្កើតកូដស្វ័យប្រវត្តិមិនស្ទួន" : "Generate Unique Code"}
+                        title="Generate Code"
+                        aria-label="Generate Code"
                       >
                         <RefreshCw size={14} />
                       </button>
