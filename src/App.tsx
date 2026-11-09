@@ -1,11 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
 import { BlankPageTemplate } from './components/BlankPageTemplate';
+import { ThemeSettingsView, defaultThemeConfig } from './components/ThemeSettingsView';
 import { Toast } from './components/Toast';
 
 export function App() {
   const [currentTab, setCurrentTab] = useState<string>('dashboard');
+
+  // Load saved theme configuration on app load
+  useEffect(() => {
+    const saved = localStorage.getItem('pineapple_theme_config');
+    if (saved) {
+      try {
+        const theme = JSON.parse(saved);
+        const root = document.documentElement;
+        if (theme.bg) root.style.setProperty('--app-bg', theme.bg);
+        if (theme.surface) root.style.setProperty('--app-surface', theme.surface);
+        if (theme.text) root.style.setProperty('--app-text', theme.text);
+        if (theme.border) root.style.setProperty('--app-border', theme.border);
+        if (theme.fontFamily) root.style.setProperty('--app-font-family', theme.fontFamily);
+        if (theme.fontSizePercent) root.style.fontSize = `${theme.fontSizePercent}%`;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
 
   // Toast
   const [toast, setToast] = useState<{ title: string; message: string } | null>(null);
@@ -15,18 +35,23 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#ded5be] flex flex-col font-sans antialiased text-ink">
+    <div 
+      className="min-h-screen flex flex-col font-sans antialiased"
+      style={{ backgroundColor: 'var(--app-bg, #ded5be)', color: 'var(--app-text, #121212)' }}
+    >
       {/* Top Application Navbar */}
       <Navbar
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
       />
 
-      {/* Main Container Wrapper - Permanent Sidebar + Blank Content (No Top Ticker strip) */}
+      {/* Main Container Wrapper - Permanent Sidebar + Content */}
       <div className="flex-1 flex justify-center p-0 sm:p-2 md:p-4 lg:p-6">
-        <div className="w-full max-w-[1600px] bg-[#ded5be] border-0 sm:border-2 border-ink shadow-2xl flex flex-row overflow-hidden relative">
-          
-          {/* Permanent Left Sidebar (Starts directly with navigation) */}
+        <div 
+          className="w-full max-w-[1600px] border-0 sm:border-2 border-ink shadow-2xl flex flex-row overflow-hidden relative"
+          style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+        >
+          {/* Permanent Left Sidebar (Never Hides, No Badges, No Underlines) */}
           <Sidebar
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
@@ -34,7 +59,7 @@ export function App() {
 
           {/* Right Main Content Area */}
           <div className="flex-1 min-w-0 flex flex-col overflow-y-auto">
-            {/* View router for each menu: Blank Page */}
+            {/* View router */}
             <div className="flex-1">
               {currentTab === 'dashboard' && (
                 <BlankPageTemplate
@@ -72,11 +97,9 @@ export function App() {
                 />
               )}
 
+              {/* Theme, Font Family & Font Size Settings */}
               {currentTab === 'settings' && (
-                <BlankPageTemplate
-                  title="Settings"
-                  breadcrumb="SETTINGS"
-                  subtitle="System configurations, domain mappings, and institutional controls canvas"
+                <ThemeSettingsView
                   onShowToast={showToast}
                 />
               )}

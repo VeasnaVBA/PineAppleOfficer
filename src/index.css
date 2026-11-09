@@ -4,75 +4,47 @@
 
 @layer base {
   :root {
-    --color-parchment: #ded5be;
-    --color-border: #121212;
+    --app-bg: #ded5be;
+    --app-surface: #ede5cf;
+    --app-card: #ded5be;
+    --app-border: #121212;
+    --app-text: #121212;
+    --app-text-muted: #524d42;
+    --app-font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    --app-font-sans: 'Inter', system-ui, sans-serif;
+    --app-font-mono: 'Space Mono', monospace;
   }
 
   body {
-    background-color: #ded5be;
-    color: #121212;
-    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--app-bg, #ded5be);
+    color: var(--app-text, #121212);
+    font-family: var(--app-font-sans, 'Inter', system-ui, sans-serif);
     overflow-x: hidden;
   }
 }
 
 /* Subtle newspaper grain overlay */
 .newspaper-texture {
-  background-color: #ded5be;
+  background-color: var(--app-bg, #ded5be);
   background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 0);
   background-size: 24px 24px;
 }
 
-/* Editorial Drop Cap */
-.drop-cap::first-letter {
-  font-family: 'Bodoni Moda', 'Playfair Display', serif;
-  float: left;
-  font-size: 3.4rem;
-  line-height: 0.8;
-  padding-top: 4px;
-  padding-right: 10px;
-  padding-bottom: 2px;
-  color: #111111;
-  font-weight: 700;
-}
-
 /* Custom hairline borders */
 .border-ink {
-  border-color: #121212;
+  border-color: var(--app-border, #121212);
 }
 
-/* Custom scrollbars matching theme */
+/* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #ded5be;
+  background: var(--app-bg, #ded5be);
 }
 ::-webkit-scrollbar-thumb {
-  background: #121212;
-}
-
-/* Underline inputs from the image */
-.input-underline {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #121212;
-  border-radius: 0;
-  outline: none;
-  color: #111111;
-  padding: 6px 0;
-  font-size: 0.875rem;
-  transition: border-color 0.2s;
-}
-
-.input-underline:focus {
-  border-bottom: 2px solid #121212;
-}
-
-.input-underline::placeholder {
-  color: #6c6659;
-  font-size: 0.825rem;
+  background: var(--app-border, #121212);
 }
 
 /* Card hover animations */
@@ -81,5 +53,5 @@
 }
 .editorial-card:hover {
   transform: translateY(-2px);
-  box-shadow: 4px 4px 0px #111111;
+  box-shadow: 4px 4px 0px var(--app-border, #121212);
 }
