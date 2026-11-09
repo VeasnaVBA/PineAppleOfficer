@@ -1,42 +1,49 @@
-export interface Article {
+export interface Teacher {
   id: string;
-  title: string;
-  subtitle: string;
-  category: string;
-  date: string;
-  imageUrl: string;
-  author: string;
-  views: number;
-  likes: number;
-  status: 'Published' | 'Draft' | 'Featured' | 'Archived';
-  excerpt: string;
-  content?: string;
-  slug?: string;
+  name: string;
+  department: string;
+  subject: string;
+  email: string;
+  phone: string;
+  classes: string[];
+  status: 'Active' | 'On Leave' | 'Tenured';
+  joinedDate: string;
+  officeRoom: string;
 }
 
-export interface MetricItem {
+export interface Student {
+  id: string;
+  studentId: string;
+  name: string;
+  grade: string;
+  section: string;
+  guardianName: string;
+  guardianEmail: string;
+  guardianPhone: string;
+  attendanceRate: number; // percentage e.g. 96
+  gpa: string;
+  status: 'Enrolled' | 'Probation' | 'Graduated';
+  enrolledDate: string;
+}
+
+export interface ClassInfo {
+  id: string;
+  code: string;
+  name: string;
+  department: string;
+  teacherName: string;
+  room: string;
+  schedule: string;
+  enrolled: number;
+  capacity: number;
+  semester: string;
+}
+
+export interface AcademicMetric {
   id: number;
   label: string;
   title: string;
   date: string;
-  value?: string;
-  change?: string;
-}
-
-export interface Subscriber {
-  id: string;
-  name: string;
-  email: string;
-  mobile: string;
-  tier: 'VIP' | 'Collector' | 'Curator' | 'Standard';
-  joinedDate: string;
-  status: 'Active' | 'Pending' | 'Unsubscribed';
-}
-
-export interface SystemNotification {
-  id: string;
-  type: 'success' | 'info' | 'warning';
-  title: string;
-  message: string;
-  timestamp: string;
+  value: string;
+  change: string;
 }

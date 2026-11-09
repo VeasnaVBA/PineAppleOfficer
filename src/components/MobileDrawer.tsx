@@ -1,13 +1,12 @@
 import React from 'react';
 import { 
   X, 
-  LayoutGrid, 
   Compass, 
-  BookOpen, 
-  BarChart3, 
+  GraduationCap, 
   Users, 
+  BookOpen, 
   Settings, 
-  PenSquare, 
+  Plus, 
   Github
 } from 'lucide-react';
 
@@ -16,9 +15,10 @@ interface MobileDrawerProps {
   onClose: () => void;
   currentTab: string;
   setCurrentTab: (tab: string) => void;
-  onOpenNewModal: () => void;
-  articleCount: number;
-  subscriberCount: number;
+  onOpenQuickAdd: () => void;
+  teacherCount: number;
+  studentCount: number;
+  classCount: number;
 }
 
 export const MobileDrawer: React.FC<MobileDrawerProps> = ({
@@ -26,19 +26,19 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
   onClose,
   currentTab,
   setCurrentTab,
-  onOpenNewModal,
-  articleCount,
-  subscriberCount
+  onOpenQuickAdd,
+  teacherCount,
+  studentCount,
+  classCount
 }) => {
   if (!isOpen) return null;
 
   const navItems = [
-    { id: 'empty', label: 'Empty Page', badge: 'Blank', icon: LayoutGrid },
-    { id: 'overview', label: 'Dashboard Overview', badge: 'Live', icon: Compass },
-    { id: 'cms', label: 'Editorial CMS', badge: 'Admin', icon: BookOpen },
-    { id: 'analytics', label: 'Audience Analytics', badge: '+14%', icon: BarChart3 },
-    { id: 'subscribers', label: 'Patrons & CRM', badge: `${subscriberCount}`, icon: Users },
-    { id: 'settings', label: 'System Settings', badge: 'Cloud', icon: Settings },
+    { id: 'overview', label: 'Dashboard', badge: 'Live', icon: Compass },
+    { id: 'teachers', label: 'Teacher Info', badge: `${teacherCount}`, icon: GraduationCap },
+    { id: 'students', label: 'Student Info', badge: `${studentCount}`, icon: Users },
+    { id: 'classes', label: 'Class Info', badge: `${classCount}`, icon: BookOpen },
+    { id: 'settings', label: 'Settings', badge: 'Config', icon: Settings },
   ];
 
   const handleSelect = (id: string) => {
@@ -64,7 +64,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
                 TETRAD
               </h2>
               <p className="text-[10px] font-mono tracking-widest text-[#b8ad94] uppercase">
-                Editorial App Menu
+                Academic Administration
               </p>
             </div>
             <button 
@@ -80,12 +80,12 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
             <button
               onClick={() => {
                 onClose();
-                onOpenNewModal();
+                onOpenQuickAdd();
               }}
               className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-ink text-[#ded5be] hover:bg-ink/85 text-xs font-mono uppercase tracking-widest border border-ink shadow-sm font-bold"
             >
-              <PenSquare size={14} />
-              <span>New Block / Dispatch</span>
+              <Plus size={14} />
+              <span>Enroll / Schedule</span>
             </button>
           </div>
 

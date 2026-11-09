@@ -1,35 +1,37 @@
 import React from 'react';
 import { 
-  LayoutGrid, 
   Compass, 
-  BookOpen, 
-  BarChart3, 
+  GraduationCap, 
   Users, 
+  BookOpen, 
   Settings, 
-  PenSquare,
+  Plus,
   Github
 } from 'lucide-react';
 
 interface SidebarProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
-  onOpenNewModal: () => void;
-  articleCount: number;
+  onOpenQuickAdd: () => void;
+  teacherCount: number;
+  studentCount: number;
+  classCount: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   currentTab,
   setCurrentTab,
-  onOpenNewModal,
-  articleCount
+  onOpenQuickAdd,
+  teacherCount,
+  studentCount,
+  classCount
 }) => {
   const navItems = [
-    { id: 'empty', label: 'Empty Page', badge: 'Blank', icon: LayoutGrid },
     { id: 'overview', label: 'Dashboard', badge: 'Live', icon: Compass },
-    { id: 'cms', label: 'Editorial CMS', badge: 'Admin', icon: BookOpen },
-    { id: 'analytics', label: 'Analytics', badge: '+14%', icon: BarChart3 },
-    { id: 'subscribers', label: 'Subscribers', badge: 'CRM', icon: Users },
-    { id: 'settings', label: 'Settings', badge: 'Cloud', icon: Settings }
+    { id: 'teachers', label: 'Teacher Info', badge: `${teacherCount}`, icon: GraduationCap },
+    { id: 'students', label: 'Student Info', badge: `${studentCount}`, icon: Users },
+    { id: 'classes', label: 'Class Info', badge: `${classCount}`, icon: BookOpen },
+    { id: 'settings', label: 'Settings', badge: 'Config', icon: Settings }
   ];
 
   return (
@@ -46,36 +48,40 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </span>
           </div>
           <p className="text-[11px] font-mono tracking-wider text-ink/70 mt-1 uppercase">
-            Curatorial Dashboard
+            Academic Operations
           </p>
         </div>
 
         {/* Action Button */}
         <div className="p-4 border-b border-ink">
           <button
-            onClick={onOpenNewModal}
+            onClick={onOpenQuickAdd}
             className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-ink text-[#ded5be] hover:bg-ink/85 transition-all text-xs font-mono uppercase tracking-widest border border-ink shadow-sm font-bold"
           >
-            <PenSquare size={14} />
-            <span>New Block / Dispatch</span>
+            <Plus size={14} />
+            <span>Quick Action</span>
           </button>
         </div>
 
         {/* Navigation list */}
         <nav className="p-4 xl:p-6 space-y-1">
           {navItems.map((item) => {
+            const Icon = item.icon;
             const isActive = currentTab === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => setCurrentTab(item.id)}
-                className={`w-full flex items-center justify-between px-3 py-2 text-sm font-serif transition-colors text-left group ${
+                className={`w-full flex items-center justify-between px-3 py-2.5 text-sm font-serif transition-colors text-left group ${
                   isActive 
                     ? 'font-bold text-ink underline decoration-2 underline-offset-4 bg-black/5' 
                     : 'text-ink/80 hover:text-ink hover:underline decoration-1 underline-offset-4'
                 }`}
               >
-                <span className="tracking-wide">{item.label}</span>
+                <div className="flex items-center gap-2.5">
+                  <Icon size={16} />
+                  <span className="tracking-wide">{item.label}</span>
+                </div>
                 {item.badge && (
                   <span className={`text-[10px] font-mono tracking-wider px-1.5 py-0.2 border ${
                     isActive ? 'border-ink bg-ink text-[#ded5be] font-bold' : 'border-ink/40 text-ink/70'

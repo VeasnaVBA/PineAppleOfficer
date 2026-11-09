@@ -1,33 +1,29 @@
 import React, { useState } from 'react';
-import { initialArticles, initialMetrics, heroArticle, initialSubscribers } from './data/initialData';
-import { Article, Subscriber } from './types';
+import { 
+  initialAcademicMetrics, 
+  initialTeachers, 
+  initialStudents, 
+  initialClasses 
+} from './data/initialData';
+import { Teacher, Student, ClassInfo } from './types';
 import { Navbar } from './components/Navbar';
 import { BottomMobileNav } from './components/BottomMobileNav';
 import { MobileDrawer } from './components/MobileDrawer';
 import { Sidebar } from './components/Sidebar';
 import { TopTicker } from './components/TopTicker';
-import { ArticleCards } from './components/ArticleCards';
-import { BottomEditorial } from './components/BottomEditorial';
-import { RightRail } from './components/RightRail';
-import { EmptyPageView } from './components/EmptyPageView';
-import { NewArticleModal } from './components/NewArticleModal';
-import { ArticleInspectModal } from './components/ArticleInspectModal';
-import { AnalyticsView } from './components/AnalyticsView';
-import { SubscribersView } from './components/SubscribersView';
-import { EditorialCMSView } from './components/EditorialCMSView';
+import { AcademicOverview } from './components/AcademicOverview';
+import { TeachersView } from './components/TeachersView';
+import { StudentsView } from './components/StudentsView';
+import { ClassesView } from './components/ClassesView';
 import { SettingsView } from './components/SettingsView';
 import { Toast } from './components/Toast';
 
 export function App() {
-  const [articles, setArticles] = useState<Article[]>(initialArticles);
-  const [subscribers, setSubscribers] = useState<Subscriber[]>(initialSubscribers);
-  const [currentTab, setCurrentTab] = useState<string>('empty');
+  const [teachers, setTeachers] = useState<Teacher[]>(initialTeachers);
+  const [students, setStudents] = useState<Student[]>(initialStudents);
+  const [classes, setClasses] = useState<ClassInfo[]>(initialClasses);
+  const [currentTab, setCurrentTab] = useState<string>('overview');
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
-  
-  // Modals
-  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
-  const [editingArticle, setEditingArticle] = useState<Article | null>(null);
-  const [inspectingArticle, setInspectingArticle] = useState<Article | null>(null);
 
   // Toast
   const [toast, setToast] = useState<{ title: string; message: string } | null>(null);
@@ -36,46 +32,36 @@ export function App() {
     setToast({ title, message });
   };
 
-  // Article handlers
-  const handleSaveArticle = (savedArticle: Article) => {
-    if (editingArticle) {
-      setArticles(prev => prev.map(a => a.id === savedArticle.id ? savedArticle : a));
-      showToast('DISPATCH REVISED', `Article "${savedArticle.title}" has been updated.`);
-    } else {
-      setArticles(prev => [savedArticle, ...prev]);
-      showToast('NEW DISPATCH PUBLISHED', `Article "${savedArticle.title}" added to active feed.`);
-    }
-    setEditingArticle(null);
+  // Teacher Handlers
+  const handleAddTeacher = (teacher: Teacher) => {
+    setTeachers(prev => [teacher, ...prev]);
   };
 
-  const handleDeleteArticle = (id: string) => {
-    setArticles(prev => prev.filter(a => a.id !== id));
-    showToast('DISPATCH ARCHIVED', 'Article entry removed from front-line archive.');
+  const handleDeleteTeacher = (id: string) => {
+    setTeachers(prev => prev.filter(t => t.id !== id));
   };
 
-  const handleToggleFeature = (id: string) => {
-    setArticles(prev => prev.map(a => {
-      if (a.id === id) {
-        const nextStatus = a.status === 'Featured' ? 'Published' : 'Featured';
-        showToast('STATUS ALTERED', `Article marked as ${nextStatus}.`);
-        return { ...a, status: nextStatus };
-      }
-      return a;
-    }));
+  // Student Handlers
+  const handleAddStudent = (student: Student) => {
+    setStudents(prev => [student, ...prev]);
   };
 
-  const handleStatusChange = (id: string, status: Article['status']) => {
-    setArticles(prev => prev.map(a => a.id === id ? { ...a, status } : a));
-    showToast('STATUS UPDATED', `Article status changed to ${status}.`);
+  const handleDeleteStudent = (id: string) => {
+    setStudents(prev => prev.filter(s => s.id !== id));
   };
 
-  // Subscriber handlers
-  const handleAddSubscriber = (sub: Subscriber) => {
-    setSubscribers(prev => [sub, ...prev]);
+  // Class Handlers
+  const handleAddClass = (newCls: ClassInfo) => {
+    setClasses(prev => [newCls, ...prev]);
   };
 
-  const handleDeleteSubscriber = (id: string) => {
-    setSubscribers(prev => prev.filter(s => s.id !== id));
+  const handleDeleteClass = (id: string) => {
+    setClasses(prev => prev.filter(c => c.id !== id));
+  };
+
+  const handleQuickAdd = () => {
+    // If on teachers page, user can add teacher, if on students, add student, etc.
+    showToast('QUICK ACTION', 'Select a tab below to enroll scholars, register faculty, or schedule courses.');
   };
 
   return (
@@ -84,14 +70,12 @@ export function App() {
       <Navbar
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
-        onOpenNewModal={() => {
-          setEditingArticle(null);
-          setIsNewModalOpen(true);
-        }}
+        onOpenQuickAdd={handleQuickAdd}
         onToggleMobileDrawer={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
         isMobileDrawerOpen={isMobileDrawerOpen}
-        articleCount={articles.length}
-        subscriberCount={subscribers.length}
+        teacherCount={teachers.length}
+        studentCount={students.length}
+        classCount={classes.length}
       />
 
       {/* Main Container Wrapper */}
@@ -102,108 +86,66 @@ export function App() {
           <Sidebar
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
-            onOpenNewModal={() => {
-              setEditingArticle(null);
-              setIsNewModalOpen(true);
-            }}
-            articleCount={articles.length}
+            onOpenQuickAdd={handleQuickAdd}
+            teacherCount={teachers.length}
+            studentCount={students.length}
+            classCount={classes.length}
           />
 
           {/* Center & Main Content Area */}
           <div className="flex-1 min-w-0 flex flex-col">
             {/* Top Ticker Bar */}
             <TopTicker
-              metrics={initialMetrics}
+              metrics={initialAcademicMetrics}
               onSelectMetric={(metric) => {
-                showToast('METRIC INSPECTION', `${metric.title} (${metric.date}) selected.`);
+                showToast('METRIC INSPECTION', `${metric.title} (${metric.value}) selected.`);
               }}
             />
 
             {/* View router based on active tab */}
             <div className="flex-1">
-              {/* Clean Empty Page Workspace (Default) */}
-              {currentTab === 'empty' && (
-                <EmptyPageView onShowToast={showToast} />
-              )}
-
-              {/* Dashboard Overview (Pure Typographic, No Images) */}
+              {/* Dashboard Overview */}
               {currentTab === 'overview' && (
-                <div className="flex flex-col xl:flex-row">
-                  <div className="flex-1 min-w-0 flex flex-col justify-between">
-                    <ArticleCards
-                      articles={articles}
-                      onSelectArticle={(article) => setInspectingArticle(article)}
-                      onEditArticle={(article) => {
-                        setEditingArticle(article);
-                        setIsNewModalOpen(true);
-                      }}
-                      onDeleteArticle={handleDeleteArticle}
-                      onToggleFeature={handleToggleFeature}
-                    />
-                    <BottomEditorial onShowToast={showToast} />
-                  </div>
-
-                  <RightRail
-                    heroArticle={heroArticle}
-                    onSelectArticle={(article) => setInspectingArticle(article)}
-                    onShowToast={showToast}
-                  />
-                </div>
-              )}
-
-              {/* Dedicated Articles Page */}
-              {currentTab === 'articles' && (
-                <div className="flex flex-col">
-                  <ArticleCards
-                    articles={articles}
-                    onSelectArticle={(article) => setInspectingArticle(article)}
-                    onEditArticle={(article) => {
-                      setEditingArticle(article);
-                      setIsNewModalOpen(true);
-                    }}
-                    onDeleteArticle={handleDeleteArticle}
-                    onToggleFeature={handleToggleFeature}
-                  />
-                  <BottomEditorial onShowToast={showToast} />
-                </div>
-              )}
-
-              {/* Editorial CMS Page */}
-              {currentTab === 'cms' && (
-                <EditorialCMSView
-                  articles={articles}
-                  onOpenNewModal={() => {
-                    setEditingArticle(null);
-                    setIsNewModalOpen(true);
-                  }}
-                  onSelectArticle={(article) => setInspectingArticle(article)}
-                  onEditArticle={(article) => {
-                    setEditingArticle(article);
-                    setIsNewModalOpen(true);
-                  }}
-                  onDeleteArticle={handleDeleteArticle}
-                  onToggleFeature={handleToggleFeature}
-                  onStatusChange={handleStatusChange}
+                <AcademicOverview
+                  teachers={teachers}
+                  students={students}
+                  classes={classes}
+                  onNavigate={setCurrentTab}
                   onShowToast={showToast}
                 />
               )}
 
-              {/* Analytics & Intelligence Page */}
-              {currentTab === 'analytics' && (
-                <AnalyticsView />
-              )}
-
-              {/* Subscribers / CRM Page */}
-              {currentTab === 'subscribers' && (
-                <SubscribersView
-                  subscribers={subscribers}
-                  onAddSubscriber={handleAddSubscriber}
-                  onDeleteSubscriber={handleDeleteSubscriber}
+              {/* Teacher Info */}
+              {currentTab === 'teachers' && (
+                <TeachersView
+                  teachers={teachers}
+                  onAddTeacher={handleAddTeacher}
+                  onDeleteTeacher={handleDeleteTeacher}
                   onShowToast={showToast}
                 />
               )}
 
-              {/* System Configuration & Cloud Settings Page */}
+              {/* Student Info */}
+              {currentTab === 'students' && (
+                <StudentsView
+                  students={students}
+                  onAddStudent={handleAddStudent}
+                  onDeleteStudent={handleDeleteStudent}
+                  onShowToast={showToast}
+                />
+              )}
+
+              {/* Class Info */}
+              {currentTab === 'classes' && (
+                <ClassesView
+                  classes={classes}
+                  onAddClass={handleAddClass}
+                  onDeleteClass={handleDeleteClass}
+                  onShowToast={showToast}
+                />
+              )}
+
+              {/* Settings */}
               {currentTab === 'settings' && (
                 <SettingsView onShowToast={showToast} />
               )}
@@ -218,12 +160,10 @@ export function App() {
         onClose={() => setIsMobileDrawerOpen(false)}
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
-        onOpenNewModal={() => {
-          setEditingArticle(null);
-          setIsNewModalOpen(true);
-        }}
-        articleCount={articles.length}
-        subscriberCount={subscribers.length}
+        onOpenQuickAdd={handleQuickAdd}
+        teacherCount={teachers.length}
+        studentCount={students.length}
+        classCount={classes.length}
       />
 
       {/* Mobile Bottom Navigation Bar */}
@@ -231,28 +171,6 @@ export function App() {
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
         onToggleMobileDrawer={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
-      />
-
-      {/* Modals */}
-      <NewArticleModal
-        isOpen={isNewModalOpen}
-        onClose={() => {
-          setIsNewModalOpen(false);
-          setEditingArticle(null);
-        }}
-        onSave={handleSaveArticle}
-        initialData={editingArticle}
-      />
-
-      <ArticleInspectModal
-        article={inspectingArticle}
-        onClose={() => setInspectingArticle(null)}
-        onEdit={(article) => {
-          setInspectingArticle(null);
-          setEditingArticle(article);
-          setIsNewModalOpen(true);
-        }}
-        onShowToast={showToast}
       />
 
       {/* Global Toast */}

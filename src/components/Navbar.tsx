@@ -3,53 +3,49 @@ import {
   Menu, 
   X, 
   Bell, 
-  PenSquare, 
-  ExternalLink, 
-  Globe, 
+  Plus, 
   Github, 
-  User, 
-  Layers,
   ChevronDown
 } from 'lucide-react';
 
 interface NavbarProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
-  onOpenNewModal: () => void;
+  onOpenQuickAdd: () => void;
   onToggleMobileDrawer: () => void;
   isMobileDrawerOpen: boolean;
-  articleCount: number;
-  subscriberCount: number;
+  teacherCount: number;
+  studentCount: number;
+  classCount: number;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentTab,
   setCurrentTab,
-  onOpenNewModal,
+  onOpenQuickAdd,
   onToggleMobileDrawer,
   isMobileDrawerOpen,
-  articleCount,
-  subscriberCount
+  teacherCount,
+  studentCount,
+  classCount
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   const notifications = [
-    { id: 1, title: 'New Patron Enrolled', desc: 'Marcus Vance subscribed to VIP Collector edition', time: '12m ago' },
-    { id: 2, title: 'Archival Dispatch Trending', desc: 'Ben Zank retrospective hit 4,820 views today', time: '1h ago' },
-    { id: 3, title: 'Vercel Edge Deployment', desc: 'Global sync complete: cache hit ratio 99.4%', time: '3h ago' }
+    { id: 1, title: 'Term I Enrollment', desc: 'New student Beatrice Chen registered in Honors', time: '10m ago' },
+    { id: 2, title: 'Schedule Updated', desc: 'MATH-201 room relocated to Science Wing Rm 112', time: '1h ago' },
+    { id: 3, title: 'Faculty Notice', desc: 'Dr. Arthur Sterling approved for tenured status', time: '3h ago' }
   ];
 
   const getPageTitle = (tab: string) => {
     switch (tab) {
-      case 'empty': return 'Empty Page';
-      case 'overview': return 'Dashboard Overview';
-      case 'articles': return 'Articles';
-      case 'cms': return 'Editorial CMS';
-      case 'analytics': return 'Audience & Analytics';
-      case 'subscribers': return 'Patrons & CRM';
+      case 'overview': return 'Academic Dashboard';
+      case 'teachers': return 'Teacher Info';
+      case 'students': return 'Student Info';
+      case 'classes': return 'Class Info';
       case 'settings': return 'System Settings';
-      default: return 'Empty Page';
+      default: return 'Academic Dashboard';
     }
   };
 
@@ -76,11 +72,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   TETRAD
                 </span>
                 <span className="text-[9px] font-mono tracking-widest px-1.5 py-0.2 border border-ink bg-[#ede5cf] font-bold">
-                  v2.4
+                  ACADEMICS
                 </span>
               </div>
               <span className="text-[10px] font-mono tracking-wider text-ink/70 uppercase hidden sm:block">
-                Editorial & Media Operating System
+                Faculty, Scholar & Course Management
               </span>
             </div>
           </div>
@@ -131,7 +127,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {showNotifications && (
               <div className="absolute right-0 mt-2 w-80 bg-[#ded5be] border-2 border-ink shadow-brutal p-3 z-50 animate-fade-in font-mono text-xs">
                 <div className="flex items-center justify-between pb-2 border-b border-ink">
-                  <span className="font-serif font-bold text-sm text-ink uppercase">Dispatches & Alerts</span>
+                  <span className="font-serif font-bold text-sm text-ink uppercase">Academic Bulletins</span>
                   <span className="text-[10px] text-ink/70">3 New</span>
                 </div>
                 <div className="divide-y divide-ink/20 py-2 space-y-2">
@@ -148,20 +144,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => setShowNotifications(false)}
                     className="text-[10px] uppercase font-bold text-ink underline"
                   >
-                    Close Log
+                    Close Bulletins
                   </button>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Quick Action: New Dispatch */}
+          {/* Quick Action */}
           <button
-            onClick={onOpenNewModal}
+            onClick={onOpenQuickAdd}
             className="flex items-center gap-1.5 px-3 py-1.5 bg-ink text-[#ded5be] hover:bg-ink/85 border border-ink text-[11px] font-mono uppercase tracking-wider font-bold transition-all shadow-sm"
           >
-            <PenSquare size={13} />
-            <span className="hidden sm:inline">New Dispatch</span>
+            <Plus size={13} />
+            <span className="hidden sm:inline">Add Record</span>
           </button>
 
           {/* User Menu */}
@@ -182,27 +178,36 @@ export const Navbar: React.FC<NavbarProps> = ({
             {showUserMenu && (
               <div className="absolute right-0 mt-2 w-52 bg-[#ded5be] border-2 border-ink shadow-brutal p-3 z-50 animate-fade-in font-mono text-xs">
                 <div className="pb-2 border-b border-ink">
-                  <p className="font-serif font-bold text-sm text-ink">Curator Veasna</p>
+                  <p className="font-serif font-bold text-sm text-ink">Dean Veasna</p>
                   <p className="text-[10px] text-ink/70 truncate">veasna@tetrad-admin.local</p>
                 </div>
                 <div className="py-2 space-y-1">
                   <button
                     onClick={() => {
-                      setCurrentTab('cms');
+                      setCurrentTab('teachers');
                       setShowUserMenu(false);
                     }}
                     className="w-full text-left py-1 hover:underline text-ink"
                   >
-                    Editorial Vault ({articleCount})
+                    Teacher Info ({teacherCount})
                   </button>
                   <button
                     onClick={() => {
-                      setCurrentTab('subscribers');
+                      setCurrentTab('students');
                       setShowUserMenu(false);
                     }}
                     className="w-full text-left py-1 hover:underline text-ink"
                   >
-                    Patron Register ({subscriberCount})
+                    Student Info ({studentCount})
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCurrentTab('classes');
+                      setShowUserMenu(false);
+                    }}
+                    className="w-full text-left py-1 hover:underline text-ink"
+                  >
+                    Class Info ({classCount})
                   </button>
                   <button
                     onClick={() => {
@@ -211,7 +216,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className="w-full text-left py-1 hover:underline text-ink"
                   >
-                    System & Cloud Config
+                    Academic Settings
                   </button>
                 </div>
                 <div className="pt-2 border-t border-ink flex justify-between items-center text-[10px]">
@@ -224,7 +229,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <Github size={11} />
                     GitHub
                   </a>
-                  <span className="text-emerald-800 font-bold">Production</span>
+                  <span className="text-emerald-800 font-bold">Term 2026</span>
                 </div>
               </div>
             )}
