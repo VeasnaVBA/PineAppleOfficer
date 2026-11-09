@@ -7,8 +7,6 @@ import {
 } from './data/initialData';
 import { Teacher, Student, ClassInfo } from './types';
 import { Navbar } from './components/Navbar';
-import { BottomMobileNav } from './components/BottomMobileNav';
-import { MobileDrawer } from './components/MobileDrawer';
 import { Sidebar } from './components/Sidebar';
 import { TopTicker } from './components/TopTicker';
 import { AcademicOverview } from './components/AcademicOverview';
@@ -23,7 +21,6 @@ export function App() {
   const [students, setStudents] = useState<Student[]>(initialStudents);
   const [classes, setClasses] = useState<ClassInfo[]>(initialClasses);
   const [currentTab, setCurrentTab] = useState<string>('overview');
-  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   // Toast
   const [toast, setToast] = useState<{ title: string; message: string } | null>(null);
@@ -60,29 +57,26 @@ export function App() {
   };
 
   const handleQuickAdd = () => {
-    // If on teachers page, user can add teacher, if on students, add student, etc.
-    showToast('QUICK ACTION', 'Select a tab below to enroll scholars, register faculty, or schedule courses.');
+    showToast('QUICK ACTION', 'Use the action button in each tab to enroll students, register faculty, or schedule courses.');
   };
 
   return (
-    <div className="min-h-screen bg-[#ded5be] flex flex-col font-sans antialiased text-ink pb-16 lg:pb-0">
+    <div className="min-h-screen bg-[#ded5be] flex flex-col font-sans antialiased text-ink">
       {/* Top Application Navbar */}
       <Navbar
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
         onOpenQuickAdd={handleQuickAdd}
-        onToggleMobileDrawer={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
-        isMobileDrawerOpen={isMobileDrawerOpen}
         teacherCount={teachers.length}
         studentCount={students.length}
         classCount={classes.length}
       />
 
-      {/* Main Container Wrapper */}
-      <div className="flex-1 flex justify-center p-0 sm:p-3 md:p-6 lg:p-8">
-        <div className="w-full max-w-[1580px] bg-[#ded5be] border-0 sm:border-2 border-ink shadow-2xl flex flex-col lg:flex-row overflow-hidden relative">
+      {/* Main Container Wrapper - Permanent Sidebar + Content */}
+      <div className="flex-1 flex justify-center p-0 sm:p-2 md:p-4 lg:p-6">
+        <div className="w-full max-w-[1600px] bg-[#ded5be] border-0 sm:border-2 border-ink shadow-2xl flex flex-row overflow-hidden relative">
           
-          {/* Left Column: Sidebar (Desktop only) */}
+          {/* Permanent Left Sidebar (Never Hides) */}
           <Sidebar
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
@@ -92,8 +86,8 @@ export function App() {
             classCount={classes.length}
           />
 
-          {/* Center & Main Content Area */}
-          <div className="flex-1 min-w-0 flex flex-col">
+          {/* Right Main Content Area */}
+          <div className="flex-1 min-w-0 flex flex-col overflow-y-auto">
             {/* Top Ticker Bar */}
             <TopTicker
               metrics={initialAcademicMetrics}
@@ -153,25 +147,6 @@ export function App() {
           </div>
         </div>
       </div>
-
-      {/* Mobile Drawer (Menu) */}
-      <MobileDrawer
-        isOpen={isMobileDrawerOpen}
-        onClose={() => setIsMobileDrawerOpen(false)}
-        currentTab={currentTab}
-        setCurrentTab={setCurrentTab}
-        onOpenQuickAdd={handleQuickAdd}
-        teacherCount={teachers.length}
-        studentCount={students.length}
-        classCount={classes.length}
-      />
-
-      {/* Mobile Bottom Navigation Bar */}
-      <BottomMobileNav
-        currentTab={currentTab}
-        setCurrentTab={setCurrentTab}
-        onToggleMobileDrawer={() => setIsMobileDrawerOpen(!isMobileDrawerOpen)}
-      />
 
       {/* Global Toast */}
       {toast && (

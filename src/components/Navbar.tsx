@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { 
-  Menu, 
-  X, 
   Bell, 
   Plus, 
   Github, 
@@ -12,8 +10,6 @@ interface NavbarProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
   onOpenQuickAdd: () => void;
-  onToggleMobileDrawer: () => void;
-  isMobileDrawerOpen: boolean;
   teacherCount: number;
   studentCount: number;
   classCount: number;
@@ -23,8 +19,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   currentTab,
   setCurrentTab,
   onOpenQuickAdd,
-  onToggleMobileDrawer,
-  isMobileDrawerOpen,
   teacherCount,
   studentCount,
   classCount
@@ -51,40 +45,25 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-40 bg-[#ded5be] border-b-2 border-ink">
-      <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 lg:py-3">
-        {/* Left: Hamburger & Brand */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onToggleMobileDrawer}
-            className="lg:hidden p-1.5 border border-ink bg-[#ede5cf] hover:bg-ink hover:text-[#ded5be] transition-colors"
-            aria-label="Toggle menu"
-          >
-            {isMobileDrawerOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-
+      <div className="flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-3">
+        {/* Left: Brand / Title */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <div 
             onClick={() => setCurrentTab('overview')}
-            className="flex items-center gap-2.5 cursor-pointer select-none"
+            className="flex items-center gap-2 cursor-pointer select-none"
           >
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="font-serif text-xl sm:text-2xl font-black tracking-[0.22em] text-ink uppercase">
-                  TETRAD
-                </span>
-                <span className="text-[9px] font-mono tracking-widest px-1.5 py-0.2 border border-ink bg-[#ede5cf] font-bold">
-                  ACADEMICS
-                </span>
-              </div>
-              <span className="text-[10px] font-mono tracking-wider text-ink/70 uppercase hidden sm:block">
-                Faculty, Scholar & Course Management
-              </span>
-            </div>
+            <span className="font-serif text-lg sm:text-2xl font-black tracking-[0.18em] sm:tracking-[0.22em] text-ink uppercase">
+              TETRAD
+            </span>
+            <span className="text-[9px] font-mono tracking-widest px-1.5 py-0.2 border border-ink bg-[#ede5cf] font-bold hidden sm:inline">
+              ACADEMICS
+            </span>
           </div>
 
-          {/* Current Page Badge for Desktop */}
-          <div className="hidden md:flex items-center gap-2 pl-4 border-l border-ink/30 text-xs font-mono">
+          {/* Current Page Badge */}
+          <div className="flex items-center gap-1.5 sm:gap-2 pl-2 sm:pl-4 border-l border-ink/30 text-xs font-mono">
             <span className="text-ink/60">/</span>
-            <span className="font-serif font-bold text-ink underline decoration-1 underline-offset-2">
+            <span className="font-serif font-bold text-ink underline decoration-1 underline-offset-2 text-xs sm:text-sm">
               {getPageTitle(currentTab)}
             </span>
           </div>
@@ -97,17 +76,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             href="https://github.com/VeasnaVBA/PineAppleOfficer"
             target="_blank"
             rel="noreferrer"
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono border border-ink bg-[#ede5cf] hover:bg-white/50 text-ink transition-colors"
+            className="hidden md:flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono border border-ink bg-[#ede5cf] hover:bg-white/50 text-ink transition-colors"
             title="GitHub Repository"
           >
             <Github size={12} />
             <span className="hidden lg:inline">VeasnaVBA/PineAppleOfficer</span>
           </a>
 
-          <div className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono border border-ink bg-[#ede5cf] text-ink">
+          <div className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1 text-[10px] font-mono border border-ink bg-[#ede5cf] text-ink">
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-            <span className="font-bold hidden sm:inline">Vercel Live</span>
-            <span className="sm:hidden font-bold">Live</span>
+            <span className="font-bold">Live</span>
           </div>
 
           {/* Notifications Dropdown */}
@@ -120,12 +98,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="relative p-1.5 border border-ink bg-[#ede5cf] hover:bg-black/10 transition-colors"
               title="Notifications"
             >
-              <Bell size={16} />
+              <Bell size={15} />
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-600 border border-ink rounded-full"></span>
             </button>
 
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-80 bg-[#ded5be] border-2 border-ink shadow-brutal p-3 z-50 animate-fade-in font-mono text-xs">
+              <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-[#ded5be] border-2 border-ink shadow-brutal p-3 z-50 animate-fade-in font-mono text-xs">
                 <div className="flex items-center justify-between pb-2 border-b border-ink">
                   <span className="font-serif font-bold text-sm text-ink uppercase">Academic Bulletins</span>
                   <span className="text-[10px] text-ink/70">3 New</span>
@@ -154,20 +132,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Quick Action */}
           <button
             onClick={onOpenQuickAdd}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-ink text-[#ded5be] hover:bg-ink/85 border border-ink text-[11px] font-mono uppercase tracking-wider font-bold transition-all shadow-sm"
+            className="hidden xs:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-ink text-[#ded5be] hover:bg-ink/85 border border-ink text-[11px] font-mono uppercase tracking-wider font-bold transition-all shadow-sm"
           >
             <Plus size={13} />
             <span className="hidden sm:inline">Add Record</span>
           </button>
 
-          {/* User Menu */}
+          {/* User Profile Menu */}
           <div className="relative">
             <button
               onClick={() => {
                 setShowUserMenu(!showUserMenu);
                 setShowNotifications(false);
               }}
-              className="flex items-center gap-1.5 p-1.5 border border-ink bg-[#ede5cf] hover:bg-black/10 transition-colors"
+              className="flex items-center gap-1 p-1 sm:p-1.5 border border-ink bg-[#ede5cf] hover:bg-black/10 transition-colors"
             >
               <div className="w-5 h-5 rounded-full bg-ink text-[#ded5be] flex items-center justify-center text-[10px] font-serif font-bold">
                 V
