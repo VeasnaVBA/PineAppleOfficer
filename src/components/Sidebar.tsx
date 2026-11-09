@@ -18,17 +18,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setCurrentTab
 }) => {
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', badge: 'Blank', icon: Compass },
-    { id: 'teachers', label: 'Teacher Info', badge: 'Blank', icon: GraduationCap },
-    { id: 'students', label: 'Student Info', badge: 'Blank', icon: Users },
-    { id: 'classes', label: 'Class Info', badge: 'Blank', icon: BookOpen },
-    { id: 'settings', label: 'Settings', badge: 'Blank', icon: Settings }
+    { id: 'dashboard', label: 'Dashboard', icon: Compass },
+    { id: 'teachers', label: 'Teacher Info', icon: GraduationCap },
+    { id: 'students', label: 'Student Info', icon: Users },
+    { id: 'classes', label: 'Class Info', icon: BookOpen },
+    { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
   return (
     <aside className="flex w-36 xs:w-44 sm:w-56 xl:w-64 flex-shrink-0 flex-col justify-between border-r-2 border-ink bg-[#ded5be] select-none">
-      {/* Navigation list starts cleanly from the top */}
-      <nav className="p-2 sm:p-4 xl:p-5 space-y-1">
+      {/* Navigation list (No badges, No underlines) */}
+      <nav className="p-2 sm:p-3 xl:p-4 space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentTab === item.id;
@@ -36,23 +36,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={item.id}
               onClick={() => setCurrentTab(item.id)}
-              className={`w-full flex items-center justify-between px-2 sm:px-3 py-2.5 text-xs sm:text-sm font-serif transition-colors text-left group ${
+              className={`w-full flex items-center px-2.5 sm:px-3.5 py-2.5 text-xs sm:text-sm font-serif transition-colors text-left ${
                 isActive 
-                  ? 'font-bold text-ink underline decoration-2 underline-offset-4 bg-black/10 sm:bg-black/5' 
-                  : 'text-ink/80 hover:text-ink hover:underline decoration-1 underline-offset-4'
+                  ? 'font-bold text-ink bg-black/10 border-l-4 border-ink' 
+                  : 'text-ink/80 hover:text-ink hover:bg-black/5'
               }`}
             >
-              <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                 <Icon size={16} className="flex-shrink-0" />
                 <span className="truncate tracking-tight sm:tracking-wide">{item.label}</span>
               </div>
-              {item.badge && (
-                <span className={`hidden sm:inline text-[9px] sm:text-[10px] font-mono tracking-wider px-1 sm:px-1.5 py-0.2 border flex-shrink-0 ${
-                  isActive ? 'border-ink bg-ink text-[#ded5be] font-bold' : 'border-ink/40 text-ink/70'
-                }`}>
-                  {item.badge}
-                </span>
-              )}
             </button>
           );
         })}

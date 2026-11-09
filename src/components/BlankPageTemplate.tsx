@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutGrid, Plus, Sparkles } from 'lucide-react';
+import { LayoutGrid } from 'lucide-react';
 
 interface BlankPageTemplateProps {
   title: string;
@@ -11,32 +11,23 @@ interface BlankPageTemplateProps {
 export const BlankPageTemplate: React.FC<BlankPageTemplateProps> = ({
   title,
   breadcrumb,
-  subtitle,
-  onShowToast
+  subtitle
 }) => {
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in">
       {/* Top Breadcrumb & Page Masthead */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b-2 border-ink gap-3">
-        <div>
-          <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono text-ink/70 uppercase">
-            <span>PINEAPPLE OFFICER</span>
-            <span>/</span>
-            <span className="font-bold text-ink underline">{breadcrumb}</span>
-          </div>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-tight text-ink mt-1">
-            {title}
-          </h2>
-          <p className="font-mono text-xs text-ink/70 tracking-wider">
-            {subtitle}
-          </p>
+      <div className="pb-4 border-b-2 border-ink">
+        <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono text-ink/70 uppercase">
+          <span>PINEAPPLE OFFICER</span>
+          <span>/</span>
+          <span className="font-bold text-ink">{breadcrumb}</span>
         </div>
-
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          <span className="text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 border border-ink bg-[#ede5cf] font-bold">
-            Blank State
-          </span>
-        </div>
+        <h2 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-tight text-ink mt-1">
+          {title}
+        </h2>
+        <p className="font-mono text-xs text-ink/70 tracking-wider">
+          {subtitle}
+        </p>
       </div>
 
       {/* Main Empty Canvas Area */}

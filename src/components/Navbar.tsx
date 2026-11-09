@@ -48,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Current Page Badge */}
           <div className="flex items-center gap-1.5 sm:gap-2 pl-2 sm:pl-4 border-l border-ink/30 text-xs font-mono">
             <span className="text-ink/60">/</span>
-            <span className="font-serif font-bold text-ink underline decoration-1 underline-offset-2 text-xs sm:text-sm">
+            <span className="font-serif font-bold text-ink text-xs sm:text-sm">
               {getPageTitle(currentTab)}
             </span>
           </div>
