@@ -8,8 +8,8 @@ interface SettingsViewProps {
 export const SettingsView: React.FC<SettingsViewProps> = ({ onShowToast }) => {
   const [siteTitle, setSiteTitle] = useState('TETRAD');
   const [subtitle, setSubtitle] = useState('Editorial & Media Administration System');
-  const [repoUrl, setRepoUrl] = useState('https://github.com/username/tetrad-admin');
-  const [vercelProject, setVercelProject] = useState('tetrad-curate.vercel.app');
+  const [repoUrl, setRepoUrl] = useState('https://github.com/VeasnaVBA/PineAppleOfficer');
+  const [vercelProject, setVercelProject] = useState('pineappleofficer.vercel.app');
   const [edgeRegion, setEdgeRegion] = useState('iad1 (Global Edge Anycast)');
 
   const handleSaveConfig = (e: React.FormEvent) => {
@@ -22,10 +22,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onShowToast }) => {
   };
 
   return (
-    <div className="p-6 lg:p-8 space-y-8 animate-fade-in max-w-4xl">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 animate-fade-in max-w-4xl">
       {/* Header */}
-      <div className="pb-4 border-b border-ink">
-        <h2 className="font-serif text-2xl lg:text-3xl font-bold uppercase tracking-tight text-ink">
+      <div className="pb-4 border-b-2 border-ink">
+        <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold uppercase tracking-tight text-ink">
           SYSTEM CONFIGURATION & CLOUD HOSTING
         </h2>
         <p className="font-mono text-xs text-ink/70 mt-1 uppercase tracking-wider">
@@ -34,18 +34,18 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onShowToast }) => {
       </div>
 
       {/* Deployment Status Block */}
-      <div className="border-2 border-ink p-6 bg-[#ede5cf] shadow-brutal space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-ink/30">
+      <div className="border-2 border-ink p-4 sm:p-6 bg-[#ede5cf] shadow-brutal space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-ink/30 gap-2">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse"></span>
             <span className="font-mono font-bold text-sm text-ink uppercase">Vercel Deployment Status</span>
           </div>
-          <span className="px-2 py-0.5 bg-ink text-[#ded5be] text-[10px] font-mono uppercase tracking-widest font-bold">
-            Production Ready
+          <span className="px-2 py-0.5 bg-ink text-[#ded5be] text-[10px] font-mono uppercase tracking-widest font-bold self-start sm:self-auto">
+            Production Live
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
           <div>
             <span className="text-ink/70 block text-[10px] uppercase">Framework</span>
             <span className="font-bold text-ink">Vite + React (SPA Mode)</span>
@@ -61,6 +61,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onShowToast }) => {
         </div>
 
         <div className="pt-2 flex flex-wrap gap-2">
+          <a
+            href="https://pine-apple-officer.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="px-3 py-1.5 border border-ink bg-ink text-[#ded5be] text-xs font-mono uppercase tracking-wider hover:bg-ink/80 flex items-center gap-1.5 font-bold"
+          >
+            <Globe size={12} />
+            <span>Open Live App</span>
+          </a>
+
           <button
             onClick={handlePurgeCache}
             className="px-3 py-1.5 border border-ink bg-[#ded5be] text-xs font-mono uppercase tracking-wider hover:bg-white/40 flex items-center gap-1.5"
@@ -72,9 +82,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onShowToast }) => {
       </div>
 
       {/* Form settings */}
-      <form onSubmit={handleSaveConfig} className="border-2 border-ink p-6 bg-[#ded5be] shadow-brutal space-y-5">
-        <h3 className="font-serif text-lg font-bold text-ink border-b border-ink/20 pb-2">
-          Curatorial Identity & Branding
+      <form onSubmit={handleSaveConfig} className="border-2 border-ink p-4 sm:p-6 bg-[#ded5be] shadow-brutal space-y-4 sm:space-y-5">
+        <h3 className="font-serif text-base sm:text-lg font-bold text-ink border-b border-ink/20 pb-2">
+          Curatorial Identity & Custom Domain
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -121,7 +131,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onShowToast }) => {
 
           <div>
             <label className="block text-[11px] font-mono uppercase tracking-widest text-ink/80 mb-1">
-              Vercel Project Domain
+              Vercel Domain
             </label>
             <div className="flex items-center border border-ink bg-transparent">
               <span className="px-3 text-ink/60"><Globe size={14} /></span>
@@ -135,7 +145,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onShowToast }) => {
           </div>
         </div>
 
-        <div className="pt-4 border-t border-ink/20 flex justify-end">
+        <div className="pt-3 border-t border-ink/20 flex justify-end">
           <button
             type="submit"
             className="px-6 py-2 bg-ink text-[#ded5be] text-xs font-mono uppercase tracking-widest font-bold hover:bg-ink/85 flex items-center gap-1.5 shadow-sm"
@@ -145,30 +155,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onShowToast }) => {
           </button>
         </div>
       </form>
-
-      {/* GitHub & Vercel Push Instructions Box */}
-      <div className="border-2 border-ink p-6 bg-[#ded5be] shadow-brutal space-y-4">
-        <h3 className="font-serif text-lg font-bold text-ink border-b border-ink/20 pb-2 flex items-center gap-2">
-          <Terminal size={16} />
-          <span>GitHub & Vercel Deployment Instructions</span>
-        </h3>
-
-        <div className="font-mono text-xs text-ink/90 space-y-3">
-          <p className="font-serif italic text-sm">
-            To synchronize with your own GitHub remote and trigger automated Vercel CI/CD:
-          </p>
-
-          <div className="bg-[#111111] text-[#ded5be] p-4 border border-ink space-y-2 text-[11px]">
-            <p className="text-[#8e8571] font-bold"># Step 1: Connect to your GitHub repository</p>
-            <p className="text-emerald-400">git remote add origin https://github.com/&lt;your-username&gt;/&lt;repo-name&gt;.git</p>
-            <p className="text-emerald-400">git branch -M main</p>
-            <p className="text-emerald-400">git push -u origin main</p>
-            
-            <p className="text-[#8e8571] font-bold pt-2"># Step 2: Deploy to Vercel (Instant CLI or Dashboard import)</p>
-            <p className="text-emerald-400">npx vercel deploy --prod</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
