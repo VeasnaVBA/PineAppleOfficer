@@ -23,17 +23,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [showUserMenu, setShowUserMenu] = useState(false);
   const t = translations[lang];
 
-  const getPageTitle = (tab: string) => {
-    switch (tab) {
-      case 'dashboard': return t.nav.dashboard;
-      case 'teachers': return t.nav.teachers;
-      case 'students': return t.nav.students;
-      case 'classes': return t.nav.classes;
-      case 'settings': return t.nav.settings;
-      default: return t.nav.dashboard;
-    }
-  };
-
   return (
     <header 
       className="sticky top-0 z-40 border-b-2 border-ink select-none text-ink transition-colors"
@@ -41,29 +30,13 @@ export const Navbar: React.FC<NavbarProps> = ({
     >
       <div className="flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-3">
         {/* Left: Brand / Title */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div 
-            onClick={() => setCurrentTab('dashboard')}
-            className="flex items-center gap-2 cursor-pointer select-none"
-          >
-            <span className="font-serif text-sm sm:text-lg lg:text-xl font-black tracking-[0.12em] sm:tracking-[0.18em] uppercase">
-              {t.brand}
-            </span>
-            <span 
-              className="text-[9px] font-mono tracking-widest px-1.5 py-0.5 border border-ink font-bold hidden sm:inline transition-colors"
-              style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
-            >
-              {t.portal}
-            </span>
-          </div>
-
-          {/* Current Page Badge */}
-          <div className="flex items-center gap-1.5 sm:gap-2 pl-2 sm:pl-4 border-l border-ink/30 text-xs font-mono">
-            <span className="opacity-60">/</span>
-            <span className="font-serif font-bold text-xs sm:text-sm">
-              {getPageTitle(currentTab)}
-            </span>
-          </div>
+        <div 
+          onClick={() => setCurrentTab('dashboard')}
+          className="flex items-center cursor-pointer select-none"
+        >
+          <span className="font-serif text-sm sm:text-lg lg:text-xl font-black tracking-[0.12em] sm:tracking-[0.18em] uppercase">
+            {t.brand}
+          </span>
         </div>
 
         {/* Right Actions */}
