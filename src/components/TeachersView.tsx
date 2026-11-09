@@ -430,13 +430,10 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
         </div>
       )}
 
-      {/* Control Bar: Search and Filters */}
-      <div 
-        className="p-3 sm:p-4 border-2 border-ink flex flex-col md:flex-row md:items-center justify-between gap-3 transition-colors"
-        style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
-      >
+      {/* Control Bar: Search and Filters (No outer box) */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
         {/* Search Input */}
-        <div className="relative flex-1">
+        <div className="relative flex-1 max-w-md">
           <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none opacity-60">
             <Search size={15} />
           </span>
@@ -445,8 +442,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
             placeholder={tt.searchPlaceholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 border border-ink text-xs font-mono focus:outline-none transition-colors"
-            style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+            className="w-full pl-9 pr-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
+            style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
           />
         </div>
 
@@ -458,8 +455,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="py-1 px-2 border border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
-              style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+              className="py-2 px-2.5 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
+              style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
             >
               <option value="All">{tt.allStatus}</option>
               <option value="Active">{tt.active}</option>
@@ -474,8 +471,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
             <select
               value={genderFilter}
               onChange={(e) => setGenderFilter(e.target.value as any)}
-              className="py-1 px-2 border border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
-              style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+              className="py-2 px-2.5 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
+              style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
             >
               <option value="All">{tt.allGender}</option>
               <option value="Male">{tt.male}</option>
@@ -485,8 +482,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
 
           {/* Total Count Badge */}
           <div 
-            className="px-2.5 py-1 border border-ink text-xs font-mono font-bold"
-            style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+            className="px-3 py-2 border-2 border-ink text-xs font-mono font-bold"
+            style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
           >
             <span>{filteredTeachers.length} / {teachers.length}</span>
           </div>
@@ -534,13 +531,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                     </td>
 
                     {/* Teacher ID */}
-                    <td className="py-3 px-3 sm:px-4 font-bold">
-                      <span 
-                        className="px-2 py-0.5 border border-ink inline-block"
-                        style={{ backgroundColor: 'var(--app-bg)' }}
-                      >
-                        {teacher.teacherId}
-                      </span>
+                    <td className="py-3 px-3 sm:px-4 font-bold font-mono">
+                      {teacher.teacherId}
                     </td>
 
                     {/* Khmer Name (Last + First) */}
@@ -555,12 +547,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
 
                     {/* Gender */}
                     <td className="py-3 px-3 sm:px-4 text-center">
-                      <span 
-                        className="px-2 py-0.5 border border-ink text-[11px]"
-                        style={{ backgroundColor: 'var(--app-bg)' }}
-                      >
-                        {getGenderLabel(teacher.gender)}
-                      </span>
+                      {getGenderLabel(teacher.gender)}
                     </td>
 
                     {/* Date of Birth */}
