@@ -102,7 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {showNotifications && (
               <div 
-                className="absolute right-0 mt-2 w-72 sm:w-80 border-2 border-ink shadow-brutal p-3 z-50 animate-fade-in font-mono text-xs text-ink"
+                className="absolute right-0 mt-2 w-72 sm:w-80 border-2 border-ink p-3 z-50 animate-fade-in font-mono text-xs text-ink"
                 style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
               >
                 <div className="flex items-center justify-between pb-2 border-b border-ink">
@@ -146,7 +146,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {showUserMenu && (
               <div 
-                className="absolute right-0 mt-2 w-52 border-2 border-ink shadow-brutal p-3 z-50 animate-fade-in font-mono text-xs text-ink"
+                className="absolute right-0 mt-2 w-52 border-2 border-ink p-3 z-50 animate-fade-in font-mono text-xs text-ink"
                 style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
               >
                 <div className="pb-2 border-b border-ink">

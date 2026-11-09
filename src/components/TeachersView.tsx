@@ -223,7 +223,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
 
         <button
           onClick={handleOpenAdd}
-          className="h-9 px-3.5 flex items-center justify-center gap-2 border-2 border-ink font-mono text-xs uppercase tracking-wider font-bold shadow-brutal hover:opacity-90 transition-all self-start sm:self-auto"
+          className="h-9 px-3.5 flex items-center justify-center gap-2 border-2 border-ink font-mono text-xs uppercase tracking-wider font-bold hover:opacity-90 transition-all self-start sm:self-auto"
           style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
         >
           <UserPlus size={15} />
@@ -238,7 +238,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
           onClick={() => setIsFormOpen(false)}
         >
           <div 
-            className="w-full max-w-2xl border-2 border-ink shadow-brutal-lg max-h-[92vh] flex flex-col transition-colors overflow-hidden"
+            className="w-full max-w-2xl border-2 border-ink max-h-[92vh] flex flex-col transition-colors overflow-hidden"
             style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -418,7 +418,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="h-9 px-5 border-2 border-ink text-xs font-mono uppercase tracking-wider font-bold shadow-brutal hover:opacity-90 transition-all flex items-center gap-1.5"
+                  className="h-9 px-5 border-2 border-ink text-xs font-mono uppercase tracking-wider font-bold hover:opacity-90 transition-all flex items-center gap-1.5"
                   style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
                 >
                   <Check size={14} />
@@ -432,7 +432,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
 
       {/* Control Bar: Search and Filters */}
       <div 
-        className="p-3 sm:p-4 border-2 border-ink shadow-brutal flex flex-col md:flex-row md:items-center justify-between gap-3 transition-colors"
+        className="p-3 sm:p-4 border-2 border-ink flex flex-col md:flex-row md:items-center justify-between gap-3 transition-colors"
         style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
       >
         {/* Search Input */}
@@ -495,7 +495,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
 
       {/* Teachers Data Table */}
       <div 
-        className="border-2 border-ink shadow-brutal overflow-hidden transition-colors"
+        className="border-2 border-ink overflow-hidden transition-colors"
         style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
       >
         <div className="overflow-x-auto">

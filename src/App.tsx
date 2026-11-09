@@ -105,7 +105,7 @@ export function App() {
       {/* Main Container Wrapper - Permanent Sidebar + Content */}
       <div className="flex-1 flex justify-center p-0 sm:p-2 md:p-4 lg:p-6">
         <div 
-          className="w-full max-w-[1600px] border-0 sm:border-2 border-ink shadow-2xl flex flex-row overflow-hidden relative"
+          className="w-full max-w-[1600px] border-0 sm:border-2 border-ink flex flex-row overflow-hidden relative"
           style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
         >
           {/* Permanent Left Sidebar (Never Hides, Translated, No Badges, No Underlines) */}

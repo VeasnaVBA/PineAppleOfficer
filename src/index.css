@@ -73,12 +73,15 @@
   border-color: var(--app-border, #121212) !important;
 }
 
-.shadow-brutal {
-  box-shadow: 3px 3px 0px var(--app-border, #121212) !important;
-}
-
-.shadow-brutal-lg {
-  box-shadow: 6px 6px 0px var(--app-border, #121212) !important;
+.shadow-brutal,
+.shadow-brutal-lg,
+.shadow-sm,
+.shadow-md,
+.shadow-lg,
+.shadow-xl,
+.shadow-2xl,
+.shadow {
+  box-shadow: none !important;
 }
 
 /* Custom scrollbars adapt to current theme */

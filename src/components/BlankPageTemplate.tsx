@@ -30,7 +30,7 @@ export const BlankPageTemplate: React.FC<BlankPageTemplateProps> = ({
         style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
       >
         <div 
-          className="w-14 h-14 border-2 border-ink flex items-center justify-center shadow-brutal transition-colors"
+          className="w-14 h-14 border-2 border-ink flex items-center justify-center transition-colors"
           style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
         >
           <LayoutGrid size={24} className="text-ink" />
@@ -47,7 +47,7 @@ export const BlankPageTemplate: React.FC<BlankPageTemplateProps> = ({
 
         <div className="pt-2">
           <div 
-            className="px-3.5 py-1.5 border-2 border-ink text-[11px] font-mono opacity-90 uppercase tracking-wider shadow-sm transition-colors"
+            className="px-3.5 py-1.5 border-2 border-ink text-[11px] font-mono opacity-90 uppercase tracking-wider transition-colors"
             style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
           >
             {t.canvas.readyBadge}

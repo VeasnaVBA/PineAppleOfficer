@@ -196,7 +196,7 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({
 
       {/* 0. Language Switcher Card */}
       <div 
-        className="border-2 border-ink p-5 sm:p-6 shadow-brutal space-y-4 transition-colors"
+        className="border-2 border-ink p-5 sm:p-6 space-y-4 transition-colors"
         style={{ backgroundColor: 'var(--app-surface)' }}
       >
         <div className="flex items-center justify-between pb-3 border-b border-ink/20">
@@ -257,7 +257,7 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({
 
       {/* 1. Theme Color Palette Swatches */}
       <div 
-        className="border-2 border-ink p-5 sm:p-6 shadow-brutal space-y-4 transition-colors"
+        className="border-2 border-ink p-5 sm:p-6 space-y-4 transition-colors"
         style={{ backgroundColor: 'var(--app-surface)' }}
       >
         <div className="flex items-center justify-between pb-3 border-b border-ink/20">
@@ -283,7 +283,7 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({
                 onClick={() => handleApplyPalette(palette)}
                 style={{ backgroundColor: palette.bg, color: palette.text, borderColor: palette.border }}
                 className={`p-3 border-2 text-left flex flex-col justify-between h-24 transition-transform hover:-translate-y-0.5 ${
-                  isSelected ? 'ring-2 ring-ink ring-offset-2 font-bold shadow-md' : 'shadow-sm'
+                  isSelected ? 'ring-2 ring-ink ring-offset-2 font-bold' : ''
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
@@ -329,7 +329,7 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({
 
       {/* 2. Font Family Selection */}
       <div 
-        className="border-2 border-ink p-5 sm:p-6 shadow-brutal space-y-4 transition-colors"
+        className="border-2 border-ink p-5 sm:p-6 space-y-4 transition-colors"
         style={{ backgroundColor: 'var(--app-surface)' }}
       >
         <div className="flex items-center justify-between pb-3 border-b border-ink/20">
@@ -376,7 +376,7 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({
 
       {/* 3. Font Size & Scaling Stepper */}
       <div 
-        className="border-2 border-ink p-5 sm:p-6 shadow-brutal space-y-4 transition-colors"
+        className="border-2 border-ink p-5 sm:p-6 space-y-4 transition-colors"
         style={{ backgroundColor: 'var(--app-surface)' }}
       >
         <div className="flex items-center justify-between pb-3 border-b border-ink/20">
@@ -436,7 +436,7 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({
 
       {/* 4. Live Real-Time Preview Card */}
       <div 
-        className="border-2 border-ink p-5 sm:p-6 shadow-brutal space-y-3 transition-colors"
+        className="border-2 border-ink p-5 sm:p-6 space-y-3 transition-colors"
         style={{ backgroundColor: 'var(--app-surface)' }}
       >
         <span className="text-[10px] font-mono uppercase tracking-widest opacity-70">

@@ -17,7 +17,7 @@ export const Toast: React.FC<ToastProps> = ({ title, message, onClose }) => {
 
   return (
     <div 
-      className="fixed bottom-6 right-6 z-50 max-w-sm w-full border-2 border-ink shadow-brutal p-4 animate-fade-in transition-all"
+      className="fixed bottom-6 right-6 z-50 max-w-sm w-full border-2 border-ink p-4 animate-fade-in transition-all"
       style={{ 
         backgroundColor: 'var(--app-border, #121212)', 
         color: 'var(--app-bg, #ded5be)',
