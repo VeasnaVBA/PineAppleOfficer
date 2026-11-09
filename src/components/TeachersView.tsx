@@ -843,7 +843,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                   <div className="flex items-center gap-2">
                     <MapPin size={16} />
                     <h4 className="font-serif font-bold text-sm uppercase">
-                      {tt.birthAddress} ({tt.village}, {tt.commune}, {tt.district}, {tt.province})
+                      {tt.birthAddress}
                     </h4>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
