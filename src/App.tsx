@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { initialAcademicMetrics } from './data/initialData';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
-import { TopTicker } from './components/TopTicker';
 import { BlankPageTemplate } from './components/BlankPageTemplate';
 import { Toast } from './components/Toast';
 
@@ -24,11 +22,11 @@ export function App() {
         setCurrentTab={setCurrentTab}
       />
 
-      {/* Main Container Wrapper - Permanent Sidebar + Blank Content */}
+      {/* Main Container Wrapper - Permanent Sidebar + Blank Content (No Top Ticker strip) */}
       <div className="flex-1 flex justify-center p-0 sm:p-2 md:p-4 lg:p-6">
         <div className="w-full max-w-[1600px] bg-[#ded5be] border-0 sm:border-2 border-ink shadow-2xl flex flex-row overflow-hidden relative">
           
-          {/* Permanent Left Sidebar (Never Hides, No Add Record button) */}
+          {/* Permanent Left Sidebar (Starts directly with navigation) */}
           <Sidebar
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
@@ -36,14 +34,6 @@ export function App() {
 
           {/* Right Main Content Area */}
           <div className="flex-1 min-w-0 flex flex-col overflow-y-auto">
-            {/* Top Ticker Bar */}
-            <TopTicker
-              metrics={initialAcademicMetrics}
-              onSelectMetric={(metric) => {
-                showToast('STATUS CHECK', `${metric.title} (${metric.value}) active.`);
-              }}
-            />
-
             {/* View router for each menu: Blank Page */}
             <div className="flex-1">
               {currentTab === 'dashboard' && (
