@@ -10,7 +10,8 @@ import {
   GraduationCap,
   Calendar,
   User,
-  Hash
+  Hash,
+  RefreshCw
 } from 'lucide-react';
 import { Teacher } from '../types';
 import { Language, translations } from '../translations';
@@ -83,16 +84,55 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
     status: 'Active'
   });
 
-  const getNextTeacherCode = () => {
-    const count = teachers.length + 1;
-    return `TCH-${String(count).padStart(3, '0')}`;
+  const generateUniqueTeacherCode = (currentVal?: string) => {
+    const existingCodes = new Set(
+      teachers
+        .filter(t => t.id !== editingTeacherId)
+        .map(t => (t.codeInfo || t.teacherId || '').trim().toUpperCase())
+        .filter(Boolean)
+    );
+
+    // If currentVal is provided and matches TCH-XXX, start searching from the next number
+    let startNum = 1;
+    if (currentVal) {
+      const match = currentVal.trim().match(/^TCH-(\d+)$/i);
+      if (match) {
+        startNum = parseInt(match[1], 10) + 1;
+      }
+    }
+
+    let num = startNum;
+    while (num < 10000) {
+      const candidate = `TCH-${String(num).padStart(3, '0')}`;
+      if (!existingCodes.has(candidate)) {
+        return candidate;
+      }
+      num++;
+    }
+
+    // Wrap-around scan from 1
+    num = 1;
+    while (existingCodes.has(`TCH-${String(num).padStart(3, '0')}`)) {
+      num++;
+    }
+    return `TCH-${String(num).padStart(3, '0')}`;
   };
+
+  const handleGenerateCode = () => {
+    const nextCode = generateUniqueTeacherCode(formData.codeInfo);
+    setFormData(prev => ({ ...prev, codeInfo: nextCode }));
+  };
+
+  const isDuplicateCode = teachers.some(
+    t => t.id !== editingTeacherId && 
+         (t.codeInfo || t.teacherId || '').trim().toLowerCase() === formData.codeInfo.trim().toLowerCase()
+  );
 
   const handleOpenAdd = () => {
     setEditingTeacherId(null);
     setFormData({
       id: String(Date.now()),
-      codeInfo: getNextTeacherCode(),
+      codeInfo: generateUniqueTeacherCode(),
       civilServantId: '',
       khmerLastName: '',
       khmerFirstName: '',
@@ -109,7 +149,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
     setEditingTeacherId(teacher.id);
     setFormData({
       id: teacher.id,
-      codeInfo: teacher.codeInfo || teacher.teacherId || getNextTeacherCode(),
+      codeInfo: teacher.codeInfo || teacher.teacherId || generateUniqueTeacherCode(),
       civilServantId: teacher.civilServantId || '',
       khmerLastName: teacher.khmerLastName,
       khmerFirstName: teacher.khmerFirstName,
@@ -125,6 +165,14 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.codeInfo.trim() || !formData.khmerLastName.trim() || !formData.englishLastName.trim()) {
+      return;
+    }
+
+    if (isDuplicateCode) {
+      onShowToast(
+        lang === 'km' ? 'កូដស្ទួន' : 'Duplicate Code',
+        lang === 'km' ? `កូដ ${formData.codeInfo} មានរួចហើយក្នុងប្រព័ន្ធ សូមបង្កើតកូដផ្សេង` : `Code ${formData.codeInfo} already exists, please generate another`
+      );
       return;
     }
 
@@ -278,23 +326,53 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Teacher Code (codeInfo) - Required */}
                   <div>
-                    <label className="block text-xs font-mono font-bold uppercase mb-1">
-                      {tt.codeInfo} *
-                    </label>
-                    <div className="relative">
-                      <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none opacity-50">
-                        <Hash size={14} />
-                      </span>
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. TCH-001"
-                        value={formData.codeInfo}
-                        onChange={(e) => setFormData({ ...formData, codeInfo: e.target.value })}
-                        className="w-full pl-8 pr-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-mono font-bold uppercase">
+                        {tt.codeInfo} *
+                      </label>
+                      <button
+                        type="button"
+                        onClick={handleGenerateCode}
+                        className="flex items-center gap-1 text-[10px] font-mono font-bold px-1.5 py-0.5 border border-ink hover:bg-black/10 transition-colors"
                         style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
-                      />
+                        title={lang === 'km' ? "បង្កើតកូដស្វ័យប្រវត្តិមិនស្ទួន" : "Generate Unique Code"}
+                      >
+                        <RefreshCw size={10} />
+                        <span>{lang === 'km' ? 'បង្កើតកូដ' : 'Generate'}</span>
+                      </button>
                     </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="relative flex-1">
+                        <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none opacity-50">
+                          <Hash size={14} />
+                        </span>
+                        <input
+                          type="text"
+                          required
+                          placeholder="e.g. TCH-001"
+                          value={formData.codeInfo}
+                          onChange={(e) => setFormData({ ...formData, codeInfo: e.target.value })}
+                          className={`w-full pl-8 pr-3 py-2 border-2 text-xs font-mono focus:outline-none transition-colors ${
+                            isDuplicateCode ? 'border-red-600 bg-red-500/10' : 'border-ink'
+                          }`}
+                          style={{ backgroundColor: isDuplicateCode ? undefined : 'var(--app-bg, #ded5be)' }}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleGenerateCode}
+                        className="h-[38px] px-2.5 border-2 border-ink hover:bg-black/10 transition-colors flex items-center justify-center text-xs font-mono font-bold flex-shrink-0"
+                        style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                        title={lang === 'km' ? "បង្កើតកូដស្វ័យប្រវត្តិមិនស្ទួន" : "Generate Unique Code"}
+                      >
+                        <RefreshCw size={14} />
+                      </button>
+                    </div>
+                    {isDuplicateCode && formData.codeInfo.trim() && (
+                      <p className="text-[10px] text-red-600 font-mono mt-1 font-bold">
+                        {lang === 'km' ? '⚠️ កូដនេះមានរួចហើយក្នុងប្រព័ន្ធ' : '⚠️ Code already exists'}
+                      </p>
+                    )}
                   </div>
 
                   {/* Civil Servant ID (civilServantId) - Optional / Not Required */}
