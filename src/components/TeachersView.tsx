@@ -1099,15 +1099,15 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
         style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
       >
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-separate border-spacing-0">
             <thead>
               <tr 
-                className="border-b-2 border-ink text-xs font-mono font-bold uppercase tracking-wider"
+                className="text-xs font-mono font-bold uppercase tracking-wider"
                 style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
               >
                 <th 
                   onClick={() => handleHeaderSort('id')}
-                  className="py-3 px-3 sm:px-4 text-center w-12 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  className="py-3 px-3 sm:px-4 text-center w-12 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap border-b-2 border-ink"
                   title={tt.defaultSort}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -1117,7 +1117,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 </th>
                 <th 
                   onClick={() => handleHeaderSort('code')}
-                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap border-b-2 border-ink"
                   title={tt.sortCode}
                 >
                   <div className="flex items-center gap-1.5">
@@ -1127,7 +1127,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 </th>
                 <th 
                   onClick={() => handleHeaderSort('civilServantId')}
-                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap border-b-2 border-ink"
                   title={tt.sortCivilServantId}
                 >
                   <div className="flex items-center gap-1.5">
@@ -1137,7 +1137,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 </th>
                 <th 
                   onClick={() => handleHeaderSort('khmerName')}
-                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap border-b-2 border-ink"
                   title={tt.sortKhmerName}
                 >
                   <div className="flex items-center gap-1.5">
@@ -1147,7 +1147,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 </th>
                 <th 
                   onClick={() => handleHeaderSort('englishName')}
-                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap border-b-2 border-ink"
                   title={tt.sortEnglishName}
                 >
                   <div className="flex items-center gap-1.5">
@@ -1157,7 +1157,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 </th>
                 <th 
                   onClick={() => handleHeaderSort('gender')}
-                  className="py-3 px-3 sm:px-4 text-center cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  className="py-3 px-3 sm:px-4 text-center cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap border-b-2 border-ink"
                 >
                   <div className="flex items-center justify-center gap-1.5">
                     <span>{tt.gender}</span>
@@ -1166,7 +1166,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 </th>
                 <th 
                   onClick={() => handleHeaderSort('dob')}
-                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap border-b-2 border-ink"
                   title={tt.sortDob}
                 >
                   <div className="flex items-center gap-1.5">
@@ -1176,7 +1176,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 </th>
                 <th 
                   onClick={() => handleHeaderSort('birthProvince')}
-                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap border-b-2 border-ink"
                   title={`${tt.sortBirthProvince} / ${tt.sortBirthDistrict}`}
                 >
                   <div className="flex items-center gap-1.5">
@@ -1186,7 +1186,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 </th>
                 <th 
                   onClick={() => handleHeaderSort('currentProvince')}
-                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap border-b-2 border-ink"
                   title={`${tt.sortCurrentProvince} / ${tt.sortCurrentDistrict}`}
                 >
                   <div className="flex items-center gap-1.5">
@@ -1196,7 +1196,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 </th>
                 <th 
                   onClick={() => handleHeaderSort('status')}
-                  className="py-3 px-3 sm:px-4 text-center cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  className="py-3 px-3 sm:px-4 text-center cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap border-b-2 border-ink"
                   title={tt.sortStatus}
                 >
                   <div className="flex items-center justify-center gap-1.5">
@@ -1205,17 +1205,17 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                   </div>
                 </th>
                 <th 
-                  className="sticky right-0 z-20 py-3 px-3 sm:px-4 text-right whitespace-nowrap border-l-2 border-ink"
+                  className="sticky right-0 z-20 py-3 px-3 sm:px-4 text-right whitespace-nowrap border-b-2 border-l-2 border-ink w-[90px] min-w-[90px]"
                   style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
                 >
                   {tt.actions}
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-ink/20 text-xs font-mono">
+            <tbody className="text-xs font-mono">
               {sortedTeachers.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="py-12 text-center opacity-70">
+                  <td colSpan={11} className="py-12 text-center opacity-70 border-b border-ink/20">
                     <p className="font-serif text-sm font-bold">{tt.noTeachersFound}</p>
                   </td>
                 </tr>
@@ -1226,17 +1226,17 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                     className="hover:bg-black/5 transition-colors"
                   >
                     {/* ID / Row Number */}
-                    <td className="py-3 px-3 sm:px-4 text-center opacity-60">
+                    <td className="py-3 px-3 sm:px-4 text-center opacity-60 border-b border-ink/20">
                       {index + 1}
                     </td>
 
                     {/* Teacher Code (codeInfo) */}
-                    <td className="py-3 px-3 sm:px-4 font-bold font-mono">
+                    <td className="py-3 px-3 sm:px-4 font-bold font-mono border-b border-ink/20">
                       {teacher.codeInfo || teacher.teacherId}
                     </td>
 
                     {/* Civil Servant ID (civilServantId - Optional) */}
-                    <td className="py-3 px-3 sm:px-4 font-mono">
+                    <td className="py-3 px-3 sm:px-4 font-mono border-b border-ink/20">
                       {teacher.civilServantId ? (
                         teacher.civilServantId
                       ) : (
@@ -1245,22 +1245,22 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                     </td>
 
                     {/* Khmer Name (Last + First) */}
-                    <td className="py-3 px-3 sm:px-4 font-serif text-sm font-bold">
+                    <td className="py-3 px-3 sm:px-4 font-serif text-sm font-bold border-b border-ink/20">
                       {teacher.khmerLastName} {teacher.khmerFirstName}
                     </td>
 
                     {/* English Name (Last + First) */}
-                    <td className="py-3 px-3 sm:px-4">
+                    <td className="py-3 px-3 sm:px-4 border-b border-ink/20">
                       <span className="font-bold">{teacher.englishLastName}</span> {teacher.englishFirstName}
                     </td>
 
                     {/* Gender */}
-                    <td className="py-3 px-3 sm:px-4 text-center">
+                    <td className="py-3 px-3 sm:px-4 text-center border-b border-ink/20">
                       {getGenderLabel(teacher.gender)}
                     </td>
 
                     {/* Date of Birth */}
-                    <td className="py-3 px-3 sm:px-4 opacity-85">
+                    <td className="py-3 px-3 sm:px-4 opacity-85 border-b border-ink/20">
                       <span className="flex items-center gap-1.5 whitespace-nowrap">
                         <Calendar size={12} className="opacity-50" />
                         {teacher.dob}
@@ -1268,23 +1268,23 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                     </td>
 
                     {/* Birthplace Address (អាសយដ្ឋានកំណើត) */}
-                    <td className="py-3 px-3 sm:px-4 text-xs font-serif min-w-[190px] leading-relaxed">
+                    <td className="py-3 px-3 sm:px-4 text-xs font-serif min-w-[190px] leading-relaxed border-b border-ink/20">
                       {formatAddress(teacher.birthVillage, teacher.birthCommune, teacher.birthDistrict, teacher.birthProvince)}
                     </td>
 
                     {/* Current Address (អាសយដ្ឋានបច្ចុប្បន្ន) */}
-                    <td className="py-3 px-3 sm:px-4 text-xs font-serif min-w-[190px] leading-relaxed">
+                    <td className="py-3 px-3 sm:px-4 text-xs font-serif min-w-[190px] leading-relaxed border-b border-ink/20">
                       {formatAddress(teacher.currentVillage, teacher.currentCommune, teacher.currentDistrict, teacher.currentProvince)}
                     </td>
 
                     {/* Status */}
-                    <td className="py-3 px-3 sm:px-4 text-center">
+                    <td className="py-3 px-3 sm:px-4 text-center border-b border-ink/20">
                       {getStatusBadge(teacher.status)}
                     </td>
 
                     {/* Actions: Edit & Delete (Sticky Right Column) */}
                     <td 
-                      className="sticky right-0 z-10 py-3 px-3 sm:px-4 text-right border-l-2 border-ink whitespace-nowrap"
+                      className="sticky right-0 z-10 py-3 px-3 sm:px-4 text-right border-b border-l-2 border-ink whitespace-nowrap w-[90px] min-w-[90px]"
                       style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
                     >
                       <div className="inline-flex items-center gap-1.5">
