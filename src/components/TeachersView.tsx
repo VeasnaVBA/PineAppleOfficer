@@ -611,7 +611,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in text-ink">
+    <div className="w-full max-w-full min-w-0 p-3 sm:p-6 lg:p-8 space-y-6 animate-fade-in text-ink overflow-x-hidden">
       {/* Header - No Subtitle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b-2 border-ink gap-3">
         <h2 className="font-serif text-2xl sm:text-3xl font-bold uppercase tracking-tight">
@@ -1095,11 +1095,11 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
 
       {/* Teachers Data Table */}
       <div 
-        className="border-2 border-ink overflow-hidden transition-colors"
+        className="w-full max-w-full min-w-0 border-2 border-ink transition-colors"
         style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
       >
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-separate border-spacing-0">
+        <div className="w-full max-w-full overflow-x-auto relative">
+          <table className="w-full min-w-[1050px] text-left border-separate border-spacing-0">
             <thead>
               <tr 
                 className="text-xs font-mono font-bold uppercase tracking-wider"
@@ -1205,7 +1205,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                   </div>
                 </th>
                 <th 
-                  className="sticky right-0 z-20 py-3 px-3 sm:px-4 text-right whitespace-nowrap border-b-2 border-l-2 border-ink w-[90px] min-w-[90px]"
+                  className="sticky right-0 z-30 py-3 px-3 sm:px-4 text-right whitespace-nowrap border-b-2 border-l-2 border-ink w-[95px] min-w-[95px]"
                   style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
                 >
                   {tt.actions}
@@ -1284,7 +1284,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
 
                     {/* Actions: Edit & Delete (Sticky Right Column) */}
                     <td 
-                      className="sticky right-0 z-10 py-3 px-3 sm:px-4 text-right border-b border-l-2 border-ink whitespace-nowrap w-[90px] min-w-[90px]"
+                      className="sticky right-0 z-20 py-3 px-3 sm:px-4 text-right border-b border-l-2 border-ink whitespace-nowrap w-[95px] min-w-[95px]"
                       style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
                     >
                       <div className="inline-flex items-center gap-1.5">

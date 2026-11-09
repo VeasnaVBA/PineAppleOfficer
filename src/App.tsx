@@ -122,9 +122,9 @@ export function App() {
       />
 
       {/* Main Container Wrapper - Collapsible Sidebar + Content */}
-      <div className="flex-1 flex justify-center p-0 sm:p-2 md:p-4 lg:p-6">
+      <div className="flex-1 flex justify-center p-0 sm:p-2 md:p-4 lg:p-6 min-w-0 max-w-full overflow-x-hidden">
         <div 
-          className="w-full max-w-[1600px] border-0 sm:border-2 border-ink flex flex-row overflow-hidden relative"
+          className="w-full max-w-[1600px] border-0 sm:border-2 border-ink flex flex-row overflow-hidden relative min-w-0"
           style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
         >
           {/* Collapsible Left Sidebar */}
@@ -141,9 +141,9 @@ export function App() {
           )}
 
           {/* Right Main Content Area */}
-          <div className="flex-1 min-w-0 flex flex-col overflow-y-auto">
+          <div className="flex-1 min-w-0 w-full max-w-full flex flex-col overflow-y-auto overflow-x-hidden">
             {/* View router for each menu: Blank Page */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0 w-full max-w-full">
               {currentTab === 'dashboard' && (
                 <BlankPageTemplate
                   title={t.pages.dashboardTitle}
