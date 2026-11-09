@@ -2,29 +2,36 @@ import React, { useState } from 'react';
 import { 
   Bell, 
   Github, 
-  ChevronDown
+  ChevronDown,
+  Languages
 } from 'lucide-react';
+import { Language, translations } from '../translations';
 
 interface NavbarProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
+  lang: Language;
+  onToggleLanguage: (newLang: Language) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentTab,
-  setCurrentTab
+  setCurrentTab,
+  lang,
+  onToggleLanguage
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const t = translations[lang];
 
   const getPageTitle = (tab: string) => {
     switch (tab) {
-      case 'dashboard': return 'Dashboard';
-      case 'teachers': return 'Teacher Info';
-      case 'students': return 'Student Info';
-      case 'classes': return 'Class Info';
-      case 'settings': return 'Settings';
-      default: return 'Dashboard';
+      case 'dashboard': return t.nav.dashboard;
+      case 'teachers': return t.nav.teachers;
+      case 'students': return t.nav.students;
+      case 'classes': return t.nav.classes;
+      case 'settings': return t.nav.settings;
+      default: return t.nav.dashboard;
     }
   };
 
@@ -41,10 +48,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-2 cursor-pointer select-none"
           >
             <span className="font-serif text-sm sm:text-lg lg:text-xl font-black tracking-[0.12em] sm:tracking-[0.18em] uppercase">
-              PINEAPPLE OFFICER
+              {t.brand}
             </span>
             <span className="text-[9px] font-mono tracking-widest px-1.5 py-0.2 border border-ink bg-[#ede5cf] font-bold hidden sm:inline">
-              PORTAL
+              {t.portal}
             </span>
           </div>
 
@@ -59,6 +66,32 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Language Switcher Button (EN / ខ្មែរ) */}
+          <div className="flex items-center border-2 border-ink bg-[#ede5cf] text-[10px] sm:text-xs font-mono">
+            <button
+              onClick={() => onToggleLanguage('en')}
+              className={`px-2 py-1 font-bold transition-colors ${
+                lang === 'en' 
+                  ? 'bg-ink text-[#ded5be]' 
+                  : 'hover:bg-black/10 text-ink'
+              }`}
+              title="English"
+            >
+              EN
+            </button>
+            <button
+              onClick={() => onToggleLanguage('km')}
+              className={`px-2 py-1 font-bold transition-colors border-l border-ink ${
+                lang === 'km' 
+                  ? 'bg-ink text-[#ded5be]' 
+                  : 'hover:bg-black/10 text-ink'
+              }`}
+              title="ភាសាខ្មែរ"
+            >
+              ខ្មែរ
+            </button>
+          </div>
+
           {/* Live Edge Status Pill */}
           <a
             href="https://github.com/VeasnaVBA/PineAppleOfficer"
@@ -73,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <div className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1 text-[10px] font-mono border border-ink bg-[#ede5cf]">
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-            <span className="font-bold">Live</span>
+            <span className="font-bold">{t.live}</span>
           </div>
 
           {/* Notifications Dropdown */}
@@ -96,19 +129,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                 style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
               >
                 <div className="flex items-center justify-between pb-2 border-b border-ink">
-                  <span className="font-serif font-bold text-sm uppercase">System Status</span>
-                  <span className="text-[10px] text-emerald-800 font-bold">All Operational</span>
+                  <span className="font-serif font-bold text-sm uppercase">{t.systemStatus}</span>
+                  <span className="text-[10px] text-emerald-800 font-bold">{t.allOperational}</span>
                 </div>
                 <div className="py-3 text-center text-xs opacity-75">
-                  <p>Pineapple Officer portal initialized.</p>
-                  <p className="text-[10px] opacity-60 mt-1">Ready for custom modules.</p>
+                  <p>{t.readyNotice}</p>
                 </div>
                 <div className="pt-2 border-t border-ink text-center">
                   <button 
                     onClick={() => setShowNotifications(false)}
                     className="text-[10px] uppercase font-bold underline"
                   >
-                    Close
+                    {t.close}
                   </button>
                 </div>
               </div>
@@ -147,7 +179,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className="w-full text-left py-1 hover:underline"
                   >
-                    Dashboard
+                    {t.nav.dashboard}
                   </button>
                   <button
                     onClick={() => {
@@ -156,7 +188,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className="w-full text-left py-1 hover:underline"
                   >
-                    Teacher Info
+                    {t.nav.teachers}
                   </button>
                   <button
                     onClick={() => {
@@ -165,7 +197,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className="w-full text-left py-1 hover:underline"
                   >
-                    Student Info
+                    {t.nav.students}
                   </button>
                   <button
                     onClick={() => {
@@ -174,7 +206,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className="w-full text-left py-1 hover:underline"
                   >
-                    Class Info
+                    {t.nav.classes}
                   </button>
                   <button
                     onClick={() => {
@@ -183,7 +215,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className="w-full text-left py-1 hover:underline"
                   >
-                    Settings
+                    {t.nav.settings}
                   </button>
                 </div>
                 <div className="pt-2 border-t border-ink flex justify-between items-center text-[10px]">
@@ -196,7 +228,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <Github size={11} />
                     GitHub
                   </a>
-                  <span className="text-emerald-800 font-bold">Production</span>
+                  <span className="text-emerald-800 font-bold">{t.production}</span>
                 </div>
               </div>
             )}

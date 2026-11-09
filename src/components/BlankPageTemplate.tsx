@@ -1,24 +1,28 @@
 import React from 'react';
 import { LayoutGrid } from 'lucide-react';
+import { Language, translations } from '../translations';
 
 interface BlankPageTemplateProps {
   title: string;
   breadcrumb: string;
   subtitle: string;
-  onShowToast: (title: string, message: string) => void;
+  lang: Language;
 }
 
 export const BlankPageTemplate: React.FC<BlankPageTemplateProps> = ({
   title,
   breadcrumb,
-  subtitle
+  subtitle,
+  lang
 }) => {
+  const t = translations[lang];
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in">
       {/* Top Breadcrumb & Page Masthead */}
       <div className="pb-4 border-b-2 border-ink">
         <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono text-ink/70 uppercase">
-          <span>PINEAPPLE OFFICER</span>
+          <span>{t.brand}</span>
           <span>/</span>
           <span className="font-bold text-ink">{breadcrumb}</span>
         </div>
@@ -38,16 +42,16 @@ export const BlankPageTemplate: React.FC<BlankPageTemplateProps> = ({
 
         <div>
           <h3 className="font-serif text-xl sm:text-2xl font-bold text-ink">
-            {title} Canvas
+            {title} {t.canvas.canvasSuffix}
           </h3>
           <p className="font-serif text-sm text-ink/75 max-w-md mx-auto mt-1 leading-relaxed">
-            This page is empty and ready for your custom {title.toLowerCase()} components, tables, charts, or forms.
+            {t.canvas.desc(title)}
           </p>
         </div>
 
         <div className="pt-2">
           <div className="px-3 py-1.5 border border-ink bg-[#ede5cf] text-[11px] font-mono text-ink/80 uppercase tracking-wider">
-            Workspace: Ready for implementation
+            {t.canvas.readyBadge}
           </div>
         </div>
       </div>

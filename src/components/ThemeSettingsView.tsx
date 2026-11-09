@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Palette, Type, Sliders, Check, RotateCcw } from 'lucide-react';
+import { Palette, Type, Sliders, Check, RotateCcw, Languages } from 'lucide-react';
+import { Language, translations } from '../translations';
 
 interface ThemeSettingsViewProps {
   onShowToast: (title: string, message: string) => void;
+  lang: Language;
+  onToggleLanguage: (newLang: Language) => void;
 }
 
 export interface AppThemeConfig {
@@ -19,11 +22,17 @@ export const defaultThemeConfig: AppThemeConfig = {
   surface: '#ede5cf',
   text: '#121212',
   border: '#121212',
-  fontFamily: "'Playfair Display', Georgia, serif",
+  fontFamily: "'Playfair Display', 'Kantumruy Pro', Georgia, serif",
   fontSizePercent: 100
 };
 
-export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToast }) => {
+export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ 
+  onShowToast, 
+  lang, 
+  onToggleLanguage 
+}) => {
+  const t = translations[lang];
+
   const [theme, setTheme] = useState<AppThemeConfig>(() => {
     const saved = localStorage.getItem('pineapple_theme_config');
     if (saved) {
@@ -33,29 +42,30 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
   });
 
   const colorPalettes = [
-    { name: 'Original Parchment', bg: '#ded5be', surface: '#ede5cf', text: '#121212', border: '#121212' },
-    { name: 'Warm Ivory', bg: '#f6ede0', surface: '#fff7ed', text: '#1a1816', border: '#1a1816' },
-    { name: 'Kraft Linen', bg: '#e8dfca', surface: '#f3ece0', text: '#201e1a', border: '#201e1a' },
-    { name: 'Desert Sand', bg: '#dfd3b7', surface: '#eee4cb', text: '#1f1b14', border: '#1f1b14' },
-    { name: 'Vintage Sage', bg: '#dae2d5', surface: '#e8eee5', text: '#192118', border: '#192118' },
-    { name: 'Rose Terracotta', bg: '#ebdcd5', surface: '#f5ebe6', text: '#261b17', border: '#261b17' },
-    { name: 'Muted Slate', bg: '#d7e0e7', surface: '#e6edf2', text: '#141d24', border: '#141d24' },
-    { name: 'Obsidian Noir', bg: '#1c1b18', surface: '#282723', text: '#ded5be', border: '#ded5be' },
+    { name: lang === 'km' ? 'ក្រដាសបូរាណដើម' : 'Original Parchment', bg: '#ded5be', surface: '#ede5cf', text: '#121212', border: '#121212' },
+    { name: lang === 'km' ? 'ពណ៌ភ្លុកក្តៅ' : 'Warm Ivory', bg: '#f6ede0', surface: '#fff7ed', text: '#1a1816', border: '#1a1816' },
+    { name: lang === 'km' ? 'ក្រណាត់ Kraft' : 'Kraft Linen', bg: '#e8dfca', surface: '#f3ece0', text: '#201e1a', border: '#201e1a' },
+    { name: lang === 'km' ? 'ខ្សាច់វាលខ្សាច់' : 'Desert Sand', bg: '#dfd3b7', surface: '#eee4cb', text: '#1f1b14', border: '#1f1b14' },
+    { name: lang === 'km' ? 'បៃតងបុរាណ' : 'Vintage Sage', bg: '#dae2d5', surface: '#e8eee5', text: '#192118', border: '#192118' },
+    { name: lang === 'km' ? 'កុលាបដីឥដ្ឋ' : 'Rose Terracotta', bg: '#ebdcd5', surface: '#f5ebe6', text: '#261b17', border: '#261b17' },
+    { name: lang === 'km' ? 'ផ្ទៃមេឃស្រាល' : 'Muted Slate', bg: '#d7e0e7', surface: '#e6edf2', text: '#141d24', border: '#141d24' },
+    { name: lang === 'km' ? 'ខ្មៅរលោង' : 'Obsidian Noir', bg: '#1c1b18', surface: '#282723', text: '#ded5be', border: '#ded5be' },
   ];
 
   const fontOptions = [
-    { name: 'Playfair Display', value: "'Playfair Display', Georgia, serif", label: 'Editorial Headline Serif' },
-    { name: 'Bodoni Moda', value: "'Bodoni Moda', Georgia, serif", label: 'Modern Vogue Serif' },
-    { name: 'Cormorant Garamond', value: "'Cormorant Garamond', Georgia, serif", label: 'Archival Heritage Serif' },
-    { name: 'Inter', value: "'Inter', system-ui, sans-serif", label: 'Clean Functional Sans' },
-    { name: 'Space Mono', value: "'Space Mono', monospace", label: 'Brutalist Monospace' },
+    { name: 'Playfair Display', value: "'Playfair Display', 'Kantumruy Pro', Georgia, serif", label: lang === 'km' ? 'ក្បាលអក្សរទស្សនាវដ្តី' : 'Editorial Headline Serif' },
+    { name: 'Kantumruy Pro', value: "'Kantumruy Pro', 'Inter', sans-serif", label: lang === 'km' ? 'ពុម្ពអក្សរខ្មែរទំនើប' : 'Modern Khmer / Latin Sans' },
+    { name: 'Bodoni Moda', value: "'Bodoni Moda', 'Kantumruy Pro', Georgia, serif", label: lang === 'km' ? 'ម៉ូដទាន់សម័យ' : 'Modern Vogue Serif' },
+    { name: 'Cormorant Garamond', value: "'Cormorant Garamond', 'Kantumruy Pro', Georgia, serif", label: lang === 'km' ? 'បណ្ណសារបុរាណ' : 'Archival Heritage Serif' },
+    { name: 'Inter', value: "'Inter', 'Kantumruy Pro', system-ui, sans-serif", label: lang === 'km' ? 'សាមញ្ញ និងច្បាស់' : 'Clean Functional Sans' },
+    { name: 'Space Mono', value: "'Space Mono', monospace", label: lang === 'km' ? 'ម៉ាស៊ីនអង្គុលីលេខ' : 'Brutalist Monospace' },
   ];
 
   const fontSizes = [
-    { label: 'Compact', percent: 90 },
-    { label: 'Normal', percent: 100 },
-    { label: 'Medium', percent: 110 },
-    { label: 'Large', percent: 120 },
+    { label: lang === 'km' ? 'តូច' : 'Compact', percent: 90 },
+    { label: lang === 'km' ? 'ធម្មតា' : 'Normal', percent: 100 },
+    { label: lang === 'km' ? 'មធ្យម' : 'Medium', percent: 110 },
+    { label: lang === 'km' ? 'ធំ' : 'Large', percent: 120 },
   ];
 
   // Apply to document root whenever theme state changes
@@ -80,14 +90,14 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
       text: palette.text,
       border: palette.border
     }));
-    onShowToast('PALETTE APPLIED', `Theme switched to ${palette.name}`);
+    onShowToast(lang === 'km' ? 'ពណ៌ត្រូវបានអនុវត្ត' : 'PALETTE APPLIED', `${palette.name}`);
   };
 
   const handleSelectFont = (fontValue: string, fontName: string) => {
     setTheme(prev => ({ ...prev, fontFamily: fontValue }));
     document.documentElement.style.setProperty('--app-font-family', fontValue);
     document.body.style.setProperty('font-family', fontValue, 'important');
-    onShowToast('TYPOGRAPHY UPDATED', `Primary font applied to entire app: ${fontName}`);
+    onShowToast(lang === 'km' ? 'ពុម្ពអក្សរត្រូវបានផ្លាស់ប្តូរ' : 'TYPOGRAPHY UPDATED', `${fontName}`);
   };
 
   const handleFontSizeChange = (delta: number) => {
@@ -99,7 +109,7 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
 
   const handleReset = () => {
     setTheme(defaultThemeConfig);
-    onShowToast('THEME RESET', 'Restored original parchment and typography');
+    onShowToast(lang === 'km' ? 'បានកំណត់ឡើងវិញ' : 'THEME RESET', 'Default settings restored');
   };
 
   return (
@@ -108,15 +118,15 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b-2 border-ink gap-3">
         <div>
           <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono opacity-70 uppercase">
-            <span>PINEAPPLE OFFICER</span>
+            <span>{t.brand}</span>
             <span>/</span>
-            <span className="font-bold">SETTINGS</span>
+            <span className="font-bold">{t.nav.settings}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight mt-1" style={{ fontFamily: theme.fontFamily }}>
-            THEME & TYPOGRAPHY SETTINGS
+            {t.pages.settingsTitle}
           </h2>
           <p className="font-mono text-xs opacity-70 tracking-wider">
-            Changes apply instantly to the entire application
+            {t.pages.settingsSub}
           </p>
         </div>
 
@@ -125,8 +135,59 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
           className="flex items-center gap-1.5 px-3 py-1.5 border border-ink text-xs font-mono uppercase tracking-wider hover:bg-black/5 self-start sm:self-auto"
         >
           <RotateCcw size={12} />
-          <span>Reset Defaults</span>
+          <span>{t.settings.resetDefaults}</span>
         </button>
+      </div>
+
+      {/* 0. Language Switcher Card */}
+      <div className="border-2 border-ink p-5 sm:p-6 bg-[#ede5cf] shadow-brutal space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-ink/20">
+          <div className="flex items-center gap-2">
+            <Languages size={16} />
+            <h3 className="font-serif font-bold text-base sm:text-lg">{t.settings.language}</h3>
+          </div>
+          <span className="text-xs font-mono font-bold uppercase px-2 py-0.5 border border-ink bg-[#ded5be]">
+            {lang === 'en' ? 'English (EN)' : 'ភាសាខ្មែរ (KM)'}
+          </span>
+        </div>
+
+        <p className="font-mono text-xs opacity-80">
+          {t.settings.languageDesc}
+        </p>
+
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <button
+            onClick={() => {
+              onToggleLanguage('en');
+              onShowToast('LANGUAGE CHANGED', 'Interface set to English');
+            }}
+            className={`p-4 border-2 border-ink text-left flex items-center justify-between transition-colors ${
+              lang === 'en' ? 'bg-ink text-[#ded5be] font-bold shadow-sm' : 'bg-[#ded5be] hover:bg-black/5 text-ink'
+            }`}
+          >
+            <div>
+              <p className="font-serif text-base font-bold">English (US)</p>
+              <p className="text-[10px] font-mono opacity-70 mt-0.5">International English</p>
+            </div>
+            {lang === 'en' && <Check size={18} />}
+          </button>
+
+          <button
+            onClick={() => {
+              onToggleLanguage('km');
+              onShowToast('ភាសាត្រូវបានផ្លាស់ប្តូរ', 'ចំណុចប្រទាក់បានប្តូរទៅជាភាសាខ្មែរ');
+            }}
+            className={`p-4 border-2 border-ink text-left flex items-center justify-between transition-colors ${
+              lang === 'km' ? 'bg-ink text-[#ded5be] font-bold shadow-sm' : 'bg-[#ded5be] hover:bg-black/5 text-ink'
+            }`}
+          >
+            <div>
+              <p className="font-serif text-base font-bold">ភាសាខ្មែរ (Khmer)</p>
+              <p className="text-[10px] font-mono opacity-70 mt-0.5">ភាសាជាតិកម្ពុជា</p>
+            </div>
+            {lang === 'km' && <Check size={18} />}
+          </button>
+        </div>
       </div>
 
       {/* 1. Theme Color Palette Swatches */}
@@ -134,12 +195,16 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
         <div className="flex items-center justify-between pb-3 border-b border-ink/20">
           <div className="flex items-center gap-2">
             <Palette size={16} />
-            <h3 className="font-serif font-bold text-base sm:text-lg">Theme Background Color</h3>
+            <h3 className="font-serif font-bold text-base sm:text-lg">{t.settings.themeColor}</h3>
           </div>
           <span className="text-[10px] font-mono uppercase opacity-70">
             {colorPalettes.find(p => p.bg === theme.bg)?.name || 'Custom'}
           </span>
         </div>
+
+        <p className="font-mono text-xs opacity-80">
+          {t.settings.themeDesc}
+        </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {colorPalettes.map((palette) => {
@@ -168,12 +233,12 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
         </div>
       </div>
 
-      {/* 2. Font Family Selection (Applies to Whole App) */}
+      {/* 2. Font Family Selection */}
       <div className="border-2 border-ink p-5 sm:p-6 bg-[#ede5cf] shadow-brutal space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-ink/20">
           <div className="flex items-center gap-2">
             <Type size={16} />
-            <h3 className="font-serif font-bold text-base sm:text-lg">Application Font Family (Global)</h3>
+            <h3 className="font-serif font-bold text-base sm:text-lg">{t.settings.fontFamily}</h3>
           </div>
           <span className="text-[10px] font-mono uppercase opacity-70">
             {fontOptions.find(f => f.value === theme.fontFamily)?.name || 'Custom'}
@@ -181,7 +246,7 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
         </div>
 
         <p className="font-mono text-xs opacity-80">
-          Click any font to apply it immediately across all headers, sidebar, navigation, and pages:
+          {t.settings.fontDesc}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -215,10 +280,10 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
         <div className="flex items-center justify-between pb-3 border-b border-ink/20">
           <div className="flex items-center gap-2">
             <Sliders size={16} />
-            <h3 className="font-serif font-bold text-base sm:text-lg">Interface Font Size</h3>
+            <h3 className="font-serif font-bold text-base sm:text-lg">{t.settings.fontSize}</h3>
           </div>
           <span className="text-xs font-mono font-bold">
-            {theme.fontSizePercent}% Scale
+            {theme.fontSizePercent}%
           </span>
         </div>
 
@@ -265,13 +330,15 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
       {/* 4. Live Real-Time Preview Card */}
       <div className="border-2 border-ink p-5 sm:p-6 bg-[#ded5be] shadow-brutal space-y-3">
         <span className="text-[10px] font-mono uppercase tracking-widest opacity-70">
-          Live Real-Time Typography & Theme Preview
+          {t.settings.previewTitle}
         </span>
         <h4 className="text-xl sm:text-2xl font-bold" style={{ fontFamily: theme.fontFamily }}>
-          The Quick Brown Fox Jumps Over The Lazy Dog
+          {lang === 'km' 
+            ? 'សួស្តី! សូមស្វាគមន៍មកកាន់ប្រព័ន្ធគ្រប់គ្រង Pineapple Officer' 
+            : 'The Quick Brown Fox Jumps Over The Lazy Dog'}
         </h4>
         <p className="text-sm leading-relaxed opacity-85" style={{ fontFamily: theme.fontFamily }}>
-          Pineapple Officer administrative portal dynamically applies this font across every navigation item, header, button, and canvas area.
+          {t.settings.previewDesc}
         </p>
       </div>
     </div>

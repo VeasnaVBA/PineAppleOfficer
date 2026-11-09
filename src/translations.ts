@@ -1,0 +1,149 @@
+export type Language = 'en' | 'km';
+
+export interface TranslationDictionary {
+  brand: string;
+  portal: string;
+  socialLinks: string;
+  edgeActive: string;
+  live: string;
+  systemStatus: string;
+  allOperational: string;
+  readyNotice: string;
+  close: string;
+  production: string;
+  nav: {
+    dashboard: string;
+    teachers: string;
+    students: string;
+    classes: string;
+    settings: string;
+  };
+  pages: {
+    dashboardTitle: string;
+    dashboardSub: string;
+    teachersTitle: string;
+    teachersSub: string;
+    studentsTitle: string;
+    studentsSub: string;
+    classesTitle: string;
+    classesSub: string;
+    settingsTitle: string;
+    settingsSub: string;
+  };
+  canvas: {
+    canvasSuffix: string;
+    desc: (title: string) => string;
+    readyBadge: string;
+  };
+  settings: {
+    themeColor: string;
+    themeDesc: string;
+    fontFamily: string;
+    fontDesc: string;
+    fontSize: string;
+    resetDefaults: string;
+    previewTitle: string;
+    previewDesc: string;
+    language: string;
+    languageDesc: string;
+  };
+}
+
+export const translations: Record<Language, TranslationDictionary> = {
+  en: {
+    brand: 'PINEAPPLE OFFICER',
+    portal: 'PORTAL',
+    socialLinks: 'Social Links',
+    edgeActive: 'Vercel Edge',
+    live: 'Live',
+    systemStatus: 'System Status',
+    allOperational: 'All Operational',
+    readyNotice: 'Pineapple Officer portal initialized.',
+    close: 'Close',
+    production: 'Production',
+    nav: {
+      dashboard: 'Dashboard',
+      teachers: 'Teacher Info',
+      students: 'Student Info',
+      classes: 'Class Info',
+      settings: 'Settings'
+    },
+    pages: {
+      dashboardTitle: 'Dashboard Overview',
+      dashboardSub: 'Administrative operations & institutional metrics canvas',
+      teachersTitle: 'Teacher Info',
+      teachersSub: 'Faculty roster, instructor directory, and departmental assignments canvas',
+      studentsTitle: 'Student Info',
+      studentsSub: 'Student enrollment roster, grade records, and guardian information canvas',
+      classesTitle: 'Class Info',
+      classesSub: 'Academic course schedule, classrooms, and timetable registry canvas',
+      settingsTitle: 'Theme & Typography Settings',
+      settingsSub: 'Changes apply instantly to the entire application'
+    },
+    canvas: {
+      canvasSuffix: 'Canvas',
+      desc: (title: string) => `This page is empty and ready for your custom ${title.toLowerCase()} components, tables, charts, or forms.`,
+      readyBadge: 'Workspace: Ready for implementation'
+    },
+    settings: {
+      themeColor: 'Theme Background Color',
+      themeDesc: 'Select an archival paper tint or dark editorial palette for your dashboard:',
+      fontFamily: 'Application Font Family (Global)',
+      fontDesc: 'Click any font to apply it immediately across all headers, sidebar, navigation, and pages:',
+      fontSize: 'Interface Font Size',
+      resetDefaults: 'Reset Defaults',
+      previewTitle: 'Live Real-Time Typography & Theme Preview',
+      previewDesc: 'Pineapple Officer administrative portal dynamically applies this font across every navigation item, header, button, and canvas area.',
+      language: 'Language Settings',
+      languageDesc: 'Switch the application language between English and Khmer (ភាសាខ្មែរ):'
+    }
+  },
+  km: {
+    brand: 'PINEAPPLE OFFICER',
+    portal: 'ច្រកគ្រប់គ្រង',
+    socialLinks: 'បណ្តាញសង្គម',
+    edgeActive: 'Vercel Edge',
+    live: 'ដំណើរការ',
+    systemStatus: 'ស្ថានភាពប្រព័ន្ធ',
+    allOperational: 'ដំណើរការធម្មតាទាំងអស់',
+    readyNotice: 'ប្រព័ន្ធ Pineapple Officer ត្រូវបានចាប់ផ្តើមដំណើរការ។',
+    close: 'បិទ',
+    production: 'ផលិតកម្ម',
+    nav: {
+      dashboard: 'ផ្ទាំងគ្រប់គ្រង',
+      teachers: 'ព័ត៌មានគ្រូ',
+      students: 'ព័ត៌មានសិស្ស',
+      classes: 'ព័ត៌មានថ្នាក់',
+      settings: 'ការកំណត់'
+    },
+    pages: {
+      dashboardTitle: 'ទិដ្ឋភាពទូទៅនៃផ្ទាំងគ្រប់គ្រង',
+      dashboardSub: 'កន្លែងប្រតិបត្តិការរដ្ឋបាល និងរង្វាស់ស្ថាប័ន',
+      teachersTitle: 'ព័ត៌មានគ្រូបង្រៀន',
+      teachersSub: 'បញ្ជីឈ្មោះសាស្ត្រាចារ្យ និងការចាត់តាំងដេប៉ាតឺម៉ង់',
+      studentsTitle: 'ព័ត៌មានសិស្ស',
+      studentsSub: 'បញ្ជីឈ្មោះចុះឈ្មោះសិស្ស កំណត់ត្រាពិន្ទុ និងព័ត៌មានអាណាព្យាបាល',
+      classesTitle: 'ព័ត៌មានថ្នាក់រៀន',
+      classesSub: 'កាលវិភាគវគ្គសិក្សា បន្ទប់រៀន និងតារាងពេលវេលា',
+      settingsTitle: 'ការកំណត់រចនាប័ទ្ម និងពុម្ពអក្សរ',
+      settingsSub: 'ការផ្លាស់ប្តូរអនុវត្តភ្លាមៗចំពោះកម្មវិធីទាំងមូល'
+    },
+    canvas: {
+      canvasSuffix: 'កន្លែងធ្វើការ',
+      desc: (title: string) => `ទំព័រនេះទទេ ហើយរួចរាល់សម្រាប់សមាសធាតុ តារាង គំនូសតាង ឬទម្រង់ផ្ទាល់ខ្លួនរបស់អ្នក។`,
+      readyBadge: 'កន្លែងធ្វើការ៖ រួចរាល់សម្រាប់ការអនុវត្ត'
+    },
+    settings: {
+      themeColor: 'ពណ៌ផ្ទៃខាងក្រោយរចនាប័ទ្ម',
+      themeDesc: 'ជ្រើសរើសពណ៌ក្រដាសបូរាណ ឬរចនាប័ទ្មងងឹតសម្រាប់ផ្ទាំងគ្រប់គ្រងរបស់អ្នក៖',
+      fontFamily: 'ពុម្ពអក្សរកម្មវិធី (សកល)',
+      fontDesc: 'ចុចលើពុម្ពអក្សរណាមួយដើម្បីអនុវត្តវាភ្លាមៗលើចំណងជើង របារចំហៀង និងទំព័រទាំងអស់៖',
+      fontSize: 'ទំហំពុម្ពអក្សរចំណុចប្រទាក់',
+      resetDefaults: 'កំណត់ឡើងវិញ',
+      previewTitle: 'ការមើលសាកល្បងពុម្ពអក្សរ និងរចនាប័ទ្មផ្ទាល់',
+      previewDesc: 'ច្រកគ្រប់គ្រង Pineapple Officer អនុវត្តពុម្ពអក្សរនេះដោយស្វ័យប្រវត្តិចំពោះគ្រប់ធាតុរុករក ចំណងជើង និងកន្លែងធ្វើការ។',
+      language: 'ការកំណត់ភាសា',
+      languageDesc: 'ផ្លាស់ប្តូរភាសាកម្មវិធីរវាងភាសាអង់គ្លេស និងភាសាខ្មែរ៖'
+    }
+  }
+};

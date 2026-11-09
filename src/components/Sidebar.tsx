@@ -7,22 +7,27 @@ import {
   Settings, 
   Github
 } from 'lucide-react';
+import { Language, translations } from '../translations';
 
 interface SidebarProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
+  lang: Language;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   currentTab,
-  setCurrentTab
+  setCurrentTab,
+  lang
 }) => {
+  const t = translations[lang];
+
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: Compass },
-    { id: 'teachers', label: 'Teacher Info', icon: GraduationCap },
-    { id: 'students', label: 'Student Info', icon: Users },
-    { id: 'classes', label: 'Class Info', icon: BookOpen },
-    { id: 'settings', label: 'Settings', icon: Settings }
+    { id: 'dashboard', label: t.nav.dashboard, icon: Compass },
+    { id: 'teachers', label: t.nav.teachers, icon: GraduationCap },
+    { id: 'students', label: t.nav.students, icon: Users },
+    { id: 'classes', label: t.nav.classes, icon: BookOpen },
+    { id: 'settings', label: t.nav.settings, icon: Settings }
   ];
 
   return (
@@ -57,7 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Footer / Social links */}
       <div className="p-3 sm:p-4 xl:p-5 border-t-2 border-ink">
         <p className="hidden sm:block text-[9px] sm:text-[10px] font-mono uppercase tracking-widest opacity-70 mb-2">
-          Social Links
+          {t.socialLinks}
         </p>
         <div className="flex items-center justify-around sm:justify-start sm:space-x-3">
           <a 
@@ -101,7 +106,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="mt-2.5 pt-2 border-t border-ink/20 flex flex-col sm:flex-row sm:items-center sm:justify-between text-[9px] font-mono opacity-70 gap-1">
           <span className="flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-            <span className="truncate">Vercel Edge</span>
+            <span className="truncate">{t.edgeActive}</span>
           </span>
           <span className="font-bold hidden sm:inline">99.98%</span>
         </div>
