@@ -16,6 +16,23 @@ export function App() {
     return (saved === 'km' || saved === 'en') ? saved : 'en';
   });
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('pineapple_sidebar_open');
+      if (saved !== null) return saved === 'true';
+      return window.innerWidth >= 768;
+    }
+    return true;
+  });
+
+  const handleToggleSidebar = () => {
+    setIsSidebarOpen(prev => {
+      const next = !prev;
+      localStorage.setItem('pineapple_sidebar_open', String(next));
+      return next;
+    });
+  };
+
   const [teachers, setTeachers] = useState<Teacher[]>(() => {
     const saved = localStorage.getItem('pineapple_teachers');
     if (saved) {
@@ -100,20 +117,28 @@ export function App() {
         setCurrentTab={setCurrentTab}
         lang={lang}
         onToggleLanguage={handleToggleLanguage}
+        isSidebarOpen={isSidebarOpen}
+        onToggleSidebar={handleToggleSidebar}
       />
 
-      {/* Main Container Wrapper - Permanent Sidebar + Content */}
+      {/* Main Container Wrapper - Collapsible Sidebar + Content */}
       <div className="flex-1 flex justify-center p-0 sm:p-2 md:p-4 lg:p-6">
         <div 
           className="w-full max-w-[1600px] border-0 sm:border-2 border-ink flex flex-row overflow-hidden relative"
           style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
         >
-          {/* Permanent Left Sidebar (Never Hides, Translated, No Badges, No Underlines) */}
-          <Sidebar
-            currentTab={currentTab}
-            setCurrentTab={setCurrentTab}
-            lang={lang}
-          />
+          {/* Collapsible Left Sidebar */}
+          {isSidebarOpen && (
+            <Sidebar
+              currentTab={currentTab}
+              setCurrentTab={setCurrentTab}
+              lang={lang}
+              onClose={() => {
+                setIsSidebarOpen(false);
+                localStorage.setItem('pineapple_sidebar_open', 'false');
+              }}
+            />
+          )}
 
           {/* Right Main Content Area */}
           <div className="flex-1 min-w-0 flex flex-col overflow-y-auto">

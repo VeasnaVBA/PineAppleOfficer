@@ -5,7 +5,8 @@ import {
   Users, 
   BookOpen, 
   Settings, 
-  Github
+  Github,
+  X
 } from 'lucide-react';
 import { Language, translations } from '../translations';
 
@@ -13,12 +14,14 @@ interface SidebarProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
   lang: Language;
+  onClose?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   currentTab,
   setCurrentTab,
-  lang
+  lang,
+  onClose
 }) => {
   const t = translations[lang];
 
@@ -30,20 +33,40 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'settings', label: t.nav.settings, icon: Settings }
   ];
 
+  const handleItemClick = (id: string) => {
+    setCurrentTab(id);
+    if (window.innerWidth < 640 && onClose) {
+      onClose();
+    }
+  };
+
   return (
     <aside 
-      className="flex w-36 xs:w-44 sm:w-56 xl:w-64 flex-shrink-0 flex-col justify-between border-r-2 border-ink select-none text-ink transition-colors"
+      className="flex w-40 xs:w-48 sm:w-56 xl:w-64 flex-shrink-0 flex-col justify-between border-r-2 border-ink select-none text-ink transition-colors animate-fade-in"
       style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
     >
       {/* Navigation list */}
       <nav className="p-2 sm:p-3 xl:p-4 space-y-1">
+        {onClose && (
+          <div className="flex items-center justify-between pb-2 mb-2 border-b border-ink/20 sm:hidden">
+            <span className="text-[10px] font-mono uppercase font-bold tracking-wider opacity-70">Menu</span>
+            <button
+              onClick={onClose}
+              className="p-1 border border-ink hover:bg-black/10 transition-colors"
+              title="Hide Sidebar"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        )}
+
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentTab === item.id;
           return (
             <button
               key={item.id}
-              onClick={() => setCurrentTab(item.id)}
+              onClick={() => handleItemClick(item.id)}
               className={`w-full flex items-center px-2.5 sm:px-3.5 py-2.5 text-xs sm:text-sm font-serif transition-colors text-left ${
                 isActive 
                   ? 'font-bold bg-black/10 border-l-4 border-ink' 

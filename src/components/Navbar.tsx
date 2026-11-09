@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { 
   Bell, 
   Github, 
-  ChevronDown
+  ChevronDown,
+  PanelLeft,
+  PanelLeftClose
 } from 'lucide-react';
 import { Language, translations } from '../translations';
 
@@ -11,13 +13,17 @@ interface NavbarProps {
   setCurrentTab: (tab: string) => void;
   lang: Language;
   onToggleLanguage: (newLang: Language) => void;
+  isSidebarOpen: boolean;
+  onToggleSidebar: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentTab,
   setCurrentTab,
   lang,
-  onToggleLanguage
+  onToggleLanguage,
+  isSidebarOpen,
+  onToggleSidebar
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -29,14 +35,26 @@ export const Navbar: React.FC<NavbarProps> = ({
       style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
     >
       <div className="flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-3">
-        {/* Left: Brand / Title */}
-        <div 
-          onClick={() => setCurrentTab('dashboard')}
-          className="flex items-center cursor-pointer select-none"
-        >
-          <span className="font-serif text-sm sm:text-lg lg:text-xl font-black tracking-[0.12em] sm:tracking-[0.18em] uppercase">
-            {t.brand}
-          </span>
+        {/* Left: Sidebar Toggle Button + Brand / Title */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button
+            onClick={onToggleSidebar}
+            className="h-8 w-8 flex items-center justify-center border border-ink hover:bg-black/10 transition-colors"
+            style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+            title={isSidebarOpen ? "Hide Sidebar" : "Show Sidebar"}
+            aria-label="Toggle Sidebar"
+          >
+            {isSidebarOpen ? <PanelLeftClose size={16} /> : <PanelLeft size={16} />}
+          </button>
+
+          <div 
+            onClick={() => setCurrentTab('dashboard')}
+            className="flex items-center cursor-pointer select-none"
+          >
+            <span className="font-serif text-sm sm:text-lg lg:text-xl font-black tracking-[0.12em] sm:tracking-[0.18em] uppercase">
+              {t.brand}
+            </span>
+          </div>
         </div>
 
         {/* Right Actions */}
