@@ -94,6 +94,20 @@ export interface TranslationDictionary {
     teacherAddedToast: string;
     teacherUpdatedToast: string;
     teacherDeletedToast: string;
+    sortBy: string;
+    defaultSort: string;
+    sortCode: string;
+    sortCivilServantId: string;
+    sortKhmerName: string;
+    sortEnglishName: string;
+    sortDob: string;
+    sortBirthProvince: string;
+    sortBirthDistrict: string;
+    sortCurrentProvince: string;
+    sortCurrentDistrict: string;
+    sortStatus: string;
+    sortAsc: string;
+    sortDesc: string;
   };
 }
 
@@ -193,7 +207,21 @@ export const translations: Record<Language, TranslationDictionary> = {
       noTeachersFound: 'No teachers found matching your search.',
       teacherAddedToast: 'Teacher registered successfully',
       teacherUpdatedToast: 'Teacher record updated',
-      teacherDeletedToast: 'Teacher removed from directory'
+      teacherDeletedToast: 'Teacher removed from directory',
+      sortBy: 'Sort by',
+      defaultSort: 'Default (#)',
+      sortCode: 'Teacher Code',
+      sortCivilServantId: 'Civil Servant ID',
+      sortKhmerName: 'Khmer Name',
+      sortEnglishName: 'English Name',
+      sortDob: 'Date of Birth',
+      sortBirthProvince: 'Birth Province',
+      sortBirthDistrict: 'Birth District',
+      sortCurrentProvince: 'Current Province',
+      sortCurrentDistrict: 'Current District',
+      sortStatus: 'Status',
+      sortAsc: 'Ascending (A-Z)',
+      sortDesc: 'Descending (Z-A)'
     }
   },
   km: {
@@ -291,7 +319,21 @@ export const translations: Record<Language, TranslationDictionary> = {
       noTeachersFound: 'រកមិនឃើញទិន្នន័យគ្រូបង្រៀនដែលត្រូវនឹងការស្វែងរកឡើយ។',
       teacherAddedToast: 'បានបញ្ចូលគ្រូបង្រៀនថ្មីដោយជោគជ័យ',
       teacherUpdatedToast: 'បានកែប្រែព័ត៌មានគ្រូបង្រៀនដោយជោគជ័យ',
-      teacherDeletedToast: 'បានលុបគ្រូបង្រៀនចេញពីបញ្ជី'
+      teacherDeletedToast: 'បានលុបគ្រូបង្រៀនចេញពីបញ្ជី',
+      sortBy: 'តម្រៀបតាម',
+      defaultSort: 'លំនាំដើម (ល.រ)',
+      sortCode: 'កូដគ្រូ',
+      sortCivilServantId: 'អត្តលេខមន្ត្រីរាជការ',
+      sortKhmerName: 'ឈ្មោះខ្មែរ',
+      sortEnglishName: 'ឈ្មោះអង់គ្លេស',
+      sortDob: 'ថ្ងៃខែឆ្នាំកំណើត',
+      sortBirthProvince: 'ខេត្តកំណើត',
+      sortBirthDistrict: 'ស្រុកកំណើត',
+      sortCurrentProvince: 'ខេត្តបច្ចុប្បន្ន',
+      sortCurrentDistrict: 'ស្រុកបច្ចុប្បន្ន',
+      sortStatus: 'ស្ថានភាព',
+      sortAsc: 'ឡើងលើ (A-Z)',
+      sortDesc: 'ចុះក្រោម (Z-A)'
     }
   }
 };

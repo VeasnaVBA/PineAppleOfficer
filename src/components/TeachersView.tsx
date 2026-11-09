@@ -13,10 +13,29 @@ import {
   Hash,
   RefreshCw,
   MapPin,
-  Copy
+  Copy,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown
 } from 'lucide-react';
 import { Teacher } from '../types';
 import { Language, translations } from '../translations';
+
+export type SortField = 
+  | 'id' 
+  | 'code' 
+  | 'civilServantId' 
+  | 'khmerName' 
+  | 'englishName' 
+  | 'gender'
+  | 'dob' 
+  | 'birthProvince' 
+  | 'birthDistrict' 
+  | 'currentProvince' 
+  | 'currentDistrict' 
+  | 'status';
+
+export type SortOrder = 'asc' | 'desc';
 
 interface TeachersViewProps {
   teachers: Teacher[];
@@ -41,6 +60,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'All' | 'Active' | 'On Leave' | 'Inactive'>('All');
   const [genderFilter, setGenderFilter] = useState<'All' | 'Male' | 'Female'>('All');
+  const [sortField, setSortField] = useState<SortField>('id');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTeacherId, setEditingTeacherId] = useState<string | null>(null);
 
@@ -313,6 +334,129 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
     if (province) p.push(`Province: ${province}`);
     return p.join(', ');
   };
+
+  const handleHeaderSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortOrder('asc');
+    }
+  };
+
+  const renderSortIcon = (field: SortField) => {
+    if (sortField === field) {
+      return sortOrder === 'asc' ? (
+        <ArrowUp size={12} className="inline-block shrink-0 text-amber-300" />
+      ) : (
+        <ArrowDown size={12} className="inline-block shrink-0 text-amber-300" />
+      );
+    }
+    return (
+      <ArrowUpDown size={11} className="inline-block shrink-0 opacity-40 group-hover:opacity-100 transition-opacity" />
+    );
+  };
+
+  // Sort logic across all fields including addresses
+  const sortedTeachers = [...filteredTeachers].sort((a, b) => {
+    let cmp = 0;
+    switch (sortField) {
+      case 'code': {
+        const codeA = a.codeInfo || a.teacherId || '';
+        const codeB = b.codeInfo || b.teacherId || '';
+        cmp = codeA.localeCompare(codeB, undefined, { numeric: true });
+        break;
+      }
+      case 'civilServantId': {
+        cmp = (a.civilServantId || '').localeCompare(b.civilServantId || '', undefined, { numeric: true });
+        break;
+      }
+      case 'khmerName': {
+        const nameA = `${a.khmerLastName} ${a.khmerFirstName}`.trim();
+        const nameB = `${b.khmerLastName} ${b.khmerFirstName}`.trim();
+        cmp = nameA.localeCompare(nameB, 'km');
+        break;
+      }
+      case 'englishName': {
+        const nameA = `${a.englishLastName} ${a.englishFirstName}`.trim();
+        const nameB = `${b.englishLastName} ${b.englishFirstName}`.trim();
+        cmp = nameA.localeCompare(nameB, 'en');
+        break;
+      }
+      case 'gender': {
+        cmp = (a.gender || '').localeCompare(b.gender || '');
+        break;
+      }
+      case 'dob': {
+        cmp = (a.dob || '').localeCompare(b.dob || '');
+        break;
+      }
+      case 'birthProvince': {
+        const provA = a.birthProvince || '';
+        const provB = b.birthProvince || '';
+        cmp = provA.localeCompare(provB, 'km');
+        if (cmp === 0) {
+          cmp = (a.birthDistrict || '').localeCompare(b.birthDistrict || '', 'km');
+        }
+        if (cmp === 0) {
+          cmp = (a.birthCommune || '').localeCompare(b.birthCommune || '', 'km');
+        }
+        if (cmp === 0) {
+          cmp = (a.birthVillage || '').localeCompare(b.birthVillage || '', 'km');
+        }
+        break;
+      }
+      case 'birthDistrict': {
+        const distA = a.birthDistrict || '';
+        const distB = b.birthDistrict || '';
+        cmp = distA.localeCompare(distB, 'km');
+        if (cmp === 0) {
+          cmp = (a.birthCommune || '').localeCompare(b.birthCommune || '', 'km');
+        }
+        break;
+      }
+      case 'currentProvince': {
+        const provA = a.currentProvince || '';
+        const provB = b.currentProvince || '';
+        cmp = provA.localeCompare(provB, 'km');
+        if (cmp === 0) {
+          cmp = (a.currentDistrict || '').localeCompare(b.currentDistrict || '', 'km');
+        }
+        if (cmp === 0) {
+          cmp = (a.currentCommune || '').localeCompare(b.currentCommune || '', 'km');
+        }
+        if (cmp === 0) {
+          cmp = (a.currentVillage || '').localeCompare(b.currentVillage || '', 'km');
+        }
+        break;
+      }
+      case 'currentDistrict': {
+        const distA = a.currentDistrict || '';
+        const distB = b.currentDistrict || '';
+        cmp = distA.localeCompare(distB, 'km');
+        if (cmp === 0) {
+          cmp = (a.currentCommune || '').localeCompare(b.currentCommune || '', 'km');
+        }
+        break;
+      }
+      case 'status': {
+        cmp = (a.status || '').localeCompare(b.status || '');
+        break;
+      }
+      case 'id':
+      default: {
+        const numA = parseInt(a.id, 10);
+        const numB = parseInt(b.id, 10);
+        if (!isNaN(numA) && !isNaN(numB)) {
+          cmp = numA - numB;
+        } else {
+          cmp = a.id.localeCompare(b.id);
+        }
+        break;
+      }
+    }
+    return sortOrder === 'asc' ? cmp : -cmp;
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -788,7 +932,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
           />
         </div>
 
-        {/* Filters and Counter */}
+        {/* Filters, Sorting and Counter */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           {/* Status Filter */}
           <div className="flex items-center gap-1.5">
@@ -821,12 +965,48 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
             </select>
           </div>
 
+          {/* Sort By Dropdown & Order Toggle */}
+          <div className="flex items-center gap-1.5">
+            <ArrowUpDown size={13} className="opacity-60" />
+            <select
+              value={sortField}
+              onChange={(e) => setSortField(e.target.value as SortField)}
+              className="py-2 px-2.5 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
+              style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+              title={tt.sortBy}
+            >
+              <option value="id">{tt.defaultSort}</option>
+              <option value="code">{tt.sortCode}</option>
+              <option value="civilServantId">{tt.sortCivilServantId}</option>
+              <option value="khmerName">{tt.sortKhmerName}</option>
+              <option value="englishName">{tt.sortEnglishName}</option>
+              <option value="dob">{tt.sortDob}</option>
+              <option value="birthProvince">{tt.sortBirthProvince}</option>
+              <option value="birthDistrict">{tt.sortBirthDistrict}</option>
+              <option value="currentProvince">{tt.sortCurrentProvince}</option>
+              <option value="currentDistrict">{tt.sortCurrentDistrict}</option>
+              <option value="status">{tt.sortStatus}</option>
+            </select>
+
+            {/* Asc / Desc Toggle Button */}
+            <button
+              type="button"
+              onClick={() => setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'))}
+              className="h-[34px] px-2.5 border-2 border-ink text-xs font-mono font-bold hover:bg-black/10 transition-colors flex items-center gap-1"
+              style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+              title={sortOrder === 'asc' ? tt.sortAsc : tt.sortDesc}
+            >
+              {sortOrder === 'asc' ? <ArrowUp size={13} /> : <ArrowDown size={13} />}
+              <span className="text-[11px]">{sortOrder === 'asc' ? 'A-Z' : 'Z-A'}</span>
+            </button>
+          </div>
+
           {/* Total Count Badge */}
           <div 
             className="px-3 py-2 border-2 border-ink text-xs font-mono font-bold"
             style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
           >
-            <span>{filteredTeachers.length} / {teachers.length}</span>
+            <span>{sortedTeachers.length} / {teachers.length}</span>
           </div>
         </div>
       </div>
@@ -843,28 +1023,117 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 className="border-b-2 border-ink text-xs font-mono font-bold uppercase tracking-wider"
                 style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
               >
-                <th className="py-3 px-3 sm:px-4 text-center w-12">{tt.id}</th>
-                <th className="py-3 px-3 sm:px-4">{tt.codeInfo}</th>
-                <th className="py-3 px-3 sm:px-4">{tt.civilServantId}</th>
-                <th className="py-3 px-3 sm:px-4">{tt.khmerFullName}</th>
-                <th className="py-3 px-3 sm:px-4">{tt.englishFullName}</th>
-                <th className="py-3 px-3 sm:px-4 text-center">{tt.gender}</th>
-                <th className="py-3 px-3 sm:px-4">{tt.dob}</th>
-                <th className="py-3 px-3 sm:px-4">{tt.birthAddress}</th>
-                <th className="py-3 px-3 sm:px-4">{tt.currentAddress}</th>
-                <th className="py-3 px-3 sm:px-4 text-center">{tt.status}</th>
-                <th className="py-3 px-3 sm:px-4 text-right">{tt.actions}</th>
+                <th 
+                  onClick={() => handleHeaderSort('id')}
+                  className="py-3 px-3 sm:px-4 text-center w-12 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  title={tt.defaultSort}
+                >
+                  <div className="flex items-center justify-center gap-1">
+                    <span>{tt.id}</span>
+                    {renderSortIcon('id')}
+                  </div>
+                </th>
+                <th 
+                  onClick={() => handleHeaderSort('code')}
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  title={tt.sortCode}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>{tt.codeInfo}</span>
+                    {renderSortIcon('code')}
+                  </div>
+                </th>
+                <th 
+                  onClick={() => handleHeaderSort('civilServantId')}
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  title={tt.sortCivilServantId}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>{tt.civilServantId}</span>
+                    {renderSortIcon('civilServantId')}
+                  </div>
+                </th>
+                <th 
+                  onClick={() => handleHeaderSort('khmerName')}
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  title={tt.sortKhmerName}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>{tt.khmerFullName}</span>
+                    {renderSortIcon('khmerName')}
+                  </div>
+                </th>
+                <th 
+                  onClick={() => handleHeaderSort('englishName')}
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  title={tt.sortEnglishName}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>{tt.englishFullName}</span>
+                    {renderSortIcon('englishName')}
+                  </div>
+                </th>
+                <th 
+                  onClick={() => handleHeaderSort('gender')}
+                  className="py-3 px-3 sm:px-4 text-center cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                >
+                  <div className="flex items-center justify-center gap-1.5">
+                    <span>{tt.gender}</span>
+                    {renderSortIcon('gender')}
+                  </div>
+                </th>
+                <th 
+                  onClick={() => handleHeaderSort('dob')}
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  title={tt.sortDob}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>{tt.dob}</span>
+                    {renderSortIcon('dob')}
+                  </div>
+                </th>
+                <th 
+                  onClick={() => handleHeaderSort('birthProvince')}
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  title={`${tt.sortBirthProvince} / ${tt.sortBirthDistrict}`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>{tt.birthAddress}</span>
+                    {renderSortIcon('birthProvince')}
+                  </div>
+                </th>
+                <th 
+                  onClick={() => handleHeaderSort('currentProvince')}
+                  className="py-3 px-3 sm:px-4 cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  title={`${tt.sortCurrentProvince} / ${tt.sortCurrentDistrict}`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>{tt.currentAddress}</span>
+                    {renderSortIcon('currentProvince')}
+                  </div>
+                </th>
+                <th 
+                  onClick={() => handleHeaderSort('status')}
+                  className="py-3 px-3 sm:px-4 text-center cursor-pointer select-none hover:bg-black/20 transition-colors group whitespace-nowrap"
+                  title={tt.sortStatus}
+                >
+                  <div className="flex items-center justify-center gap-1.5">
+                    <span>{tt.status}</span>
+                    {renderSortIcon('status')}
+                  </div>
+                </th>
+                <th className="py-3 px-3 sm:px-4 text-right whitespace-nowrap">{tt.actions}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-ink/20 text-xs font-mono">
-              {filteredTeachers.length === 0 ? (
+              {sortedTeachers.length === 0 ? (
                 <tr>
                   <td colSpan={11} className="py-12 text-center opacity-70">
                     <p className="font-serif text-sm font-bold">{tt.noTeachersFound}</p>
                   </td>
                 </tr>
               ) : (
-                filteredTeachers.map((teacher, index) => (
+                sortedTeachers.map((teacher, index) => (
                   <tr 
                     key={teacher.id} 
                     className="hover:bg-black/5 transition-colors"
