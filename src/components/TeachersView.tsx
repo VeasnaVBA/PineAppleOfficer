@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   UserPlus, 
   Search, 
@@ -40,6 +40,23 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
   const [genderFilter, setGenderFilter] = useState<'All' | 'Male' | 'Female'>('All');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTeacherId, setEditingTeacherId] = useState<string | null>(null);
+
+  // Close modal on Escape key & lock background scroll
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isFormOpen) {
+        setIsFormOpen(false);
+      }
+    };
+    if (isFormOpen) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isFormOpen]);
 
   // Form State
   const [formData, setFormData] = useState<{
@@ -214,186 +231,202 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
         </button>
       </div>
 
-      {/* Add / Edit Teacher Modal Form */}
+      {/* Add / Edit Teacher Modal Popup Dialog */}
       {isFormOpen && (
-        <div className="border-2 border-ink shadow-brutal p-5 sm:p-6 space-y-5 animate-fade-in transition-colors"
-          style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+          onClick={() => setIsFormOpen(false)}
         >
-          <div className="flex items-center justify-between pb-3 border-b border-ink">
-            <div className="flex items-center gap-2">
-              <GraduationCap size={18} />
-              <h3 className="font-serif text-lg font-bold uppercase">
-                {editingTeacherId ? tt.editTeacher : tt.addTeacher}
-              </h3>
-            </div>
-            <button
-              onClick={() => setIsFormOpen(false)}
-              className="p-1 border border-ink hover:bg-black/10 transition-colors"
-              title={tt.cancel}
+          <div 
+            className="w-full max-w-2xl border-2 border-ink shadow-brutal-lg max-h-[92vh] flex flex-col transition-colors overflow-hidden"
+            style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div 
+              className="px-4 py-3 sm:px-6 sm:py-4 border-b-2 border-ink flex items-center justify-between"
+              style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
             >
-              <X size={16} />
-            </button>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Teacher ID */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase mb-1">
-                  {tt.teacherId} *
-                </label>
-                <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none opacity-50">
-                    <Hash size={14} />
-                  </span>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. TCH-001"
-                    value={formData.teacherId}
-                    onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
-                    className="w-full pl-8 pr-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
-                    style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
-                  />
-                </div>
+              <div className="flex items-center gap-2.5">
+                <GraduationCap size={20} />
+                <h3 className="font-serif text-base sm:text-lg font-bold uppercase tracking-wide">
+                  {editingTeacherId ? tt.editTeacher : tt.addTeacher}
+                </h3>
               </div>
-
-              {/* Khmer Last Name */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase mb-1">
-                  {tt.khmerLastName} *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="ឧ. ស៊ុន"
-                  value={formData.khmerLastName}
-                  onChange={(e) => setFormData({ ...formData, khmerLastName: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
-                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
-                />
-              </div>
-
-              {/* Khmer First Name */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase mb-1">
-                  {tt.khmerFirstName} *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="ឧ. វណ្ណា"
-                  value={formData.khmerFirstName}
-                  onChange={(e) => setFormData({ ...formData, khmerFirstName: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
-                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
-                />
-              </div>
-
-              {/* English Last Name */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase mb-1">
-                  {tt.englishLastName} *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Sun"
-                  value={formData.englishLastName}
-                  onChange={(e) => setFormData({ ...formData, englishLastName: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
-                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
-                />
-              </div>
-
-              {/* English First Name */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase mb-1">
-                  {tt.englishFirstName} *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Vanna"
-                  value={formData.englishFirstName}
-                  onChange={(e) => setFormData({ ...formData, englishFirstName: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
-                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
-                />
-              </div>
-
-              {/* Gender */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase mb-1">
-                  {tt.gender} *
-                </label>
-                <select
-                  value={formData.gender}
-                  onChange={(e) => setFormData({ ...formData, gender: e.target.value as any })}
-                  className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
-                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
-                >
-                  <option value="Male">{tt.male}</option>
-                  <option value="Female">{tt.female}</option>
-                  <option value="Other">{tt.other}</option>
-                </select>
-              </div>
-
-              {/* Date of Birth */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase mb-1">
-                  {tt.dob} *
-                </label>
-                <div className="relative">
-                  <input
-                    type="date"
-                    required
-                    value={formData.dob}
-                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
-                    style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
-                  />
-                </div>
-              </div>
-
-              {/* Status */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase mb-1">
-                  {tt.status} *
-                </label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                  className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
-                  style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
-                >
-                  <option value="Active">{tt.active}</option>
-                  <option value="On Leave">{tt.onLeave}</option>
-                  <option value="Inactive">{tt.inactive}</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-ink">
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="h-9 px-4 border-2 border-ink text-xs font-mono uppercase tracking-wider font-bold hover:bg-black/10 transition-colors"
-                style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                className="p-1 border border-current hover:opacity-75 transition-opacity"
+                title={tt.cancel}
               >
-                {tt.cancel}
-              </button>
-              <button
-                type="submit"
-                className="h-9 px-5 border-2 border-ink text-xs font-mono uppercase tracking-wider font-bold shadow-brutal hover:opacity-90 transition-all flex items-center gap-1.5"
-                style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
-              >
-                <Check size={14} />
-                <span>{tt.save}</span>
+                <X size={18} />
               </button>
             </div>
-          </form>
+
+            {/* Scrollable Modal Form Body */}
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Teacher ID */}
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase mb-1">
+                      {tt.teacherId} *
+                    </label>
+                    <div className="relative">
+                      <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none opacity-50">
+                        <Hash size={14} />
+                      </span>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. TCH-001"
+                        value={formData.teacherId}
+                        onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
+                        className="w-full pl-8 pr-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
+                        style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Gender */}
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase mb-1">
+                      {tt.gender} *
+                    </label>
+                    <select
+                      value={formData.gender}
+                      onChange={(e) => setFormData({ ...formData, gender: e.target.value as any })}
+                      className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
+                      style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                    >
+                      <option value="Male">{tt.male}</option>
+                      <option value="Female">{tt.female}</option>
+                      <option value="Other">{tt.other}</option>
+                    </select>
+                  </div>
+
+                  {/* Khmer Last Name */}
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase mb-1">
+                      {tt.khmerLastName} *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="ឧ. ស៊ុន"
+                      value={formData.khmerLastName}
+                      onChange={(e) => setFormData({ ...formData, khmerLastName: e.target.value })}
+                      className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                      style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                    />
+                  </div>
+
+                  {/* Khmer First Name */}
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase mb-1">
+                      {tt.khmerFirstName} *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="ឧ. វណ្ណា"
+                      value={formData.khmerFirstName}
+                      onChange={(e) => setFormData({ ...formData, khmerFirstName: e.target.value })}
+                      className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                      style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                    />
+                  </div>
+
+                  {/* English Last Name */}
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase mb-1">
+                      {tt.englishLastName} *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Sun"
+                      value={formData.englishLastName}
+                      onChange={(e) => setFormData({ ...formData, englishLastName: e.target.value })}
+                      className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
+                      style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                    />
+                  </div>
+
+                  {/* English First Name */}
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase mb-1">
+                      {tt.englishFirstName} *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Vanna"
+                      value={formData.englishFirstName}
+                      onChange={(e) => setFormData({ ...formData, englishFirstName: e.target.value })}
+                      className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
+                      style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                    />
+                  </div>
+
+                  {/* Date of Birth */}
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase mb-1">
+                      {tt.dob} *
+                    </label>
+                    <input
+                      type="date"
+                      required
+                      value={formData.dob}
+                      onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                      className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors"
+                      style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                    />
+                  </div>
+
+                  {/* Status */}
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase mb-1">
+                      {tt.status} *
+                    </label>
+                    <select
+                      value={formData.status}
+                      onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                      className="w-full px-3 py-2 border-2 border-ink text-xs font-mono focus:outline-none transition-colors cursor-pointer"
+                      style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                    >
+                      <option value="Active">{tt.active}</option>
+                      <option value="On Leave">{tt.onLeave}</option>
+                      <option value="Inactive">{tt.inactive}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Footer Action Buttons */}
+              <div 
+                className="px-4 py-3 sm:px-6 sm:py-4 border-t-2 border-ink flex items-center justify-end gap-3 transition-colors"
+                style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setIsFormOpen(false)}
+                  className="h-9 px-4 border-2 border-ink text-xs font-mono uppercase tracking-wider font-bold hover:bg-black/10 transition-colors"
+                  style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+                >
+                  {tt.cancel}
+                </button>
+                <button
+                  type="submit"
+                  className="h-9 px-5 border-2 border-ink text-xs font-mono uppercase tracking-wider font-bold shadow-brutal hover:opacity-90 transition-all flex items-center gap-1.5"
+                  style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
+                >
+                  <Check size={14} />
+                  <span>{tt.save}</span>
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
