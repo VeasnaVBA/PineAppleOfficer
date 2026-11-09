@@ -32,7 +32,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside 
-      className="flex w-36 xs:w-44 sm:w-56 xl:w-64 flex-shrink-0 flex-col justify-between border-r-2 border-ink select-none"
+      className="flex w-36 xs:w-44 sm:w-56 xl:w-64 flex-shrink-0 flex-col justify-between border-r-2 border-ink select-none text-ink transition-colors"
       style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
     >
       {/* Navigation list */}
@@ -99,16 +99,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className="hover:opacity-60 transition-opacity"
             title="GitHub Repository"
           >
-            <Github size={13} />
+            <Github size={14} />
           </a>
-        </div>
-
-        <div className="mt-2.5 pt-2 border-t border-ink/20 flex flex-col sm:flex-row sm:items-center sm:justify-between text-[9px] font-mono opacity-70 gap-1">
-          <span className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-            <span className="truncate">{t.edgeActive}</span>
-          </span>
-          <span className="font-bold hidden sm:inline">99.98%</span>
         </div>
       </div>
     </aside>

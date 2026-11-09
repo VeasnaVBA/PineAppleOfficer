@@ -28,9 +28,15 @@ export function App() {
       try {
         const theme = JSON.parse(saved);
         const root = document.documentElement;
-        if (theme.bg) root.style.setProperty('--app-bg', theme.bg);
+        if (theme.bg) {
+          root.style.setProperty('--app-bg', theme.bg);
+          document.body.style.backgroundColor = theme.bg;
+        }
         if (theme.surface) root.style.setProperty('--app-surface', theme.surface);
-        if (theme.text) root.style.setProperty('--app-text', theme.text);
+        if (theme.text) {
+          root.style.setProperty('--app-text', theme.text);
+          document.body.style.color = theme.text;
+        }
         if (theme.border) root.style.setProperty('--app-border', theme.border);
         if (theme.fontFamily) {
           root.style.setProperty('--app-font-family', theme.fontFamily);

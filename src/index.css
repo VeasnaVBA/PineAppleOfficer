@@ -10,7 +10,7 @@
     --app-border: #121212;
     --app-text: #121212;
     --app-text-muted: #524d42;
-    --app-font-family: 'Playfair Display', 'Kantumruy Pro', 'Cormorant Garamond', Georgia, serif;
+    --app-font-family: 'Playfair Display', 'Kantumruy Pro', Georgia, serif;
   }
 
   body {
@@ -18,9 +18,10 @@
     color: var(--app-text, #121212);
     font-family: var(--app-font-family, 'Playfair Display', 'Kantumruy Pro', Georgia, serif) !important;
     overflow-x: hidden;
+    min-height: 100vh;
   }
 
-  /* Force the selected font globally across the entire app */
+  /* Force font inheritance */
   h1, h2, h3, h4, h5, h6,
   p, span, a, button, input, textarea, select, div {
     font-family: inherit;
@@ -33,15 +34,57 @@
   }
 }
 
-/* Custom hairline borders */
+/* Dynamic theme overrides to ensure all colors adapt to active theme */
 .border-ink {
-  border-color: var(--app-border, #121212);
+  border-color: var(--app-border, #121212) !important;
 }
 
-/* Custom scrollbars */
+.text-ink {
+  color: var(--app-text, #121212) !important;
+}
+
+.bg-ink {
+  background-color: var(--app-border, #121212) !important;
+  color: var(--app-bg, #ded5be) !important;
+}
+
+/* Theme-adaptive surfaces and backgrounds */
+.bg-app-bg {
+  background-color: var(--app-bg, #ded5be) !important;
+}
+
+.bg-app-surface {
+  background-color: var(--app-surface, #ede5cf) !important;
+}
+
+.bg-app-card {
+  background-color: var(--app-card, #ded5be) !important;
+}
+
+.text-app-text {
+  color: var(--app-text, #121212) !important;
+}
+
+.text-app-muted {
+  color: var(--app-text-muted, #524d42) !important;
+}
+
+.border-app-border {
+  border-color: var(--app-border, #121212) !important;
+}
+
+.shadow-brutal {
+  box-shadow: 3px 3px 0px var(--app-border, #121212) !important;
+}
+
+.shadow-brutal-lg {
+  box-shadow: 6px 6px 0px var(--app-border, #121212) !important;
+}
+
+/* Custom scrollbars adapt to current theme */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: var(--app-bg, #ded5be);

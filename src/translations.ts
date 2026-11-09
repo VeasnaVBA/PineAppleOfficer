@@ -88,6 +88,8 @@ export const translations: Record<Language, TranslationDictionary> = {
     settings: {
       themeColor: 'Theme Background Color',
       themeDesc: 'Select an archival paper tint or dark editorial palette for your dashboard:',
+      customColor: 'Custom Color Picker',
+      customColorDesc: 'Pick any color from the palette to apply across the entire application:',
       fontFamily: 'Application Font Family (Global)',
       fontDesc: 'Click any font to apply it immediately across all headers, sidebar, navigation, and pages:',
       fontSize: 'Interface Font Size',
@@ -136,6 +138,8 @@ export const translations: Record<Language, TranslationDictionary> = {
     settings: {
       themeColor: 'ពណ៌ផ្ទៃខាងក្រោយរចនាប័ទ្ម',
       themeDesc: 'ជ្រើសរើសពណ៌ក្រដាសបូរាណ ឬរចនាប័ទ្មងងឹតសម្រាប់ផ្ទាំងគ្រប់គ្រងរបស់អ្នក៖',
+      customColor: 'ឧបករណ៍ជ្រើសរើសពណ៌ផ្ទាល់ខ្លួន',
+      customColorDesc: 'ជ្រើសរើសពណ៌ណាមួយដើម្បីអនុវត្តលើផ្ទាំងគ្រប់គ្រងទាំងមូល៖',
       fontFamily: 'ពុម្ពអក្សរកម្មវិធី (សកល)',
       fontDesc: 'ចុចលើពុម្ពអក្សរណាមួយដើម្បីអនុវត្តវាភ្លាមៗលើចំណងជើង របារចំហៀង និងទំព័រទាំងអស់៖',
       fontSize: 'ទំហំពុម្ពអក្សរចំណុចប្រទាក់',
