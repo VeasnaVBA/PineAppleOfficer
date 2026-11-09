@@ -5,66 +5,46 @@ import {
   Users, 
   BookOpen, 
   Settings, 
-  Plus,
   Github
 } from 'lucide-react';
 
 interface SidebarProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
-  onOpenQuickAdd: () => void;
-  teacherCount: number;
-  studentCount: number;
-  classCount: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   currentTab,
-  setCurrentTab,
-  onOpenQuickAdd,
-  teacherCount,
-  studentCount,
-  classCount
+  setCurrentTab
 }) => {
   const navItems = [
-    { id: 'overview', label: 'Dashboard', badge: 'Live', icon: Compass },
-    { id: 'teachers', label: 'Teachers', badge: `${teacherCount}`, icon: GraduationCap },
-    { id: 'students', label: 'Students', badge: `${studentCount}`, icon: Users },
-    { id: 'classes', label: 'Classes', badge: `${classCount}`, icon: BookOpen },
-    { id: 'settings', label: 'Settings', badge: 'Config', icon: Settings }
+    { id: 'dashboard', label: 'Dashboard', badge: 'Blank', icon: Compass },
+    { id: 'teachers', label: 'Teacher Info', badge: 'Blank', icon: GraduationCap },
+    { id: 'students', label: 'Student Info', badge: 'Blank', icon: Users },
+    { id: 'classes', label: 'Class Info', badge: 'Blank', icon: BookOpen },
+    { id: 'settings', label: 'Settings', badge: 'Blank', icon: Settings }
   ];
 
   return (
     <aside className="flex w-36 xs:w-44 sm:w-56 xl:w-64 flex-shrink-0 flex-col justify-between border-r-2 border-ink bg-[#ded5be] select-none">
-      {/* Brand Header */}
+      {/* Brand Header: PINEAPPLE OFFICER */}
       <div>
-        <div className="p-3 sm:p-5 xl:p-8 border-b-2 border-ink">
+        <div className="p-3 sm:p-5 xl:p-6 border-b-2 border-ink">
           <div className="flex items-center justify-between">
-            <h1 className="font-serif text-lg sm:text-2xl xl:text-3xl font-bold tracking-[0.15em] sm:tracking-[0.2em] text-ink uppercase">
-              TETRAD
+            <h1 className="font-serif text-sm xs:text-base sm:text-xl xl:text-2xl font-black tracking-[0.1em] text-ink uppercase leading-tight">
+              PINEAPPLE OFFICER
             </h1>
             <span className="hidden sm:inline text-[9px] tracking-widest uppercase font-mono px-1.5 py-0.5 border border-ink bg-[#ede5cf] font-bold">
               v2.4
             </span>
           </div>
-          <p className="text-[9px] sm:text-[11px] font-mono tracking-wider text-ink/70 mt-1 uppercase truncate">
-            Academics
+          <p className="text-[9px] sm:text-[10px] font-mono tracking-wider text-ink/70 mt-1 uppercase truncate">
+            Administrative Portal
           </p>
         </div>
 
-        {/* Action Button */}
-        <div className="p-2.5 sm:p-4 border-b border-ink">
-          <button
-            onClick={onOpenQuickAdd}
-            className="w-full flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 px-2 sm:px-4 bg-ink text-[#ded5be] hover:bg-ink/85 transition-all text-[10px] sm:text-xs font-mono uppercase tracking-wider border border-ink shadow-sm font-bold"
-          >
-            <Plus size={13} />
-            <span className="truncate">Add Record</span>
-          </button>
-        </div>
-
-        {/* Navigation list */}
-        <nav className="p-2 sm:p-4 xl:p-6 space-y-1">
+        {/* Navigation list (No + ADD RECORD button) */}
+        <nav className="p-2 sm:p-4 xl:p-5 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
