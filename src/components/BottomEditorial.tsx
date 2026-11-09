@@ -102,7 +102,7 @@ export const BottomEditorial: React.FC<BottomEditorialProps> = ({ onShowToast })
             <div className="font-mono text-[11px] bg-ink/5 p-3 border border-ink text-ink space-y-1">
               <div className="flex items-center gap-2 text-emerald-800 font-bold">
                 <Terminal size={12} />
-                <span>GIT COMMIT: HEAD -> main [e9b421a]</span>
+                <span>GIT COMMIT: HEAD &rarr; main [cf1ad64]</span>
               </div>
               <p className="text-ink/80">• Curatorial grid calibrated to high-contrast monochrome aesthetic.</p>
               <p className="text-ink/80">• Subscribed webhooks registered with edge dispatcher.</p>
