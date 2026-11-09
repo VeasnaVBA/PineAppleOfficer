@@ -12,6 +12,14 @@ export const initialTeachers: Teacher[] = [
     englishFirstName: 'Vanna',
     gender: 'Male',
     dob: '1985-05-12',
+    birthVillage: 'ព្រែកតាពៅ',
+    birthCommune: 'ដើមមាន',
+    birthDistrict: 'ក្រុងតាខ្មៅ',
+    birthProvince: 'ខេត្តកណ្តាល',
+    currentVillage: 'ភូមិ១',
+    currentCommune: 'បឹងកក់១',
+    currentDistrict: 'ខណ្ឌទួលគោក',
+    currentProvince: 'រាជធានីភ្នំពេញ',
     status: 'Active'
   },
   {
@@ -25,6 +33,14 @@ export const initialTeachers: Teacher[] = [
     englishFirstName: 'Thida',
     gender: 'Female',
     dob: '1990-08-23',
+    birthVillage: 'វត្តបូព៌',
+    birthCommune: 'សាលាកំរើក',
+    birthDistrict: 'ក្រុងសៀមរាប',
+    birthProvince: 'ខេត្តសៀមរាប',
+    currentVillage: 'វត្តបូព៌',
+    currentCommune: 'សាលាកំរើក',
+    currentDistrict: 'ក្រុងសៀមរាប',
+    currentProvince: 'ខេត្តសៀមរាប',
     status: 'Active'
   },
   {
@@ -38,6 +54,14 @@ export const initialTeachers: Teacher[] = [
     englishFirstName: 'Sokha',
     gender: 'Male',
     dob: '1982-11-04',
+    birthVillage: 'កំពង់ក្រសាំង',
+    birthCommune: 'ស្វាយប៉ោ',
+    birthDistrict: 'ក្រុងបាត់ដំបង',
+    birthProvince: 'ខេត្តបាត់ដំបង',
+    currentVillage: 'ព្រែកមហាទេព',
+    currentCommune: 'ស្វាយប៉ោ',
+    currentDistrict: 'ក្រុងបាត់ដំបង',
+    currentProvince: 'ខេត្តបាត់ដំបង',
     status: 'Active'
   },
   {
@@ -51,6 +75,14 @@ export const initialTeachers: Teacher[] = [
     englishFirstName: 'Sopheap',
     gender: 'Female',
     dob: '1992-02-18',
+    birthVillage: 'ផ្សារលើ',
+    birthCommune: 'ស្វាយរៀង',
+    birthDistrict: 'ក្រុងស្វាយរៀង',
+    birthProvince: 'ខេត្តស្វាយរៀង',
+    currentVillage: 'ភូមិ៤',
+    currentCommune: 'ចតុមុខ',
+    currentDistrict: 'ខណ្ឌដូនពេញ',
+    currentProvince: 'រាជធានីភ្នំពេញ',
     status: 'On Leave'
   },
   {
@@ -64,6 +96,14 @@ export const initialTeachers: Teacher[] = [
     englishFirstName: 'Vicheth',
     gender: 'Male',
     dob: '1988-09-30',
+    birthVillage: 'វាលវង់',
+    birthCommune: 'វាលវង់',
+    birthDistrict: 'ក្រុងកំពង់ចាម',
+    birthProvince: 'ខេត្តកំពង់ចាម',
+    currentVillage: 'វាលវង់',
+    currentCommune: 'វាលវង់',
+    currentDistrict: 'ក្រុងកំពង់ចាម',
+    currentProvince: 'ខេត្តកំពង់ចាម',
     status: 'Active'
   },
   {
@@ -77,6 +117,14 @@ export const initialTeachers: Teacher[] = [
     englishFirstName: 'Pisey',
     gender: 'Female',
     dob: '1994-07-15',
+    birthVillage: 'កំពង់បាយខាងត្បូង',
+    birthCommune: 'កំពង់បាយ',
+    birthDistrict: 'ក្រុងកំពត',
+    birthProvince: 'ខេត្តកំពត',
+    currentVillage: 'កំពង់បាយខាងជើង',
+    currentCommune: 'កំពង់បាយ',
+    currentDistrict: 'ក្រុងកំពត',
+    currentProvince: 'ខេត្តកំពត',
     status: 'Inactive'
   }
 ];

@@ -73,6 +73,13 @@ export interface TranslationDictionary {
     female: string;
     other: string;
     dob: string;
+    birthAddress: string;
+    currentAddress: string;
+    village: string;
+    commune: string;
+    district: string;
+    province: string;
+    sameAsBirthplace: string;
     status: string;
     active: string;
     onLeave: string;
@@ -166,6 +173,13 @@ export const translations: Record<Language, TranslationDictionary> = {
       female: 'Female',
       other: 'Other',
       dob: 'Date of Birth',
+      birthAddress: 'Birthplace Address',
+      currentAddress: 'Current Address',
+      village: 'Village',
+      commune: 'Commune / Sangkat',
+      district: 'District / Khan',
+      province: 'Province / City / Capital',
+      sameAsBirthplace: 'Same as Birthplace Address',
       status: 'Status',
       active: 'Active',
       onLeave: 'On Leave',
@@ -257,6 +271,13 @@ export const translations: Record<Language, TranslationDictionary> = {
       female: 'ស្រី',
       other: 'ផ្សេងៗ',
       dob: 'ថ្ងៃខែឆ្នាំកំណើត',
+      birthAddress: 'អាសយដ្ឋានកំណើត',
+      currentAddress: 'អាសយដ្ឋានបច្ចុប្បន្ន',
+      village: 'ភូមិ',
+      commune: 'ឃុំ/សង្កាត់',
+      district: 'ស្រុក/ខណ្ឌ',
+      province: 'ខេត្ត/ក្រុង/រាជធានី',
+      sameAsBirthplace: 'ដូចអាសយដ្ឋានកំណើត',
       status: 'ស្ថានភាព',
       active: 'សកម្ម',
       onLeave: 'ឈប់សម្រាក',

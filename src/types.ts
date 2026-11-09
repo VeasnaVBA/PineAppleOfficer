@@ -10,6 +10,21 @@ export interface Teacher {
   gender: 'Male' | 'Female' | 'Other' | string;
   dob: string;
   status: 'Active' | 'On Leave' | 'Inactive';
+
+  // Birthplace Address (អាសយដ្ឋានកំណើត)
+  birthVillage?: string; // ភូមិ
+  birthCommune?: string; // ឃុំ/សង្កាត់
+  birthDistrict?: string; // ស្រុក/ខណ្ឌ
+  birthProvince?: string; // ខេត្ត/ក្រុង/រាជធានី
+  birthPlace?: string; // Full formatted fallback
+
+  // Current Address (អាសយដ្ឋានបច្ចុប្បន្ន)
+  currentVillage?: string; // ភូមិ
+  currentCommune?: string; // ឃុំ/សង្កាត់
+  currentDistrict?: string; // ស្រុក/ខណ្ឌ
+  currentProvince?: string; // ខេត្ត/ក្រុង/រាជធានី
+  currentAddress?: string; // Full formatted address string
+
   // Optional convenience fields for backwards compatibility
   name?: string;
   department?: string;

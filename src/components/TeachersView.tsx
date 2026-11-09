@@ -11,7 +11,9 @@ import {
   Calendar,
   User,
   Hash,
-  RefreshCw
+  RefreshCw,
+  MapPin,
+  Copy
 } from 'lucide-react';
 import { Teacher } from '../types';
 import { Language, translations } from '../translations';
@@ -71,6 +73,14 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
     gender: 'Male' | 'Female' | 'Other';
     dob: string;
     status: 'Active' | 'On Leave' | 'Inactive';
+    birthVillage: string;
+    birthCommune: string;
+    birthDistrict: string;
+    birthProvince: string;
+    currentVillage: string;
+    currentCommune: string;
+    currentDistrict: string;
+    currentProvince: string;
   }>({
     id: '',
     codeInfo: '',
@@ -81,7 +91,15 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
     englishFirstName: '',
     gender: 'Male',
     dob: '1990-01-01',
-    status: 'Active'
+    status: 'Active',
+    birthVillage: '',
+    birthCommune: '',
+    birthDistrict: '',
+    birthProvince: '',
+    currentVillage: '',
+    currentCommune: '',
+    currentDistrict: '',
+    currentProvince: ''
   });
 
   const generateUniqueTeacherCode = (currentVal?: string) => {
@@ -140,7 +158,15 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
       englishFirstName: '',
       gender: 'Male',
       dob: '1990-01-01',
-      status: 'Active'
+      status: 'Active',
+      birthVillage: '',
+      birthCommune: '',
+      birthDistrict: '',
+      birthProvince: '',
+      currentVillage: '',
+      currentCommune: '',
+      currentDistrict: '',
+      currentProvince: ''
     });
     setIsFormOpen(true);
   };
@@ -157,7 +183,15 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
       englishFirstName: teacher.englishFirstName,
       gender: (teacher.gender as 'Male' | 'Female' | 'Other') || 'Male',
       dob: teacher.dob || '1990-01-01',
-      status: teacher.status || 'Active'
+      status: teacher.status || 'Active',
+      birthVillage: teacher.birthVillage || '',
+      birthCommune: teacher.birthCommune || '',
+      birthDistrict: teacher.birthDistrict || '',
+      birthProvince: teacher.birthProvince || '',
+      currentVillage: teacher.currentVillage || '',
+      currentCommune: teacher.currentCommune || '',
+      currentDistrict: teacher.currentDistrict || '',
+      currentProvince: teacher.currentProvince || ''
     });
     setIsFormOpen(true);
   };
@@ -211,10 +245,27 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
     const query = searchTerm.toLowerCase().trim();
     const code = (tch.codeInfo || tch.teacherId || '').toLowerCase();
     const civilId = (tch.civilServantId || '').toLowerCase();
+    const bVill = (tch.birthVillage || '').toLowerCase();
+    const bCom = (tch.birthCommune || '').toLowerCase();
+    const bDist = (tch.birthDistrict || '').toLowerCase();
+    const bProv = (tch.birthProvince || '').toLowerCase();
+    const cVill = (tch.currentVillage || '').toLowerCase();
+    const cCom = (tch.currentCommune || '').toLowerCase();
+    const cDist = (tch.currentDistrict || '').toLowerCase();
+    const cProv = (tch.currentProvince || '').toLowerCase();
+
     const matchesSearch = 
       !query ||
       code.includes(query) ||
       civilId.includes(query) ||
+      bVill.includes(query) ||
+      bCom.includes(query) ||
+      bDist.includes(query) ||
+      bProv.includes(query) ||
+      cVill.includes(query) ||
+      cCom.includes(query) ||
+      cDist.includes(query) ||
+      cProv.includes(query) ||
       tch.khmerLastName.toLowerCase().includes(query) ||
       tch.khmerFirstName.toLowerCase().includes(query) ||
       `${tch.khmerLastName} ${tch.khmerFirstName}`.toLowerCase().includes(query) ||
@@ -227,6 +278,20 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
 
     return matchesSearch && matchesStatus && matchesGender;
   });
+
+  const formatAddress = (village?: string, commune?: string, district?: string, province?: string) => {
+    const parts = [village, commune, district, province].filter(Boolean);
+    if (parts.length === 0) return '-';
+    if (lang === 'km') {
+      const p = [];
+      if (village) p.push(`ភូមិ${village}`);
+      if (commune) p.push(`ឃុំ/សង្កាត់${commune}`);
+      if (district) p.push(`ស្រុក/ខណ្ឌ${district}`);
+      if (province) p.push(`${province}`);
+      return p.join(', ');
+    }
+    return parts.join(', ');
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -497,6 +562,165 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                     </select>
                   </div>
                 </div>
+
+                {/* Section: អាសយដ្ឋានកំណើត (Birthplace Address) */}
+                <div className="pt-4 border-t-2 border-ink space-y-3">
+                  <div className="flex items-center gap-2">
+                    <MapPin size={16} />
+                    <h4 className="font-serif font-bold text-sm uppercase">
+                      {tt.birthAddress} ({tt.village}, {tt.commune}, {tt.district}, {tt.province})
+                    </h4>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    {/* ភូមិ (Village) */}
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase mb-1">
+                        {tt.village}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="ឧ. ព្រែកតាពៅ"
+                        value={formData.birthVillage}
+                        onChange={(e) => setFormData({ ...formData, birthVillage: e.target.value })}
+                        className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                        style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                      />
+                    </div>
+
+                    {/* ឃុំ/សង្កាត់ (Commune) */}
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase mb-1">
+                        {tt.commune}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="ឧ. ដើមមាន"
+                        value={formData.birthCommune}
+                        onChange={(e) => setFormData({ ...formData, birthCommune: e.target.value })}
+                        className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                        style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                      />
+                    </div>
+
+                    {/* ស្រុក/ខណ្ឌ (District) */}
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase mb-1">
+                        {tt.district}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="ឧ. ក្រុងតាខ្មៅ"
+                        value={formData.birthDistrict}
+                        onChange={(e) => setFormData({ ...formData, birthDistrict: e.target.value })}
+                        className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                        style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                      />
+                    </div>
+
+                    {/* ខេត្ត/ក្រុង/រាជធានី (Province) */}
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase mb-1">
+                        {tt.province}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="ឧ. ខេត្តកណ្តាល"
+                        value={formData.birthProvince}
+                        onChange={(e) => setFormData({ ...formData, birthProvince: e.target.value })}
+                        className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                        style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section: អាសយដ្ឋានបច្ចុប្បន្ន (Current Address) */}
+                <div className="pt-4 border-t-2 border-ink space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <MapPin size={16} />
+                      <h4 className="font-serif font-bold text-sm uppercase">
+                        {tt.currentAddress}
+                      </h4>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({
+                        ...prev,
+                        currentVillage: prev.birthVillage,
+                        currentCommune: prev.birthCommune,
+                        currentDistrict: prev.birthDistrict,
+                        currentProvince: prev.birthProvince
+                      }))}
+                      className="flex items-center gap-1.5 px-2.5 py-1 border border-ink text-[11px] font-mono font-bold hover:bg-black/10 transition-colors self-start sm:self-auto"
+                      style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                    >
+                      <Copy size={12} />
+                      <span>{tt.sameAsBirthplace}</span>
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    {/* ភូមិ (Village) */}
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase mb-1">
+                        {tt.village}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="ឧ. ភូមិ១"
+                        value={formData.currentVillage}
+                        onChange={(e) => setFormData({ ...formData, currentVillage: e.target.value })}
+                        className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                        style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                      />
+                    </div>
+
+                    {/* ឃុំ/សង្កាត់ (Commune) */}
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase mb-1">
+                        {tt.commune}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="ឧ. បឹងកក់១"
+                        value={formData.currentCommune}
+                        onChange={(e) => setFormData({ ...formData, currentCommune: e.target.value })}
+                        className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                        style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                      />
+                    </div>
+
+                    {/* ស្រុក/ខណ្ឌ (District) */}
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase mb-1">
+                        {tt.district}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="ឧ. ខណ្ឌទួលគោក"
+                        value={formData.currentDistrict}
+                        onChange={(e) => setFormData({ ...formData, currentDistrict: e.target.value })}
+                        className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                        style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                      />
+                    </div>
+
+                    {/* ខេត្ត/ក្រុង/រាជធានី (Province) */}
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase mb-1">
+                        {tt.province}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="ឧ. រាជធានីភ្នំពេញ"
+                        value={formData.currentProvince}
+                        onChange={(e) => setFormData({ ...formData, currentProvince: e.target.value })}
+                        className="w-full px-3 py-2 border-2 border-ink text-xs focus:outline-none transition-colors"
+                        style={{ backgroundColor: 'var(--app-bg, #ded5be)' }}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Modal Footer Action Buttons */}
@@ -605,6 +829,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                 <th className="py-3 px-3 sm:px-4">{tt.englishFullName}</th>
                 <th className="py-3 px-3 sm:px-4 text-center">{tt.gender}</th>
                 <th className="py-3 px-3 sm:px-4">{tt.dob}</th>
+                <th className="py-3 px-3 sm:px-4">{tt.birthAddress}</th>
+                <th className="py-3 px-3 sm:px-4">{tt.currentAddress}</th>
                 <th className="py-3 px-3 sm:px-4 text-center">{tt.status}</th>
                 <th className="py-3 px-3 sm:px-4 text-right">{tt.actions}</th>
               </tr>
@@ -612,7 +838,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
             <tbody className="divide-y divide-ink/20 text-xs font-mono">
               {filteredTeachers.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="py-12 text-center opacity-70">
+                  <td colSpan={11} className="py-12 text-center opacity-70">
                     <p className="font-serif text-sm font-bold">{tt.noTeachersFound}</p>
                   </td>
                 </tr>
@@ -658,10 +884,20 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
 
                     {/* Date of Birth */}
                     <td className="py-3 px-3 sm:px-4 opacity-85">
-                      <span className="flex items-center gap-1.5">
+                      <span className="flex items-center gap-1.5 whitespace-nowrap">
                         <Calendar size={12} className="opacity-50" />
                         {teacher.dob}
                       </span>
+                    </td>
+
+                    {/* Birthplace Address (អាសយដ្ឋានកំណើត) */}
+                    <td className="py-3 px-3 sm:px-4 text-xs font-serif min-w-[190px] leading-relaxed">
+                      {formatAddress(teacher.birthVillage, teacher.birthCommune, teacher.birthDistrict, teacher.birthProvince)}
+                    </td>
+
+                    {/* Current Address (អាសយដ្ឋានបច្ចុប្បន្ន) */}
+                    <td className="py-3 px-3 sm:px-4 text-xs font-serif min-w-[190px] leading-relaxed">
+                      {formatAddress(teacher.currentVillage, teacher.currentCommune, teacher.currentDistrict, teacher.currentProvince)}
                     </td>
 
                     {/* Status */}
