@@ -284,13 +284,34 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
     if (parts.length === 0) return '-';
     if (lang === 'km') {
       const p = [];
-      if (village) p.push(`ភូមិ${village}`);
-      if (commune) p.push(`ឃុំ/សង្កាត់${commune}`);
-      if (district) p.push(`ស្រុក/ខណ្ឌ${district}`);
-      if (province) p.push(`${province}`);
+      if (village) {
+        const cleanV = village.replace(/^ភូមិ\s*៖?\s*/, '').trim();
+        p.push(`ភូមិ៖ ${cleanV || village}`);
+      }
+      if (commune) {
+        const cleanC = commune.replace(/^(ឃុំ\/សង្កាត់|ឃុំ|សង្កាត់)\s*៖?\s*/, '').trim();
+        p.push(`ឃុំ/សង្កាត់៖ ${cleanC || commune}`);
+      }
+      if (district) {
+        const cleanD = district.replace(/^(ស្រុក\/ខណ្ឌ|ស្រុក|ខណ្ឌ)\s*៖?\s*/, '').trim();
+        p.push(`ស្រុក/ខណ្ឌ៖ ${cleanD || district}`);
+      }
+      if (province) {
+        const cleanP = province.replace(/^ខេត្ត\/ក្រុង\/រាជធានី\s*៖?\s*/, '').trim();
+        if (cleanP.startsWith('ខេត្ត') || cleanP.startsWith('រាជធានី') || cleanP.startsWith('ក្រុង')) {
+          p.push(cleanP);
+        } else {
+          p.push(`ខេត្ត/រាជធានី៖ ${cleanP}`);
+        }
+      }
       return p.join(', ');
     }
-    return parts.join(', ');
+    const p = [];
+    if (village) p.push(`Village: ${village}`);
+    if (commune) p.push(`Commune: ${commune}`);
+    if (district) p.push(`District: ${district}`);
+    if (province) p.push(`Province: ${province}`);
+    return p.join(', ');
   };
 
   const getStatusBadge = (status: string) => {
