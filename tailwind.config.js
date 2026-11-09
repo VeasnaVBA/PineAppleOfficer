@@ -23,14 +23,14 @@ export default {
           DEFAULT: '#111111',
           pure: '#000000',
           soft: '#242424',
-          muted: '#524d44',
+          muted: '#524d42',
           faint: '#857e72',
         },
       },
       fontFamily: {
-        serif: ['"Playfair Display"', '"Cormorant Garamond"', 'Georgia', 'serif'],
-        display: ['"Bodoni Moda"', '"Playfair Display"', 'Georgia', 'serif'],
-        sans: ['"Inter"', 'system-ui', 'sans-serif'],
+        serif: ['var(--app-font-family)', '"Playfair Display"', 'Georgia', 'serif'],
+        display: ['var(--app-font-family)', '"Bodoni Moda"', 'Georgia', 'serif'],
+        sans: ['var(--app-font-family)', '"Inter"', 'system-ui', 'sans-serif'],
         mono: ['"Space Mono"', 'monospace'],
       },
       boxShadow: {

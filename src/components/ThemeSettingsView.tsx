@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Palette, Type, Sliders, Check, RotateCcw, Sparkles } from 'lucide-react';
+import { Palette, Type, Sliders, Check, RotateCcw } from 'lucide-react';
 
 interface ThemeSettingsViewProps {
   onShowToast: (title: string, message: string) => void;
@@ -45,7 +45,7 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
 
   const fontOptions = [
     { name: 'Playfair Display', value: "'Playfair Display', Georgia, serif", label: 'Editorial Headline Serif' },
-    { name: 'Bodoni Moda', value: "'Bodoni Moda', Georgia, serif", label: 'Modern Fashion Serif' },
+    { name: 'Bodoni Moda', value: "'Bodoni Moda', Georgia, serif", label: 'Modern Vogue Serif' },
     { name: 'Cormorant Garamond', value: "'Cormorant Garamond', Georgia, serif", label: 'Archival Heritage Serif' },
     { name: 'Inter', value: "'Inter', system-ui, sans-serif", label: 'Clean Functional Sans' },
     { name: 'Space Mono', value: "'Space Mono', monospace", label: 'Brutalist Monospace' },
@@ -66,6 +66,7 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
     root.style.setProperty('--app-text', theme.text);
     root.style.setProperty('--app-border', theme.border);
     root.style.setProperty('--app-font-family', theme.fontFamily);
+    document.body.style.setProperty('font-family', theme.fontFamily, 'important');
     root.style.fontSize = `${theme.fontSizePercent}%`;
 
     localStorage.setItem('pineapple_theme_config', JSON.stringify(theme));
@@ -84,7 +85,9 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
 
   const handleSelectFont = (fontValue: string, fontName: string) => {
     setTheme(prev => ({ ...prev, fontFamily: fontValue }));
-    onShowToast('TYPOGRAPHY UPDATED', `Primary font set to ${fontName}`);
+    document.documentElement.style.setProperty('--app-font-family', fontValue);
+    document.body.style.setProperty('font-family', fontValue, 'important');
+    onShowToast('TYPOGRAPHY UPDATED', `Primary font applied to entire app: ${fontName}`);
   };
 
   const handleFontSizeChange = (delta: number) => {
@@ -107,13 +110,13 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
           <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono opacity-70 uppercase">
             <span>PINEAPPLE OFFICER</span>
             <span>/</span>
-            <span className="font-bold underline">SETTINGS</span>
+            <span className="font-bold">SETTINGS</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-tight mt-1" style={{ fontFamily: theme.fontFamily }}>
             THEME & TYPOGRAPHY SETTINGS
           </h2>
           <p className="font-mono text-xs opacity-70 tracking-wider">
-            Customize theme colors, application fonts, and interface scaling
+            Changes apply instantly to the entire application
           </p>
         </div>
 
@@ -138,11 +141,6 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
           </span>
         </div>
 
-        <p className="font-mono text-xs opacity-80">
-          Select an archival paper tint or dark editorial palette for your dashboard:
-        </p>
-
-        {/* Color Matrix inspired by the uploaded image */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {colorPalettes.map((palette) => {
             const isSelected = theme.bg === palette.bg;
@@ -170,17 +168,21 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
         </div>
       </div>
 
-      {/* 2. Font Family Selection */}
+      {/* 2. Font Family Selection (Applies to Whole App) */}
       <div className="border-2 border-ink p-5 sm:p-6 bg-[#ede5cf] shadow-brutal space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-ink/20">
           <div className="flex items-center gap-2">
             <Type size={16} />
-            <h3 className="font-serif font-bold text-base sm:text-lg">Application Font Family</h3>
+            <h3 className="font-serif font-bold text-base sm:text-lg">Application Font Family (Global)</h3>
           </div>
           <span className="text-[10px] font-mono uppercase opacity-70">
             {fontOptions.find(f => f.value === theme.fontFamily)?.name || 'Custom'}
           </span>
         </div>
+
+        <p className="font-mono text-xs opacity-80">
+          Click any font to apply it immediately across all headers, sidebar, navigation, and pages:
+        </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {fontOptions.map((font) => {
@@ -221,7 +223,6 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          {/* Quick preset buttons */}
           <div className="flex items-center gap-2 w-full sm:w-auto">
             {fontSizes.map((sz) => {
               const isSelected = theme.fontSizePercent === sz.percent;
@@ -239,7 +240,6 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
             })}
           </div>
 
-          {/* Stepper matching the reference image [- 100% +] */}
           <div className="flex items-center border-2 border-ink bg-[#ded5be]">
             <button
               onClick={() => handleFontSizeChange(-5)}
@@ -270,8 +270,8 @@ export const ThemeSettingsView: React.FC<ThemeSettingsViewProps> = ({ onShowToas
         <h4 className="text-xl sm:text-2xl font-bold" style={{ fontFamily: theme.fontFamily }}>
           The Quick Brown Fox Jumps Over The Lazy Dog
         </h4>
-        <p className="font-serif text-sm leading-relaxed opacity-85">
-          Pineapple Officer administrative portal dynamically renders with this theme palette ({theme.bg}), primary font ({fontOptions.find(f => f.value === theme.fontFamily)?.name}), and scaling ({theme.fontSizePercent}%).
+        <p className="text-sm leading-relaxed opacity-85" style={{ fontFamily: theme.fontFamily }}>
+          Pineapple Officer administrative portal dynamically applies this font across every navigation item, header, button, and canvas area.
         </p>
       </div>
     </div>

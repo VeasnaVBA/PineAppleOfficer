@@ -11,23 +11,26 @@
     --app-text: #121212;
     --app-text-muted: #524d42;
     --app-font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-    --app-font-sans: 'Inter', system-ui, sans-serif;
-    --app-font-mono: 'Space Mono', monospace;
   }
 
   body {
     background-color: var(--app-bg, #ded5be);
     color: var(--app-text, #121212);
-    font-family: var(--app-font-sans, 'Inter', system-ui, sans-serif);
+    font-family: var(--app-font-family, 'Playfair Display', Georgia, serif) !important;
     overflow-x: hidden;
   }
-}
 
-/* Subtle newspaper grain overlay */
-.newspaper-texture {
-  background-color: var(--app-bg, #ded5be);
-  background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 0);
-  background-size: 24px 24px;
+  /* Force the selected font globally across the entire app */
+  h1, h2, h3, h4, h5, h6,
+  p, span, a, button, input, textarea, select, div {
+    font-family: inherit;
+  }
+
+  .font-serif,
+  .font-sans,
+  .font-display {
+    font-family: var(--app-font-family, 'Playfair Display', Georgia, serif) !important;
+  }
 }
 
 /* Custom hairline borders */
@@ -45,13 +48,4 @@
 }
 ::-webkit-scrollbar-thumb {
   background: var(--app-border, #121212);
-}
-
-/* Card hover animations */
-.editorial-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.editorial-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 4px 4px 0px var(--app-border, #121212);
 }

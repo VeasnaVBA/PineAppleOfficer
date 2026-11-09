@@ -19,7 +19,10 @@ export function App() {
         if (theme.surface) root.style.setProperty('--app-surface', theme.surface);
         if (theme.text) root.style.setProperty('--app-text', theme.text);
         if (theme.border) root.style.setProperty('--app-border', theme.border);
-        if (theme.fontFamily) root.style.setProperty('--app-font-family', theme.fontFamily);
+        if (theme.fontFamily) {
+          root.style.setProperty('--app-font-family', theme.fontFamily);
+          document.body.style.setProperty('font-family', theme.fontFamily, 'important');
+        }
         if (theme.fontSizePercent) root.style.fontSize = `${theme.fontSizePercent}%`;
       } catch (e) {
         console.error(e);
@@ -36,7 +39,7 @@ export function App() {
 
   return (
     <div 
-      className="min-h-screen flex flex-col font-sans antialiased"
+      className="min-h-screen flex flex-col antialiased"
       style={{ backgroundColor: 'var(--app-bg, #ded5be)', color: 'var(--app-text, #121212)' }}
     >
       {/* Top Application Navbar */}
