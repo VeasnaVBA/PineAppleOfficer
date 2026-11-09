@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Article } from '../types';
-import { Send, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface RightRailProps {
   heroArticle: Article;
@@ -44,13 +44,13 @@ export const RightRail: React.FC<RightRailProps> = ({
   };
 
   return (
-    <aside className="w-full xl:w-80 2xl:w-96 flex-shrink-0 flex flex-col justify-between border-t xl:border-t-0 xl:border-l border-ink bg-[#ded5be]">
+    <aside className="w-full xl:w-80 2xl:w-96 flex-shrink-0 flex flex-col justify-between border-t-2 xl:border-t-0 xl:border-l-2 border-ink bg-[#ded5be]">
       {/* Top: Featured Cinematic Story */}
-      <div className="border-b border-ink">
+      <div className="border-b-2 border-ink">
         {/* Cinematic Monochrome Image */}
         <div 
           onClick={() => onSelectArticle(heroArticle)}
-          className="relative aspect-[16/11] bg-[#1a1a1a] overflow-hidden cursor-pointer group"
+          className="relative aspect-[16/10] sm:aspect-[16/11] bg-[#1a1a1a] overflow-hidden cursor-pointer group"
         >
           <img
             src={heroArticle.imageUrl}
@@ -63,17 +63,17 @@ export const RightRail: React.FC<RightRailProps> = ({
         </div>
 
         {/* Story Text */}
-        <div className="p-5 lg:p-6">
+        <div className="p-4 sm:p-5 lg:p-6">
           <h3 
             onClick={() => onSelectArticle(heroArticle)}
-            className="font-serif text-base lg:text-lg font-bold text-ink leading-snug hover:underline cursor-pointer"
+            className="font-serif text-base sm:text-lg font-bold text-ink leading-snug hover:underline cursor-pointer"
           >
             {heroArticle.title}
           </h3>
           <p className="text-[10px] font-mono tracking-wider text-ink/70 mt-1 uppercase">
             {heroArticle.date} • {heroArticle.category}
           </p>
-          <p className="text-xs font-serif text-ink/85 mt-2.5 leading-relaxed line-clamp-4">
+          <p className="text-xs font-serif text-ink/85 mt-2 leading-relaxed line-clamp-4">
             {heroArticle.excerpt}
           </p>
 
@@ -88,13 +88,13 @@ export const RightRail: React.FC<RightRailProps> = ({
       </div>
 
       {/* Bottom: "Subscribe Now" Form from the reference image */}
-      <div className="p-6 lg:p-7 flex-1 flex flex-col justify-between">
+      <div className="p-5 sm:p-6 lg:p-7 flex-1 flex flex-col justify-between">
         <div>
-          <h4 className="font-serif text-lg font-bold text-ink text-center tracking-wide mb-5">
+          <h4 className="font-serif text-base sm:text-lg font-bold text-ink text-center tracking-wide mb-4">
             Subscribe Now
           </h4>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3.5">
             <div>
               <input
                 type="text"
@@ -106,7 +106,7 @@ export const RightRail: React.FC<RightRailProps> = ({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <input
                   type="email"
@@ -148,7 +148,7 @@ export const RightRail: React.FC<RightRailProps> = ({
               />
             </div>
 
-            <div className="pt-3 text-center">
+            <div className="pt-2 text-center">
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -161,7 +161,7 @@ export const RightRail: React.FC<RightRailProps> = ({
         </div>
 
         {/* Footer info */}
-        <div className="pt-6 mt-6 border-t border-ink/20 text-center">
+        <div className="pt-5 mt-5 border-t border-ink/20 text-center">
           <p className="text-[10px] font-mono tracking-widest text-ink/70 uppercase">
             ALL RIGHTS RESERVED © 2026
           </p>

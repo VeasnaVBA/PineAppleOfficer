@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, Share2, Bookmark, Check, Sparkles, Terminal } from 'lucide-react';
+import { Heart, Terminal } from 'lucide-react';
 
 interface BottomEditorialProps {
   onShowToast: (title: string, message: string) => void;
@@ -22,14 +22,14 @@ export const BottomEditorial: React.FC<BottomEditorialProps> = ({ onShowToast })
   };
 
   return (
-    <div className="bg-[#ded5be] grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-ink">
+    <div className="bg-[#ded5be] grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-ink border-b-2 lg:border-b-0 border-ink">
       {/* Left 9 columns: Featured Story / Editorial */}
-      <div className="lg:col-span-9 p-6 lg:p-8 flex flex-col justify-between">
+      <div className="lg:col-span-9 p-4 sm:p-6 lg:p-8 flex flex-col justify-between">
         <div>
           {/* Top meta row */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-4 border-b border-ink/20 gap-2">
             <div>
-              <h3 className="font-serif text-lg lg:text-xl font-bold text-ink leading-tight">
+              <h3 className="font-serif text-base sm:text-lg lg:text-xl font-bold text-ink leading-tight">
                 The Understated Charm of Jack Johnstone's Photography
               </h3>
               <p className="text-[10px] font-mono uppercase tracking-widest text-ink/70 mt-0.5">
@@ -37,8 +37,8 @@ export const BottomEditorial: React.FC<BottomEditorialProps> = ({ onShowToast })
               </p>
             </div>
             
-            <div className="flex items-center gap-3">
-              <span className="text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 border border-ink bg-[#ede5cf] text-ink font-semibold">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 border border-ink bg-[#ede5cf] text-ink font-semibold">
                 Recommended For You
               </span>
               
@@ -79,7 +79,7 @@ export const BottomEditorial: React.FC<BottomEditorialProps> = ({ onShowToast })
 
           {activeSubTab === 'telemetry' && (
             <div className="font-mono text-xs text-ink space-y-2 py-2">
-              <div className="flex items-center justify-between border-b border-ink/20 pb-1">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-ink/20 pb-1 gap-1">
                 <span className="text-ink/70">Edge CDN Routing:</span>
                 <span className="font-bold">hnd1, sfo1, fra1, cdg1 (Vercel Global Anycast)</span>
               </div>
@@ -115,15 +115,17 @@ export const BottomEditorial: React.FC<BottomEditorialProps> = ({ onShowToast })
         <div className="mt-6 pt-3 border-t border-ink/20 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-ink/70">
           <span>CURATORIAL ARCHIVE VOL. XII</span>
           <span>EST. 2026 • DIGITAL EDITION</span>
-          <span className="underline cursor-pointer hover:text-ink" onClick={() => onShowToast('EXPORT COMPLETED', 'Archival article transcript exported to markdown')}>
+          <span 
+            className="underline cursor-pointer hover:text-ink" 
+            onClick={() => onShowToast('EXPORT COMPLETED', 'Archival article transcript exported to markdown')}
+          >
             Export Transcript ↓
           </span>
         </div>
       </div>
 
-      {/* Right 3 columns: Engagement Box from the reference image */}
-      <div className="lg:col-span-3 p-6 flex flex-col items-center justify-center text-center bg-[#ded5be]">
-        {/* The 231 Box Frame exactly matching the image */}
+      {/* Right 3 columns: Engagement Box */}
+      <div className="lg:col-span-3 p-5 sm:p-6 flex flex-col items-center justify-center text-center bg-[#ded5be]">
         <div className="w-28 border-2 border-ink bg-[#ded5be] p-3 flex flex-col items-center shadow-brutal">
           <div 
             onClick={handleLike}
@@ -135,7 +137,6 @@ export const BottomEditorial: React.FC<BottomEditorialProps> = ({ onShowToast })
             </span>
           </div>
 
-          {/* Social icons inside box */}
           <div className="flex flex-col items-center gap-2.5 text-ink w-full">
             <button 
               onClick={handleLike} 

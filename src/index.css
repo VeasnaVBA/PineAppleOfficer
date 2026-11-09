@@ -12,6 +12,7 @@
     background-color: #ded5be;
     color: #121212;
     font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
   }
 }
 
@@ -42,8 +43,8 @@
 
 /* Custom scrollbars matching theme */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: #ded5be;
@@ -60,7 +61,7 @@
   border-radius: 0;
   outline: none;
   color: #111111;
-  padding: 4px 0;
+  padding: 6px 0;
   font-size: 0.875rem;
   transition: border-color 0.2s;
 }
@@ -72,4 +73,13 @@
 .input-underline::placeholder {
   color: #6c6659;
   font-size: 0.825rem;
+}
+
+/* Card hover animations */
+.editorial-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.editorial-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0px #111111;
 }

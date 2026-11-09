@@ -33,19 +33,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'analytics', label: 'Analytics', badge: '+14%' },
     { id: 'subscribers', label: 'Subscribers', badge: 'CRM' },
     { id: 'gallery', label: 'Gallery', badge: 'Media' },
-    { id: 'settings', label: 'Settings', badge: 'Vercel' }
+    { id: 'settings', label: 'Settings', badge: 'Cloud' }
   ];
 
   return (
-    <aside className="w-full md:w-56 lg:w-64 flex-shrink-0 flex flex-col justify-between border-b md:border-b-0 md:border-r border-ink bg-[#ded5be]">
+    <aside className="hidden lg:flex w-56 xl:w-64 flex-shrink-0 flex-col justify-between border-r-2 border-ink bg-[#ded5be]">
       {/* Brand Header */}
       <div>
-        <div className="p-6 md:p-8 border-b border-ink">
+        <div className="p-6 xl:p-8 border-b-2 border-ink">
           <div className="flex items-center justify-between">
-            <h1 className="font-serif text-2xl lg:text-3xl font-bold tracking-[0.2em] text-ink uppercase">
+            <h1 className="font-serif text-2xl xl:text-3xl font-bold tracking-[0.2em] text-ink uppercase">
               TETRAD
             </h1>
-            <span className="text-[10px] tracking-widest uppercase font-mono px-1.5 py-0.5 border border-ink bg-[#ede5cf]">
+            <span className="text-[10px] tracking-widest uppercase font-mono px-1.5 py-0.5 border border-ink bg-[#ede5cf] font-bold">
               v2.4
             </span>
           </div>
@@ -58,7 +58,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="p-4 border-b border-ink">
           <button
             onClick={onOpenNewModal}
-            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-ink text-[#ded5be] hover:bg-ink/85 transition-all text-xs font-mono uppercase tracking-widest border border-ink shadow-sm"
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-ink text-[#ded5be] hover:bg-ink/85 transition-all text-xs font-mono uppercase tracking-widest border border-ink shadow-sm font-bold"
           >
             <PenSquare size={14} />
             <span>New Dispatch</span>
@@ -66,7 +66,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Navigation list */}
-        <nav className="p-4 md:p-6 space-y-1">
+        <nav className="p-4 xl:p-6 space-y-1">
           {navItems.map((item) => {
             const isActive = currentTab === item.id;
             return (
@@ -82,7 +82,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <span className="tracking-wide">{item.label}</span>
                 {item.badge && (
                   <span className={`text-[10px] font-mono tracking-wider px-1.5 py-0.2 border ${
-                    isActive ? 'border-ink bg-ink text-[#ded5be]' : 'border-ink/40 text-ink/70'
+                    isActive ? 'border-ink bg-ink text-[#ded5be] font-bold' : 'border-ink/40 text-ink/70'
                   }`}>
                     {item.badge}
                   </span>
@@ -127,7 +127,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             p
           </a>
           <a 
-            href="https://github.com" 
+            href="https://github.com/VeasnaVBA/PineAppleOfficer" 
             target="_blank" 
             rel="noreferrer" 
             className="hover:opacity-60 transition-opacity"
@@ -142,7 +142,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
             Vercel Edge Ready
           </span>
-          <span>99.98%</span>
+          <span className="font-bold">99.98%</span>
         </div>
       </div>
     </aside>

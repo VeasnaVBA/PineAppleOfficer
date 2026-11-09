@@ -1,6 +1,6 @@
 import React from 'react';
 import { MetricItem } from '../types';
-import { ArrowUpRight, TrendingUp, Radio } from 'lucide-react';
+import { ArrowUpRight, TrendingUp } from 'lucide-react';
 
 interface TopTickerProps {
   metrics: MetricItem[];
@@ -9,21 +9,21 @@ interface TopTickerProps {
 
 export const TopTicker: React.FC<TopTickerProps> = ({ metrics, onSelectMetric }) => {
   return (
-    <div className="border-b border-ink bg-[#ded5be] grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink">
+    <div className="border-b-2 border-ink bg-[#ded5be] grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink">
       {metrics.map((item) => (
         <div 
           key={item.id}
           onClick={() => onSelectMetric?.(item)}
-          className="p-4 lg:p-5 flex items-start gap-3 hover:bg-black/[0.03] transition-colors cursor-pointer group"
+          className="p-3 sm:p-4 lg:p-5 flex items-start gap-3 hover:bg-black/[0.03] transition-colors cursor-pointer group"
         >
           <span className="font-serif font-bold text-base lg:text-lg text-ink flex-shrink-0">
             {item.label}
           </span>
           <div className="flex-1 min-w-0">
-            <h4 className="font-serif text-xs lg:text-sm text-ink leading-snug group-hover:underline line-clamp-2">
+            <h4 className="font-serif text-xs sm:text-sm text-ink leading-snug group-hover:underline line-clamp-2">
               {item.title}
             </h4>
-            <div className="flex items-center gap-2 mt-1.5 text-[10px] font-mono text-ink/75">
+            <div className="flex flex-wrap items-center gap-2 mt-1 text-[10px] font-mono text-ink/75">
               <span>{item.date}</span>
               {item.value && (
                 <>
