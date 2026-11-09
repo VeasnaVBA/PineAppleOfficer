@@ -1204,7 +1204,12 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                     {renderSortIcon('status')}
                   </div>
                 </th>
-                <th className="py-3 px-3 sm:px-4 text-right whitespace-nowrap">{tt.actions}</th>
+                <th 
+                  className="sticky right-0 z-20 py-3 px-3 sm:px-4 text-right whitespace-nowrap border-l-2 border-ink"
+                  style={{ backgroundColor: 'var(--app-border)', color: 'var(--app-bg)' }}
+                >
+                  {tt.actions}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-ink/20 text-xs font-mono">
@@ -1277,8 +1282,11 @@ export const TeachersView: React.FC<TeachersViewProps> = ({
                       {getStatusBadge(teacher.status)}
                     </td>
 
-                    {/* Actions: Edit & Delete */}
-                    <td className="py-3 px-3 sm:px-4 text-right">
+                    {/* Actions: Edit & Delete (Sticky Right Column) */}
+                    <td 
+                      className="sticky right-0 z-10 py-3 px-3 sm:px-4 text-right border-l-2 border-ink whitespace-nowrap"
+                      style={{ backgroundColor: 'var(--app-surface, #ede5cf)' }}
+                    >
                       <div className="inline-flex items-center gap-1.5">
                         <button
                           onClick={() => handleOpenEdit(teacher)}
